@@ -1,0 +1,1095 @@
+
+<!DOCTYPE html create by geyuqi>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作业公布站 - 教师端</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 2000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left {
+            text-align: left;
+        }
+
+        .header h1 {
+            color: #11998e;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .current-time {
+            font-size: 1.2em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .current-date {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .header-actions {
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+
+
+        .add-btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+
+
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(17, 153, 142, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(17, 153, 142, 0.6);
+        }
+
+        .cloud-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cloud-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-header h2 {
+            color: #11998e;
+            font-size: 1.8em;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #11998e;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .links-section {
+            border-top: 2px dashed #e2e8f0;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .links-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .links-header h3 {
+            color: #333;
+        }
+
+        .add-link-btn {
+            background: #11998e;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+
+        .add-link-btn:hover {
+            background: #0d7a6e;
+        }
+
+        .link-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .link-item input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .link-item input:focus {
+            outline: none;
+            border-color: #11998e;
+        }
+
+        .remove-link-btn {
+            background: #f56565;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .remove-link-btn:hover {
+            background: #e53e3e;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .submit-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .cancel-btn {
+            flex: 1;
+            background: #e2e8f0;
+            color: #666;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cancel-btn:hover {
+            background: #cbd5e0;
+        }
+
+        .homework-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        @media (min-width: 2000px) {
+            .homework-list {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        @media (max-width: 1600px) {
+            .homework-list {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 1300px) {
+            .homework-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 950px) {
+            .homework-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .homework-list {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+
+        .homework-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .homework-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-title {
+            flex: 1;
+        }
+
+        .card-title h2 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .subject-tag {
+            display: inline-block;
+            background: #11998e;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .card-date {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .card-content {
+            color: #333;
+            line-height: 2;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+            font-size: 2.0em;
+            font-weight: bold;
+        }
+
+        .notice-bar {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notice-icon {
+            font-size: 1.5em;
+        }
+
+        .notice-content {
+            flex: 1;
+            color: #5d4e37;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .notice-edit-btn {
+            background: #11998e;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background 0.3s;
+        }
+
+        .notice-edit-btn:hover {
+            background: #0d7a6e;
+        }
+
+        .card-links {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .card-links h4 {
+            color: #11998e;
+            margin-bottom: 10px;
+        }
+
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .link-item-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #11998e;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .edit-btn {
+            flex: 1;
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        .edit-btn:hover {
+            background: #3182ce;
+        }
+
+        .delete-btn {
+            flex: 1;
+            background: #f56565;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #e53e3e;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .empty-state h2 {
+            color: #11998e;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        .student-link {
+            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .student-link a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .student-link a:hover {
+            color: white;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.3);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9em;
+            backdrop-filter: blur(5px);
+        }
+
+        .footer-left {
+            text-align: left;
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        .footer a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* 给页面底部留出空间，避免内容被固定栏遮挡 */
+        body {
+            padding-bottom: 80px;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #48bb78;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 2000;
+            animation: toastSlideIn 0.3s ease;
+            display: none;
+        }
+
+        .toast.active {
+            display: block;
+        }
+
+        .toast.error {
+            background: #f56565;
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>👨‍🏫 作业公布站</h1>
+                    <p>教师管理端  </p>
+                </div>
+                <div class="header-right">
+                    <div class="current-time" id="current-time">--:--:--</div>
+                    <div class="current-date" id="current-date">----年--月--日</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="----------yoururl------------" target="_blank" class="cloud-btn">☁️ 云盘</a>
+                <button class="add-btn" onclick="openModal()">➕ 发布新作业</button>
+            </div>
+        </div>
+
+        <div class="notice-bar">
+            <span class="notice-icon">📢</span>
+            <span class="notice-content" id="notice-content">加载公告中...</span>
+            <button class="notice-edit-btn" onclick="openNoticeModal()">✏️ 编辑公告</button>
+        </div>
+
+        <div id="homework-list" class="homework-list">
+            <div class="empty-state">
+                <h2>📝 暂无作业</h2>
+                <p>点击上方按钮发布第一个作业</p>
+            </div>
+        </div>
+
+        <div class="student-link">
+            <a href="/">← 返回学生端</a>
+            <span style="margin: 0 15px; color: rgba(255,255,255,0.5);">|</span>
+            <a href="/stats">📊 访问统计</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-left">
+            <a href="https://beian.miit.gov.cn/" target="_blank">备案号</a>
+        </div>
+        <div class="footer-right">
+            <a href="https://github.com" target="_blank">🐙 Github 开源</a>
+        </div>
+    </div>
+
+    <!-- 公告编辑模态框 -->
+    <div id="notice-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>编辑公告</h2>
+                <button class="close-btn" onclick="closeNoticeModal()">×</button>
+            </div>
+            <form id="notice-form">
+                <div class="form-group">
+                    <label for="notice-content-input">公告内容</label>
+                    <textarea id="notice-content-input" required placeholder="请输入公告内容..." style="min-height: 100px;"></textarea>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="submit-btn">保存</button>
+                    <button type="button" class="cancel-btn" onclick="closeNoticeModal()">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+     <!-- 编辑/新增模态框 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">发布新作业</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <form id="homework-form">
+                <input type="hidden" id="homework-id">
+                
+                <div class="form-group">
+                    <label for="title">作业标题 *</label>
+                    <input type="text" id="title" required placeholder="例如：第三章课后习题">
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">科目 *</label>
+                    <select id="subject" required>
+                        <option value="">请选择科目</option>
+                        <option value="语文">语文</option>
+                        <option value="数学">数学</option>
+                        <option value="英语">英语</option>
+                        <option value="物理">物理</option>
+                        <option value="化学">化学</option>
+                        <option value="生物">生物</option>
+                        <option value="历史">历史</option>
+                        <option value="地理">地理</option>
+                        <option value="政治">政治</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">作业内容 *</label>
+                    <textarea id="content" required placeholder="请详细描述作业内容..."></textarea>
+                </div>
+                
+                <div class="links-section">
+                    <div class="links-header">
+                        <h3>🔗 相关链接</h3>
+                        <button type="button" class="add-link-btn" onclick="addLink()">+ 添加链接</button>
+                    </div>
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">支持普通链接</p>
+                    <div id="links-container"></div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="submit" class="submit-btn">保存</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal()">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let homework = [];
+        let linkCount = 0;
+
+        // 显示提示
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast active';
+            if (isError) toast.classList.add('error');
+            
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+
+        // 加载作业
+        async function loadHomework() {
+            try {
+                const response = await fetch('/api/homework');
+                homework = await response.json();
+                renderHomework();
+            } catch (error) {
+                console.error('加载作业失败:', error);
+                showToast('加载作业失败', true);
+            }
+        }
+
+        // 渲染作业
+        function renderHomework() {
+            const container = document.getElementById('homework-list');
+            
+            if (homework.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h2>📝 暂无作业</h2>
+                        <p>点击上方按钮发布第一个作业</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = homework.map(item => `
+                <div class="homework-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h2>${escapeHtml(item.title)}</h2>
+                            <span class="subject-tag">${escapeHtml(item.subject)}</span>
+                        </div>
+                        <div class="card-date">
+                            <div>📅 发布: ${formatDate(item.createdAt)}</div>
+                            ${item.updatedAt !== item.createdAt ? `<div>✏️ 更新: ${formatDate(item.updatedAt)}</div>` : ''}
+                        </div>
+                    </div>
+                    <div class="card-content">${escapeHtml(item.content)}</div>
+                    ${item.links && item.links.length > 0 ? `
+                        <div class="card-links">
+                            <h4>🔗 相关链接</h4>
+                            <div class="link-list">
+                                ${item.links.map(link => `
+                                    <a href="${escapeHtml(link.url)}" target="_blank" class="link-item-display">
+                                        <span>📎</span>
+                                        <span>${escapeHtml(link.title)}</span>
+                                    </a>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    <div class="card-actions">
+                        <button class="edit-btn" onclick="editHomework('${item.id}')">✏️ 编辑</button>
+                        <button class="delete-btn" onclick="deleteHomework('${item.id}')">🗑️ 删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 打开模态
+        function openModal(id = null) {
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const form = document.getElementById('homework-form');
+            
+            form.reset();
+            document.getElementById('homework-id').value = '';
+            document.getElementById('links-container').innerHTML = '';
+            linkCount = 0;
+            
+            if (id) {
+                const item = homework.find(h => h.id === id);
+                if (item) {
+                    modalTitle.textContent = '编辑作业';
+                    document.getElementById('homework-id').value = item.id;
+                    document.getElementById('title').value = item.title;
+                    document.getElementById('subject').value = item.subject;
+                    document.getElementById('content').value = item.content;
+                    
+                    if (item.links && item.links.length > 0) {
+                        item.links.forEach(link => {
+                            addLink(link.title, link.url);
+                        });
+                    }
+                }
+            } else {
+                modalTitle.textContent = '发布新作业';
+            }
+            
+            modal.classList.add('active');
+        }
+
+        // 关闭模态
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // 添加链接
+        function addLink(title = '', url = '') {
+            const container = document.getElementById('links-container');
+            const linkId = linkCount++;
+            
+            const linkHtml = `
+                <div class="link-item" data-link-id="${linkId}">
+                    <input type="text" class="link-title" placeholder="链接标题" value="${escapeHtml(title)}">
+                    <input type="text" class="link-url" placeholder="https://... " value="${escapeHtml(url)}">
+                    <button type="button" class="remove-link-btn" onclick="removeLink(${linkId})">×</button>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', linkHtml);
+        }
+
+        // 删除链接
+        function removeLink(id) {
+            const linkItem = document.querySelector(`[data-link-id="${id}"]`);
+            if (linkItem) {
+                linkItem.remove();
+            }
+        }
+
+        // 获取链接列表
+        function getLinks() {
+            const links = [];
+            document.querySelectorAll('.link-item').forEach(item => {
+                const title = item.querySelector('.link-title').value.trim();
+                const url = item.querySelector('.link-url').value.trim();
+                if (title && url) {
+                    links.push({ title, url });
+                }
+            });
+            return links;
+        }
+
+        // 编辑作业
+        function editHomework(id) {
+            openModal(id);
+        }
+
+        // 删除作业
+        async function deleteHomework(id) {
+            if (!confirm('确定要删除这个作业吗？')) return;
+            
+            try {
+                const response = await fetch(`/api/homework/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showToast('作业删除成功！');
+                    loadHomework();
+                } else {
+                    showToast('删除失败', true);
+                }
+            } catch (error) {
+                console.error('删除失败:', error);
+                showToast('删除失败', true);
+            }
+        }
+
+        // 表单提交
+        document.getElementById('homework-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('homework-id').value;
+            const data = {
+                title: document.getElementById('title').value,
+                subject: document.getElementById('subject').value,
+                content: document.getElementById('content').value,
+                links: getLinks()
+            };
+            
+            try {
+                const url = id ? `/api/homework/${id}` : '/api/homework';
+                const method = id ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    showToast(id ? '作业更新成功 ！' : '作业发布成功 ！');
+                    closeModal();
+                    loadHomework();
+                } else {
+                    showToast('保存失败', true);
+                }
+            } catch (error) {
+                console.error('保存失 败:', error);
+                showToast('保存失败', true);
+            }
+        });
+
+        // 点击模态框外部关闭
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
+
+        // 格式化日期
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // HTML转义
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 加载公告
+        async function loadNotice() {
+            try {
+                const response = await fetch('/api/notice');
+                const notice = await response.json();
+                document.getElementById('notice-content').textContent = notice.content || '';
+            } catch (error) {
+                console.error('加载公告失败:', error);
+            }
+        }
+
+        // 打开公告编辑模态框
+        async function openNoticeModal() {
+            try {
+                const response = await fetch('/api/notice');
+                const notice = await response.json();
+                document.getElementById('notice-content-input').value = notice.content || '';
+                document.getElementById('notice-modal').classList.add('active');
+            } catch (error) {
+                console.error('加载公告失败:', error);
+                showToast('加载公告失败', true);
+            }
+        }
+
+        // 关闭公告编辑模态框
+        function closeNoticeModal() {
+            document.getElementById('notice-modal').classList.remove('active');
+        }
+
+        // 更新时间
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
+            const dateStr = now.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+            document.getElementById('current-time').textContent = timeStr;
+            document.getElementById('current-date').textContent = dateStr;
+        }
+
+        // 公告表单提
+        document.getElementById('notice-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                content: document.getElementById('notice-content-input').value
+            };
+            
+            try {
+                const response = await fetch('/api/notice', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    showToast('公告更新成功！');
+                    closeNoticeModal();
+                    loadNotice();
+                } else {
+                    showToast('保存失败', true);
+                }
+            } catch (error) {
+                console.error('保存失败:', error);
+                showToast('保存失败', true);
+            }
+        });
+
+        // 点击公告模态框外部关闭
+        document.getElementById('notice-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'notice-modal') {
+                closeNoticeModal();
+            }
+        });
+
+        // 初始化
+        updateTime();
+        setInterval(updateTime, 1000);
+        loadNotice();
+        loadHomework();
+    </script>
+</body>
+</html>
+   

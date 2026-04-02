@@ -1,0 +1,698 @@
+
+<!DOCTYPE html create by geyuqi>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作业公布站 - 学生端</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 2000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left {
+            text-align: left;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .header-right {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .theme-toggle {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: #5a67d8;
+        }
+
+        .current-time {
+            font-size: 1.2em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .current-date {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #48bb78;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 15px;
+        }
+
+        .status-badge.offline {
+            background: #f56565;
+        }
+
+        .notice-bar {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notice-icon {
+            font-size: 1.5em;
+        }
+
+        .notice-content {
+            flex: 1;
+            color: #5d4e37;
+            font-size: 1.1em;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .homework-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        @media (min-width: 2000px) {
+            .homework-list {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        @media (max-width: 1600px) {
+            .homework-list {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 1300px) {
+            .homework-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 950px) {
+            .homework-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .homework-list {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+
+        .homework-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: slideIn 0.5s ease;
+        }
+
+        .homework-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .homework-card.new {
+            border-left: 5px solid #48bb78;
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-title {
+            flex: 1;
+        }
+
+        .card-title h2 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .subject-tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .card-date {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .card-content {
+            color: #333;
+            line-height: 2;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+            font-size: 1.6em;
+            font-weight: bold;
+        }
+
+        .card-links {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .card-links h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #667eea;
+            transition: background 0.3s;
+        }
+
+        .link-item:hover {
+            background: #edf2f7;
+        }
+
+        .link-icon {
+            font-size: 1.2em;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .empty-state h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        .teacher-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .teacher-link a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .teacher-link a:hover {
+            color: white;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.3);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9em;
+            backdrop-filter: blur(5px);
+        }
+
+        .footer-left {
+            text-align: left;
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        .footer a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* 给页面底部留出空间，避免内容被固定栏遮挡 */
+        body {
+            padding-bottom: 80px;
+        }
+
+        /* 深色模式样式 */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        body.dark-mode .header {
+            background: #1e293b;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        body.dark-mode .header h1 {
+            color: #818cf8;
+        }
+
+        body.dark-mode .header p {
+            color: #94a3b8;
+        }
+
+        body.dark-mode .current-time {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .current-date {
+            color: #94a3b8;
+        }
+
+        body.dark-mode .notice-bar {
+            background: linear-gradient(135deg, #4338ca 0%, #5b21b6 100%);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        body.dark-mode .notice-content {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .homework-card {
+            background: #1e293b;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        body.dark-mode .card-title h2 {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .card-content {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .card-date {
+            color: #64748b;
+        }
+
+        body.dark-mode .subject-tag {
+            background: #6366f1;
+        }
+
+        body.dark-mode .card-links h4 {
+            color: #818cf8;
+        }
+
+        body.dark-mode .link-item {
+            background: #334155;
+            color: #818cf8;
+        }
+
+        body.dark-mode .link-item:hover {
+            background: #475569;
+        }
+
+        body.dark-mode .empty-state {
+            background: #1e293b;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        body.dark-mode .empty-state h2 {
+            color: #818cf8;
+        }
+
+        body.dark-mode .empty-state p {
+            color: #94a3b8;
+        }
+
+        body.dark-mode .footer {
+            background: rgba(0,0,0,0.6);
+        }
+
+        body.dark-mode .theme-toggle {
+            background: #818cf8;
+        }
+
+        body.dark-mode .theme-toggle:hover {
+            background: #6366f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>📚 作业公布站</h1>
+                    <p>作业实时查看平台</p>
+                </div>
+                <div class="header-right">
+                    <div class="current-time" id="current-time">--:--:--</div>
+                    <div class="current-date" id="current-date">----年--月--日</div>
+                    <button class="theme-toggle" onclick="toggleTheme()">🌙 深色模式</button>
+                </div>
+            </div>
+            <div id="status-badge" class="status-badge" style="margin-top: 15px;">🔄 实时连接中...</div>
+        </div>
+
+        <div class="notice-bar">
+            <span class="notice-icon">📢</span>
+            <span class="notice-content" id="notice-content">加载公告中...</span>
+        </div>
+
+        <div id="homework-list" class="homework-list">
+            <div class="empty-state">
+                <h2>📝 暂无作业</h2>
+                <p>等待老师发布作业...</p>
+            </div>
+        </div>
+
+        <div class="teacher-link">
+            <a href=""></a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-left">
+            <a href="https://beian.miit.gov.cn/" target="_blank">备案号</a>
+        </div>
+        <div class="footer-right">
+            <a href="https://github.com" target="_blank">此项目已开源</a>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        let homework = [];
+        let ws = null;
+
+        // 连接WebSocket
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}`;
+            
+            ws = new WebSocket(wsUrl);
+            
+            ws.onopen = () => {
+                document.getElementById('status-badge').textContent = '✅ 实时连接已建立';
+                document.getElementById('status-badge').classList.remove('offline');
+            };
+            
+            ws.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+                handleWebSocketMessage(message);
+            };
+            
+            ws.onclose = () => {
+                document.getElementById('status-badge').textContent = '❌ 连接已断开，正在重连...';
+                document.getElementById('status-badge').classList.add('offline');
+                setTimeout(connectWebSocket, 3000);
+            };
+            
+            ws.onerror = (error) => {
+                console.error('WebSocket错误:', error);
+            };
+        }
+
+        // 处理WebSocket消息
+        function handleWebSocketMessage(message) {
+            switch (message.type) {
+                case 'homework_created':
+                    homework.unshift(message.data);
+                    markAsNew(message.data.id);
+                    renderHomework();
+                    break;
+                case 'homework_updated':
+                    const index = homework.findIndex(h => h.id === message.data.id);
+                    if (index !== -1) {
+                        homework[index] = message.data;
+                        markAsNew(message.data.id);
+                    }
+                    renderHomework();
+                    break;
+                case 'homework_deleted':
+                    homework = homework.filter(h => h.id !== message.data.id);
+                    renderHomework();
+                    break;
+                case 'notice_updated':
+                    document.getElementById('notice-content').textContent = message.data.content || '';
+                    break;
+            }
+        }
+
+        // 标记为新作业
+        function markAsNew(id) {
+            setTimeout(() => {
+                const card = document.querySelector(`[data-id="${id}"]`);
+                if (card) {
+                    card.classList.add('new');
+                    setTimeout(() => {
+                        card.classList.remove('new');
+                    }, 3000);
+                }
+            }, 100);
+        }
+
+        // 加载作业
+        async function loadHomework() {
+            try {
+                const response = await fetch('/api/homework');
+                homework = await response.json();
+                renderHomework();
+            } catch (error) {
+                console.error('加载作业失败:', error);
+            }
+        }
+
+        // 加载公告
+        async function loadNotice() {
+            try {
+                const response = await fetch('/api/notice');
+                const notice = await response.json();
+                document.getElementById('notice-content').textContent = notice.content || '';
+            } catch (error) {
+                console.error('加载公告失败:', error);
+            }
+        }
+
+        // 渲染作业
+        function renderHomework() {
+            const container = document.getElementById('homework-list');
+            
+            if (homework.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h2>📝 暂无作业</h2>
+                        <p>等待老师发布作业...</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = homework.map(item => `
+                <div class="homework-card" data-id="${item.id}">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h2>${escapeHtml(item.title)}</h2>
+                            <span class="subject-tag">${escapeHtml(item.subject)}</span>
+                        </div>
+                        <div class="card-date">
+                            <div>📅 发布: ${formatDate(item.createdAt)}</div>
+                            ${item.updatedAt !== item.createdAt ? `<div>✏️ 更新: ${formatDate(item.updatedAt)}</div>` : ''}
+                        </div>
+                    </div>
+                    <div class="card-content">${escapeHtml(item.content)}</div>
+                    ${item.links && item.links.length > 0 ? `
+                        <div class="card-links">
+                            <h4>🔗 相关链接</h4>
+                            <div class="link-list">
+                                ${item.links.map(link => `
+                                    <a href="${escapeHtml(link.url)}" target="_blank" class="link-item">
+                                        <span class="link-icon">📎</span>
+                                        <span>${escapeHtml(link.title)}</span>
+                                    </a>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // 格式化日期
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // HTML转义
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 更新时间
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
+            const dateStr = now.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+            document.getElementById('current-time').textContent = timeStr;
+            document.getElementById('current-date').textContent = dateStr;
+        }
+
+        // 深色模式切换
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.querySelector('.theme-toggle');
+            
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                btn.textContent = '🌙 深色模式';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.add('dark-mode');
+                btn.textContent = '☀️ 浅色模式';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // 初始化主题
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                btn.textContent = '☀️ 浅色模式';
+            }
+        }
+
+        // 初始化
+        initTheme();
+        updateTime();
+        setInterval(updateTime, 1000);
+        loadNotice();
+        loadHomework();
+        connectWebSocket();
+    </script>
+</body>
+</html>
