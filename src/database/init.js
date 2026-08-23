@@ -56,6 +56,21 @@ const defaultData = {
   notices: [],
   homework_submissions: [],
   visit_stats: [],
+  time_slots: [
+    { id: 'slot-1', name: '第1节', start_time: '08:00', end_time: '08:45', period_type: 'class', order_num: 1 },
+    { id: 'slot-2', name: '第2节', start_time: '08:55', end_time: '09:40', period_type: 'class', order_num: 2 },
+    { id: 'slot-3', name: '课间操', start_time: '09:40', end_time: '10:05', period_type: 'break', order_num: 3 },
+    { id: 'slot-4', name: '第3节', start_time: '10:05', end_time: '10:50', period_type: 'class', order_num: 4 },
+    { id: 'slot-5', name: '第4节', start_time: '11:00', end_time: '11:45', period_type: 'class', order_num: 5 },
+    { id: 'slot-6', name: '午休', start_time: '11:45', end_time: '14:00', period_type: 'lunch', order_num: 6 },
+    { id: 'slot-7', name: '第5节', start_time: '14:00', end_time: '14:45', period_type: 'class', order_num: 7 },
+    { id: 'slot-8', name: '第6节', start_time: '14:55', end_time: '15:40', period_type: 'class', order_num: 8 },
+    { id: 'slot-9', name: '眼保健操', start_time: '15:40', end_time: '15:55', period_type: 'break', order_num: 9 },
+    { id: 'slot-10', name: '第7节', start_time: '15:55', end_time: '16:40', period_type: 'class', order_num: 10 },
+    { id: 'slot-11', name: '第8节', start_time: '16:50', end_time: '17:35', period_type: 'class', order_num: 11 }
+  ],
+  timetables: [],
+  timetable_entries: [],
   system_config: [
     { id: 1, key: 'site_name', value: '南通市崇川初级中学作业公布站', description: '网站名称' },
     { id: 2, key: 'school_name', value: '南通市崇川初级中学', description: '学校名称' },

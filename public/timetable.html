@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>课程表 - 作业公布站</title>
+  <link rel="stylesheet" href="/css/common.css">
+  <style>
+    .page-layout {
+      padding: 24px 0;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .page-title-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .class-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .class-select {
+      padding: 10px 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      font-size: 14px;
+      cursor: pointer;
+      min-width: 140px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .timetable-container {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .timetable-toolbar {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: linear-gradient(135deg, var(--primary-soft), transparent);
+    }
+
+    .week-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .week-tab {
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 500;
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .week-tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .timetable-scroll {
+      overflow-x: auto;
+    }
+
+    .timetable {
+      width: 100%;
+      min-width: 800px;
+      border-collapse: collapse;
+    }
+
+    .timetable th {
+      padding: 16px 8px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+      background: var(--bg-hover);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+    }
+
+    .timetable th.weekday-header {
+      min-width: 120px;
+    }
+
+    .timetable th.weekend {
+      background: rgba(232, 70, 58, 0.05);
+      color: var(--danger);
+    }
+
+    .timetable td {
+      padding: 4px;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: top;
+    }
+
+    .time-cell {
+      padding: 12px 8px !important;
+      text-align: center;
+      background: var(--bg-hover);
+      min-width: 90px;
+      border-right: 1px solid var(--border);
+    }
+
+    .time-name {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .time-range {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .time-cell.break {
+      background: rgba(239, 170, 23, 0.08);
+    }
+
+    .time-cell.break .time-name {
+      color: var(--warning);
+    }
+
+    .time-cell.lunch {
+      background: rgba(29, 201, 129, 0.08);
+    }
+
+    .time-cell.lunch .time-name {
+      color: var(--success);
+    }
+
+    .course-cell {
+      min-height: 72px;
+    }
+
+    .course-card {
+      padding: 12px 10px;
+      border-radius: var(--radius);
+      height: 100%;
+      min-height: 64px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .course-card:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow);
+      z-index: 1;
+    }
+
+    .course-card.empty {
+      background: var(--bg-hover);
+      cursor: default;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .course-card.empty:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .course-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .course-teacher {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+
+    .course-room {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+
+    .course-actions {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .course-card:hover .course-actions {
+      opacity: 1;
+    }
+
+    .course-action-btn {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: inherit;
+    }
+
+    .break-cell {
+      text-align: center;
+      padding: 8px;
+      color: var(--warning);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .lunch-cell {
+      text-align: center;
+      padding: 8px;
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .subject-yuwen { background: linear-gradient(135deg, #FEF2F2, #FEE2E2); color: #DC2626; border-color: #FECACA; }
+    .subject-shuxue { background: linear-gradient(135deg, #EEF2FF, #E0E7FF); color: #4F46E5; border-color: #C7D2FE; }
+    .subject-yingyu { background: linear-gradient(135deg, #EFF6FF, #DBEAFE); color: #2563EB; border-color: #BFDBFE; }
+    .subject-wuli { background: linear-gradient(135deg, #ECFDF5, #D1FAE5); color: #059669; border-color: #A7F3D0; }
+    .subject-huaxue { background: linear-gradient(135deg, #FFF7ED, #FFEDD5); color: #EA580C; border-color: #FED7AA; }
+    .subject-shengwu { background: linear-gradient(135deg, #F0FDFA, #CCFBF1); color: #0D9488; border-color: #99F6E4; }
+    .subject-zhengzhi { background: linear-gradient(135deg, #FFFBEB, #FEF3C7); color: #D97706; border-color: #FDE68A; }
+    .subject-lishi { background: linear-gradient(135deg, #F5F3FF, #EDE9FE); color: #7C3AED; border-color: #DDD6FE; }
+    .subject-dili { background: linear-gradient(135deg, #ECFEFF, #CFFAFE); color: #0891B2; border-color: #A5F3FC; }
+    .subject-tiyu { background: linear-gradient(135deg, #F7FEE7, #ECFCCB); color: #65A30D; border-color: #D9F99D; }
+    .subject-yinyue { background: linear-gradient(135deg, #FDF2F8, #FCE7F3); color: #DB2777; border-color: #FBCFE8; }
+    .subject-meishu { background: linear-gradient(135deg, #FFF7ED, #FFEDD5); color: #EA580C; border-color: #FED7AA; }
+    .subject-xinxi { background: linear-gradient(135deg, #EEF2FF, #E0E7FF); color: #4F46E5; border-color: #C7D2FE; }
+
+    .subject-color-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .info-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid var(--border-light);
+      margin-bottom: 20px;
+    }
+
+    .info-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .class-selector {
+        width: 100%;
+      }
+      .class-select {
+        flex: 1;
+        min-width: 0;
+      }
+      .header-actions {
+        width: 100%;
+      }
+      .header-actions .btn {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header" id="header"></header>
+
+  <main class="container page-layout">
+    <div class="page-header">
+      <div class="page-title-section">
+        <div>
+          <h1 class="page-title">📅 课程表</h1>
+          <div class="text-secondary text-sm mt-4" id="className">请选择班级</div>
+        </div>
+      </div>
+      <div class="class-selector">
+        <select class="class-select" id="gradeSelect" onchange="onGradeChange()">
+          <option value="">选择年级</option>
+        </select>
+        <select class="class-select" id="classSelect" onchange="onClassChange()">
+          <option value="">选择班级</option>
+        </select>
+        <div class="header-actions" id="actionButtons" style="display:none">
+          <button class="btn btn-outline btn-sm" onclick="exportClassIsland()">
+            📥 导出ClassIsland
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="editMode()" id="editBtn" style="display:none">
+            ✏️ 编辑课表
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timetable-container">
+      <div class="timetable-toolbar">
+        <div class="week-tabs">
+          <button class="week-tab active" data-week="all">全部周次</button>
+          <button class="week-tab" data-week="odd">单周</button>
+          <button class="week-tab" data-week="even">双周</button>
+        </div>
+        <div class="text-sm text-secondary" id="currentDate"></div>
+      </div>
+      <div class="timetable-scroll">
+        <table class="timetable" id="timetable">
+          <thead>
+            <tr>
+              <th class="time-cell">时间</th>
+              <th class="weekday-header">周一</th>
+              <th class="weekday-header">周二</th>
+              <th class="weekday-header">周三</th>
+              <th class="weekday-header">周四</th>
+              <th class="weekday-header">周五</th>
+              <th class="weekday-header weekend">周六</th>
+              <th class="weekday-header weekend">周日</th>
+            </tr>
+          </thead>
+          <tbody id="timetableBody">
+            <tr><td colspan="8" class="loading"><div class="spinner"></div>请选择班级查看课程表</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="editModal" style="display:none">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="editModalTitle">编辑课程</h3>
+        <button class="modal-close" onclick="closeEditModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">科目</label>
+          <select class="form-control" id="editSubject">
+            <option value="">无课程（空）</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">教师</label>
+            <input type="text" class="form-control" id="editTeacher" placeholder="教师姓名">
+          </div>
+          <div class="form-group">
+            <label class="form-label">教室</label>
+            <input type="text" class="form-control" id="editRoom" placeholder="教室地点">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">周次类型</label>
+          <select class="form-control" id="editWeekType">
+            <option value="all">每周</option>
+            <option value="odd">单周</option>
+            <option value="even">双周</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" id="deleteEntryBtn" onclick="deleteEntry()" style="margin-right:auto;display:none">删除</button>
+        <button class="btn btn-outline" onclick="closeEditModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveEntry()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script>
+    let gradesData = [];
+    let currentClassId = null;
+    let currentWeekType = 'all';
+    let timetableData = null;
+    let currentEditSlot = null;
+    let currentEditWeekday = null;
+    let currentEntryId = null;
+    let subjects = [];
+
+    async function init() {
+      initHeader('timetable');
+      recordVisit('/timetable');
+      await loadGrades();
+      updateDate();
+      setupWeekTabs();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const classId = urlParams.get('classId');
+      if (classId) {
+        setTimeout(() => selectClass(classId), 100);
+      }
+    }
+
+    function updateDate() {
+      const now = new Date();
+      const weekStart = new Date(now);
+      weekStart.setDate(now.getDate() - now.getDay() + 1);
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      document.getElementById('currentDate').textContent = 
+        `${weekStart.getMonth()+1}月${weekStart.getDate()}日 - ${weekEnd.getMonth()+1}月${weekEnd.getDate()}日`;
+    }
+
+    function setupWeekTabs() {
+      document.querySelectorAll('.week-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.week-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentWeekType = tab.dataset.week;
+          if (currentClassId) loadTimetable(currentClassId);
+        });
+      });
+    }
+
+    async function loadGrades() {
+      try {
+        const data = await API.get('/api/grades/classes/all');
+        gradesData = data.data || [];
+        
+        const gradeSelect = document.getElementById('gradeSelect');
+        gradesData.forEach(g => {
+          const opt = document.createElement('option');
+          opt.value = g.id;
+          opt.textContent = g.name;
+          gradeSelect.appendChild(opt);
+        });
+      } catch (e) {
+        showToast('加载年级失败', 'error');
+      }
+    }
+
+    function onGradeChange() {
+      const gradeId = document.getElementById('gradeSelect').value;
+      const classSelect = document.getElementById('classSelect');
+      classSelect.innerHTML = '<option value="">选择班级</option>';
+      
+      if (gradeId) {
+        const grade = gradesData.find(g => g.id === gradeId);
+        if (grade && grade.classes) {
+          grade.classes.sort((a,b) => a.class_num - b.class_num).forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = c.name;
+            classSelect.appendChild(opt);
+          });
+        }
+      }
+    }
+
+    function onClassChange() {
+      const classId = document.getElementById('classSelect').value;
+      if (classId) selectClass(classId);
+    }
+
+    function selectClass(classId) {
+      currentClassId = classId;
+      
+      for (const g of gradesData) {
+        const cls = g.classes?.find(c => c.id === classId);
+        if (cls) {
+          document.getElementById('gradeSelect').value = g.id;
+          onGradeChange();
+          document.getElementById('classSelect').value = classId;
+          document.getElementById('className').textContent = cls.name;
+          break;
+        }
+      }
+      
+      document.getElementById('actionButtons').style.display = 'flex';
+      if (API.isLoggedIn() && (API.hasRole('teacher', 'admin', 'super_admin'))) {
+        document.getElementById('editBtn').style.display = 'inline-flex';
+      }
+      
+      loadTimetable(classId);
+    }
+
+    async function loadTimetable(classId) {
+      try {
+        const params = currentWeekType !== 'all' ? `?week_type=${currentWeekType}` : '';
+        const data = await API.get(`/api/timetable/${classId}${params}`);
+        timetableData = data.data;
+        subjects = data.data.subjects || [];
+        renderTimetable();
+        renderLegend();
+      } catch (e) {
+        document.getElementById('timetableBody').innerHTML = '<tr><td colspan="8" class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">暂无课表数据</div></td></tr>';
+      }
+    }
+
+    function renderTimetable() {
+      const { slots, grid, weekdays } = timetableData;
+      const tbody = document.getElementById('timetableBody');
+      
+      let html = '';
+      slots.forEach(slot => {
+        html += '<tr>';
+        html += `<td class="time-cell ${slot.period_type}">
+          <div class="time-name">${slot.name}</div>
+          <div class="time-range">${slot.start_time}-${slot.end_time}</div>
+        </td>`;
+        
+        weekdays.forEach(day => {
+          if (slot.period_type === 'break') {
+            html += `<td class="break-cell" colspan="7"></td>`;
+            return;
+          }
+          if (slot.period_type === 'lunch') {
+            html += `<td class="lunch-cell" colspan="7"></td>`;
+            return;
+          }
+          
+          const entry = grid[slot.id]?.[day.id];
+          html += '<td class="course-cell">';
+          
+          if (entry && entry.subject_id) {
+            const subject = subjects.find(s => s.id === entry.subject_id);
+            const subjectCode = subject?.code || 'default';
+            html += `<div class="course-card subject-${subjectCode}" onclick="openEditModal('${slot.id}', ${day.id}, '${entry.id || ''}')">
+              <div class="course-name">${entry.subjectName || subject?.name || ''}</div>
+              ${entry.teacher_name ? `<div class="course-teacher">👤 ${entry.teacher_name}</div>` : ''}
+              ${entry.classroom ? `<div class="course-room">📍 ${entry.classroom}</div>` : ''}
+            </div>`;
+          } else {
+            const canEdit = API.isLoggedIn() && API.hasRole('teacher', 'admin', 'super_admin');
+            html += `<div class="course-card empty" ${canEdit ? `onclick="openEditModal('${slot.id}', ${day.id})"` : ''}>
+              ${canEdit ? '+ 添加' : ''}
+            </div>`;
+          }
+          html += '</td>';
+        });
+        html += '</tr>';
+      });
+      
+      tbody.innerHTML = html;
+    }
+
+    function renderLegend() {
+      const legend = document.getElementById('legend');
+      const usedSubjects = new Set();
+      Object.values(timetableData.grid).forEach(day => {
+        Object.values(day).forEach(entry => {
+          if (entry?.subject_id) usedSubjects.add(entry.subject_id);
+        });
+      });
+      
+      let html = '<span class="text-sm text-secondary" style="margin-right:8px">科目颜色：</span>';
+      subjects.filter(s => usedSubjects.has(s.id)).forEach(s => {
+        html += `<span class="legend-item">
+          <span class="subject-color-dot subject-${s.code}" style="background:currentColor"></span>
+          ${s.name}
+        </span>`;
+      });
+      legend.innerHTML = html;
+    }
+
+    let isEditing = false;
+    function editMode() {
+      isEditing = !isEditing;
+      showToast(isEditing ? '点击课程可以编辑' : '已退出编辑模式', 'info');
+      document.getElementById('editBtn').textContent = isEditing ? '✅ 完成编辑' : '✏️ 编辑课表';
+    }
+
+    function openEditModal(slotId, weekday, entryId = null) {
+      if (!API.isLoggedIn() || !API.hasRole('teacher', 'admin', 'super_admin')) {
+        if (!isEditing) return;
+      }
+      
+      currentEditSlot = slotId;
+      currentEditWeekday = weekday;
+      currentEntryId = entryId;
+      
+      const subjectSelect = document.getElementById('editSubject');
+      subjectSelect.innerHTML = '<option value="">无课程（空）</option>';
+      subjects.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = s.name;
+        subjectSelect.appendChild(opt);
+      });
+      
+      document.getElementById('editTeacher').value = '';
+      document.getElementById('editRoom').value = '';
+      document.getElementById('editWeekType').value = 'all';
+      document.getElementById('deleteEntryBtn').style.display = entryId ? 'flex' : 'none';
+      
+      if (entryId) {
+        const entry = Object.values(timetableData.grid).flatMap(d => Object.values(d)).find(e => e && e.id === entryId);
+        if (entry) {
+          subjectSelect.value = entry.subject_id || '';
+          document.getElementById('editTeacher').value = entry.teacher_name || '';
+          document.getElementById('editRoom').value = entry.classroom || '';
+          document.getElementById('editWeekType').value = entry.week_type || 'all';
+        }
+      }
+      
+      document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+      document.getElementById('editModal').style.display = 'none';
+      currentEditSlot = null;
+      currentEditWeekday = null;
+      currentEntryId = null;
+    }
+
+    async function saveEntry() {
+      const subject_id = document.getElementById('editSubject').value;
+      const teacher_name = document.getElementById('editTeacher').value;
+      const classroom = document.getElementById('editRoom').value;
+      const week_type = document.getElementById('editWeekType').value;
+      
+      try {
+        await API.post(`/api/timetable/${currentClassId}/entry`, {
+          slot_id: currentEditSlot,
+          weekday: currentEditWeekday,
+          subject_id: subject_id || null,
+          teacher_name,
+          classroom,
+          week_type
+        });
+        
+        showToast(currentEntryId ? '课程已更新' : '课程已添加', 'success');
+        closeEditModal();
+        loadTimetable(currentClassId);
+      } catch (e) {
+        showToast(e.message || '保存失败', 'error');
+      }
+    }
+
+    async function deleteEntry() {
+      if (!currentEntryId) return;
+      if (!await showModal({ title: '确认删除', content: '确定要删除这节课吗？' })) return;
+      
+      try {
+        await API.delete(`/api/timetable/${currentClassId}/entry/${currentEntryId}`);
+        showToast('课程已删除', 'success');
+        closeEditModal();
+        loadTimetable(currentClassId);
+      } catch (e) {
+        showToast(e.message || '删除失败', 'error');
+      }
+    }
+
+    function exportClassIsland() {
+      if (!currentClassId) return;
+      window.open(`/api/timetable/${currentClassId}/export/classisland`, '_blank');
+      showToast('正在下载ClassIsland课表文件...', 'info');
+    }
+
+    document.getElementById('editModal').addEventListener('click', (e) => {
+      if (e.target.id === 'editModal') closeEditModal();
+    });
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

@@ -14,6 +14,7 @@ const homeworkModule = require('./src/routes/homework');
 const noticesModule = require('./src/routes/notices');
 const statsRoutes = require('./src/routes/stats');
 const uploadRoutes = require('./src/routes/upload');
+const timetableRoutes = require('./src/routes/timetable');
 
 const app = express();
 const server = http.createServer(app);
@@ -38,6 +39,7 @@ app.use('/api/homework', homeworkModule.router);
 app.use('/api/notices', noticesModule.router);
 app.use('/api/stats', statsRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/timetable', timetableRoutes);
 
 app.get('/api/config', (req, res) => {
   const configs = db.query('system_config');
@@ -71,6 +73,10 @@ app.get('/student', (req, res) => {
 
 app.get('/stats', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'stats.html'));
+});
+
+app.get('/timetable', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'timetable.html'));
 });
 
 app.get('/', (req, res) => {
