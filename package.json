@@ -1,7 +1,7 @@
 {
-  "name": "homework-platform",
-  "version": "1.0.0",
-  "description": "作业公布站-homework-system",
+  "name": "ntcc-homework-platform",
+  "version": "2.0.0",
+  "description": "南通市崇川初级中学作业公布站 - 支持多年级多班级的完整教务管理平台",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -11,9 +11,13 @@
     "express": "^4.18.2",
     "ws": "^8.14.2",
     "cors": "^2.8.5",
-    "body-parser": "^1.20.2"
+    "body-parser": "^1.20.2",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.0"
   },
-  "keywords": ["homework", "education"],
+  "keywords": ["homework", "education", "school", "ntcc"],
   "author": "geyuqi",
   "license": "MIT"
 }

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 - 南通市崇川初级中学作业公布站</title>
+  <link rel="stylesheet" href="/css/common.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .login-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .login-logo-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: var(--radius-lg);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .login-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .role-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .role-btn {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .role-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .role-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .back-link a {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .demo-accounts {
+      margin-top: 24px;
+      padding: 16px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .demo-accounts-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card card">
+      <div class="login-logo">
+        <div class="login-logo-icon">📚</div>
+        <h1 class="login-title">欢迎登录</h1>
+        <p class="login-subtitle">南通市崇川初级中学作业公布站</p>
+      </div>
+
+      <div class="role-selector">
+        <button class="role-btn active" data-role="super_admin">管理员</button>
+        <button class="role-btn" data-role="teacher">教师</button>
+        <button class="role-btn" data-role="student">学生/家长</button>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label">用户名</label>
+          <input type="text" class="form-control" id="username" placeholder="请输入用户名" value="admin" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">密码</label>
+          <input type="password" class="form-control" id="password" placeholder="请输入密码" value="admin123" required>
+        </div>
+        <button type="submit" class="btn btn-primary login-btn">登 录</button>
+      </form>
+
+      <div class="back-link">
+        <a href="/">← 返回首页</a>
+      </div>
+
+      <div class="demo-accounts">
+        <div class="demo-accounts-title">默认账号</div>
+        <div>超级管理员：admin / admin123</div>
+        <div style="margin-top:4px">学生/家长无需登录，可在首页选择班级查看</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script>
+    let selectedRole = 'super_admin';
+
+    document.querySelectorAll('.role-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedRole = btn.dataset.role;
+        
+        if (selectedRole === 'super_admin' || selectedRole === 'admin') {
+          document.getElementById('username').value = 'admin';
+          document.getElementById('password').value = 'admin123';
+        } else {
+          document.getElementById('username').value = '';
+          document.getElementById('password').value = '';
+        }
+      });
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const data = await API.post('/api/auth/login', {
+          username,
+          password,
+          role: selectedRole === 'student' ? undefined : selectedRole
+        });
+
+        API.setAuth(data.data.token, data.data.user);
+        showToast('登录成功', 'success');
+        
+        setTimeout(() => {
+          if (data.data.user.role === 'super_admin' || data.data.user.role === 'admin') {
+            window.location.href = '/admin';
+          } else if (data.data.user.role === 'teacher') {
+            window.location.href = '/teacher';
+          } else {
+            window.location.href = '/student';
+          }
+        }, 500);
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    });
+
+    if (API.isLoggedIn()) {
+      if (API.hasRole('super_admin', 'admin')) {
+        window.location.href = '/admin';
+      } else if (API.hasRole('teacher')) {
+        window.location.href = '/teacher';
+      } else {
+        window.location.href = '/student';
+      }
+    }
+
+    initTheme();
+  </script>
+</body>
+</html>

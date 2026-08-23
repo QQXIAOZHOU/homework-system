@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理后台 - 作业公布站</title>
+  <link rel="stylesheet" href="/css/common.css">
+  <style>
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 24px;
+      padding: 24px 0;
+      min-height: calc(100vh - 64px);
+    }
+
+    .sidebar-menu {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+      height: fit-content;
+      position: sticky;
+      top: 88px;
+      border: 1px solid var(--border-light);
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: var(--transition);
+      margin-bottom: 4px;
+    }
+
+    .menu-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .menu-item.active {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .main-panel {
+      min-width: 0;
+    }
+
+    .panel-section {
+      display: none;
+    }
+
+    .panel-section.active {
+      display: block;
+    }
+
+    .page-header {
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .page-desc {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .overview-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1px solid var(--border-light);
+    }
+
+    .overview-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .overview-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .content-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th, .data-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 14px;
+    }
+
+    .data-table th {
+      background: var(--bg-hover);
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .data-table tr:hover td {
+      background: var(--bg-hover);
+    }
+
+    .grade-section {
+      margin-bottom: 24px;
+    }
+
+    .grade-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--primary);
+      display: inline-block;
+    }
+
+    .class-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .class-item {
+      background: var(--bg-hover);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .class-name {
+      font-weight: 500;
+    }
+
+    .class-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar-menu {
+        position: static;
+        display: flex;
+        overflow-x: auto;
+        gap: 4px;
+      }
+      
+      .menu-item {
+        white-space: nowrap;
+        margin-bottom: 0;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .data-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header" id="header"></header>
+
+  <main class="container admin-layout">
+    <aside class="sidebar-menu">
+      <div class="menu-item active" data-panel="overview" onclick="switchPanel('overview')">
+        <span>📊</span> 数据概览
+      </div>
+      <div class="menu-item" data-panel="grades" onclick="switchPanel('grades')">
+        <span>🏫</span> 年级班级
+      </div>
+      <div class="menu-item" data-panel="users" onclick="switchPanel('users')">
+        <span>👥</span> 用户管理
+      </div>
+      <div class="menu-item" data-panel="homework" onclick="switchPanel('homework')">
+        <span>📝</span> 作业管理
+      </div>
+      <div class="menu-item" data-panel="settings" onclick="switchPanel('settings')">
+        <span>⚙️</span> 系统设置
+      </div>
+    </aside>
+
+    <div class="main-panel">
+      <div class="panel-section active" id="panel-overview">
+        <div class="page-header">
+          <h1 class="page-title">数据概览</h1>
+          <p class="page-desc">系统运行状态和数据统计</p>
+        </div>
+        <div class="overview-grid" id="overviewGrid">
+          <div class="overview-card">
+            <div class="overview-value" id="ovUsers">-</div>
+            <div class="overview-label">总用户数</div>
+          </div>
+          <div class="overview-card">
+            <div class="overview-value" id="ovTeachers">-</div>
+            <div class="overview-label">教师人数</div>
+          </div>
+          <div class="overview-card">
+            <div class="overview-value" id="ovStudents">-</div>
+            <div class="overview-label">学生人数</div>
+          </div>
+          <div class="overview-card">
+            <div class="overview-value" id="ovClasses">-</div>
+            <div class="overview-label">班级总数</div>
+          </div>
+          <div class="overview-card">
+            <div class="overview-value" id="ovHomework">-</div>
+            <div class="overview-label">作业总数</div>
+          </div>
+          <div class="overview-card">
+            <div class="overview-value" id="ovVisits">-</div>
+            <div class="overview-label">今日访问</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">各年级统计</span>
+          </div>
+          <div class="card-body" id="gradeStats">
+            <div class="loading"><div class="spinner"></div>加载中...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section" id="panel-grades">
+        <div class="page-header">
+          <h1 class="page-title">年级班级管理</h1>
+          <p class="page-desc">管理年级和班级信息</p>
+        </div>
+        <div id="gradesContainer">
+          <div class="loading"><div class="spinner"></div>加载中...</div>
+        </div>
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">添加新班级</span>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <select class="form-control" id="newClassGrade">
+                <option value="">选择年级</option>
+              </select>
+              <input type="number" class="form-control" id="newClassNumber" placeholder="班级号 (如1,2,3)" min="1">
+              <input type="text" class="form-control" id="newClassName" placeholder="班级名称 (可选)">
+            </div>
+            <button class="btn btn-primary" onclick="addClass()">添加班级</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section" id="panel-users">
+        <div class="page-header">
+          <h1 class="page-title">用户管理</h1>
+          <p class="page-desc">管理教师、学生账号</p>
+        </div>
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">添加用户</span>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <input type="text" class="form-control" id="newUsername" placeholder="用户名">
+              <input type="password" class="form-control" id="newPassword" placeholder="密码">
+              <input type="text" class="form-control" id="newRealName" placeholder="真实姓名">
+            </div>
+            <div class="form-row">
+              <select class="form-control" id="newRole" onchange="onRoleChange()">
+                <option value="teacher">教师</option>
+                <option value="student">学生</option>
+                <option value="admin">教务管理员</option>
+              </select>
+              <select class="form-control" id="newUserGrade" onchange="loadNewUserClasses()">
+                <option value="">选择年级</option>
+              </select>
+              <select class="form-control" id="newUserClass">
+                <option value="">选择班级</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" onclick="addUser()">添加用户</button>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">用户列表</span>
+            <div class="filter-group">
+              <select class="filter-select" id="userRoleFilter" onchange="loadUsers()">
+                <option value="">全部角色</option>
+                <option value="teacher">教师</option>
+                <option value="student">学生</option>
+                <option value="admin">管理员</option>
+              </select>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>用户名</th>
+                  <th>姓名</th>
+                  <th>角色</th>
+                  <th>年级班级</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="userTableBody">
+                <tr><td colspan="6" class="loading"><div class="spinner"></div>加载中...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section" id="panel-homework">
+        <div class="page-header">
+          <h1 class="page-title">作业管理</h1>
+          <p class="page-desc">查看和管理所有作业</p>
+        </div>
+        <div class="content-card">
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>科目</th>
+                  <th>标题</th>
+                  <th>班级</th>
+                  <th>教师</th>
+                  <th>发布时间</th>
+                  <th>查看</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="adminHomeworkBody">
+                <tr><td colspan="7" class="loading"><div class="spinner"></div>加载中...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section" id="panel-settings">
+        <div class="page-header">
+          <h1 class="page-title">系统设置</h1>
+          <p class="page-desc">系统配置和数据管理</p>
+        </div>
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">系统信息</span>
+          </div>
+          <div class="card-body">
+            <p><strong>学校名称：</strong>南通市崇川初级中学</p>
+            <p class="mt-8"><strong>系统版本：</strong>v2.0.0</p>
+            <p class="mt-8"><strong>默认管理员：</strong>admin（请及时修改密码）</p>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">账号设置</span>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <input type="password" class="form-control" id="oldPassword" placeholder="原密码">
+              <input type="password" class="form-control" id="newPassword1" placeholder="新密码">
+              <input type="password" class="form-control" id="newPassword2" placeholder="确认新密码">
+            </div>
+            <button class="btn btn-primary" onclick="changePassword()">修改密码</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/common.js"></script>
+  <script>
+    let gradesData = [];
+
+    async function init() {
+      if (!API.isLoggedIn() || !API.hasRole('super_admin', 'admin')) {
+        window.location.href = '/login';
+        return;
+      }
+      
+      initHeader('admin');
+      await loadGrades();
+      await Promise.all([
+        loadOverview(),
+        loadGradesPanel(),
+        loadUsers(),
+        loadAdminHomework()
+      ]);
+      recordVisit('/admin');
+    }
+
+    function switchPanel(panel) {
+      document.querySelectorAll('.menu-item').forEach(m => m.classList.toggle('active', m.dataset.panel === panel));
+      document.querySelectorAll('.panel-section').forEach(p => p.classList.toggle('active', p.id === 'panel-' + panel));
+    }
+
+    async function loadGrades() {
+      const data = await API.get('/api/grades');
+      gradesData = data.data;
+      
+      const gradeSelects = ['newClassGrade', 'newUserGrade'];
+      gradeSelects.forEach(id => {
+        const sel = document.getElementById(id);
+        if (sel) {
+          sel.innerHTML = '<option value="">选择年级</option>';
+          gradesData.forEach(g => {
+            sel.innerHTML += `<option value="${g.id}">${g.fullName}</option>`;
+          });
+        }
+      });
+    }
+
+    async function loadOverview() {
+      try {
+        const data = await API.get('/api/stats/overview');
+        const o = data.data.overview;
+        const v = data.data.visits;
+        
+        document.getElementById('ovUsers').textContent = o.totalUsers;
+        document.getElementById('ovTeachers').textContent = o.teacherCount;
+        document.getElementById('ovStudents').textContent = o.studentCount;
+        document.getElementById('ovClasses').textContent = o.classCount;
+        document.getElementById('ovHomework').textContent = o.homeworkCount;
+        document.getElementById('ovVisits').textContent = v.todayVisits;
+
+        const gs = document.getElementById('gradeStats');
+        gs.innerHTML = data.data.gradeStats.map(g => `
+          <div class="grade-section">
+            <div class="grade-title">${g.full_name}</div>
+            <div class="flex gap-16 flex-wrap text-sm">
+              <span>班级数：<strong>${g.class_count}</strong></span>
+              <span>学生数：<strong>${g.student_count}</strong></span>
+              <span>教师数：<strong>${g.teacher_count}</strong></span>
+              <span>作业数：<strong>${g.homework_count}</strong></span>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function loadGradesPanel() {
+      const container = document.getElementById('gradesContainer');
+      container.innerHTML = gradesData.map(grade => `
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">${grade.fullName}</span>
+            <span class="text-muted text-sm">${grade.classes.length} 个班级</span>
+          </div>
+          <div class="card-body">
+            <div class="class-grid">
+              ${grade.classes.map(c => `
+                <div class="class-item">
+                  <span class="class-name">${c.class_name}</span>
+                  <span class="class-count">${c.actual_student_count || 0}人</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function addClass() {
+      const gradeId = document.getElementById('newClassGrade').value;
+      const classNumber = document.getElementById('newClassNumber').value;
+      const className = document.getElementById('newClassName').value;
+
+      if (!gradeId || !classNumber) {
+        showToast('请选择年级并填写班级号', 'error');
+        return;
+      }
+
+      try {
+        await API.post(`/api/grades/${gradeId}/classes`, {
+          classNumber: parseInt(classNumber),
+          className: className || null
+        });
+        showToast('班级添加成功', 'success');
+        document.getElementById('newClassNumber').value = '';
+        document.getElementById('newClassName').value = '';
+        await loadGrades();
+        await loadGradesPanel();
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    function onRoleChange() {}
+
+    async function loadNewUserClasses() {
+      const gradeId = document.getElementById('newUserGrade').value;
+      const sel = document.getElementById('newUserClass');
+      sel.innerHTML = '<option value="">选择班级</option>';
+      if (!gradeId) return;
+      
+      const grade = gradesData.find(g => g.id === parseInt(gradeId));
+      (grade?.classes || []).forEach(c => {
+        sel.innerHTML += `<option value="${c.id}">${c.class_name}</option>`;
+      });
+    }
+
+    async function addUser() {
+      const username = document.getElementById('newUsername').value;
+      const password = document.getElementById('newPassword').value;
+      const realName = document.getElementById('newRealName').value;
+      const role = document.getElementById('newRole').value;
+      const gradeId = document.getElementById('newUserGrade').value;
+      const classId = document.getElementById('newUserClass').value;
+
+      if (!username || !password || !realName) {
+        showToast('请填写必填信息', 'error');
+        return;
+      }
+
+      try {
+        await API.post('/api/users', {
+          username, password, realName, role,
+          gradeId: gradeId ? parseInt(gradeId) : null,
+          classId: classId || null
+        });
+        showToast('用户添加成功', 'success');
+        document.getElementById('newUsername').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('newRealName').value = '';
+        loadUsers();
+        loadOverview();
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    async function loadUsers() {
+      const role = document.getElementById('userRoleFilter').value;
+      try {
+        let url = '/api/users?pageSize=100';
+        if (role) url += `&role=${role}`;
+        const data = await API.get(url);
+        const tbody = document.getElementById('userTableBody');
+        
+        const roleNames = { super_admin: '超管', admin: '管理员', teacher: '教师', student: '学生', parent: '家长' };
+        
+        tbody.innerHTML = data.data.list.map(u => `
+          <tr>
+            <td class="font-mono text-sm">${u.username}</td>
+            <td>${u.real_name}</td>
+            <td><span class="badge badge-primary">${roleNames[u.role]}</span></td>
+            <td class="text-secondary text-sm">${u.grade_name || ''} ${u.class_name || ''}</td>
+            <td><span class="badge ${u.status ? 'badge-success' : 'badge-danger'}">${u.status ? '正常' : '禁用'}</span></td>
+            <td>
+              <button class="btn-icon ${u.status ? 'danger' : ''}" onclick="toggleUserStatus('${u.id}', ${u.status ? 0 : 1})">
+                ${u.status ? '🚫' : '✅'}
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    async function toggleUserStatus(userId, status) {
+      try {
+        await API.put(`/api/users/${userId}`, { status });
+        showToast(status ? '用户已启用' : '用户已禁用', 'success');
+        loadUsers();
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    async function loadAdminHomework() {
+      try {
+        const data = await API.get('/api/homework?pageSize=100');
+        const tbody = document.getElementById('adminHomeworkBody');
+        
+        tbody.innerHTML = data.data.list.map(h => `
+          <tr>
+            <td><span class="badge" style="background:${getSubjectColor(h.subject_name)}20;color:${getSubjectColor(h.subject_name)}">${h.subject_name || ''}</span></td>
+            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.title}</td>
+            <td class="text-sm text-secondary">${h.grade_name || ''} ${h.class_name || ''}</td>
+            <td class="text-sm">${h.teacher_name}</td>
+            <td class="text-sm text-secondary">${formatDateTime(h.created_at)}</td>
+            <td class="text-sm">${h.view_count || 0}</td>
+            <td><button class="btn-icon danger" onclick="deleteHomework('${h.id}')">🗑️</button></td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function deleteHomework(id) {
+      if (!await showModal({ title: '确认删除', content: '确定要删除这份作业吗？' })) return;
+      try {
+        await API.delete(`/api/homework/${id}`);
+        showToast('删除成功', 'success');
+        loadAdminHomework();
+        loadOverview();
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    async function changePassword() {
+      const oldPassword = document.getElementById('oldPassword').value;
+      const newPassword1 = document.getElementById('newPassword1').value;
+      const newPassword2 = document.getElementById('newPassword2').value;
+
+      if (!oldPassword || !newPassword1 || !newPassword2) {
+        showToast('请填写完整', 'error');
+        return;
+      }
+      if (newPassword1 !== newPassword2) {
+        showToast('两次密码不一致', 'error');
+        return;
+      }
+      if (newPassword1.length < 6) {
+        showToast('新密码至少6位', 'error');
+        return;
+      }
+
+      try {
+        await API.post('/api/auth/change-password', { oldPassword, newPassword: newPassword1 });
+        showToast('密码修改成功，请重新登录', 'success');
+        setTimeout(() => {
+          API.logout();
+          window.location.href = '/login';
+        }, 1500);
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
