@@ -47,11 +47,15 @@ app.get('/api/config', (req, res) => {
   configs.forEach(c => { configObj[c.key] = c.value; });
   
   res.json({
-    schoolName: configObj.school_name || config.SCHOOL_NAME,
-    siteName: configObj.site_name || '作业公布站',
-    semester: configObj.semester || '',
-    roles: config.ROLE_NAMES,
-    maintenanceMode: configObj.maintenance_mode === 'true'
+    success: true,
+    message: '获取成功',
+    data: {
+      schoolName: configObj.school_name || config.SCHOOL_NAME,
+      siteName: configObj.site_name || '作业公布站',
+      semester: configObj.semester || '',
+      roles: config.ROLE_NAMES,
+      maintenanceMode: configObj.maintenance_mode === 'true'
+    }
   });
 });
 

@@ -7,8 +7,20 @@
   <link rel="stylesheet" href="/css/common.css">
   <style>
     .hero {
-      padding: 60px 0 40px;
+      padding: 48px 0 32px;
       text-align: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 400px;
+      background: linear-gradient(180deg, var(--primary-soft) 0%, transparent 100%);
+      z-index: -1;
     }
 
     .school-badge {
@@ -16,64 +28,171 @@
       align-items: center;
       gap: 8px;
       padding: 8px 20px;
-      background: var(--primary-soft);
-      color: var(--primary);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       border-radius: var(--radius-full);
       font-size: 14px;
       font-weight: 500;
       margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
     }
 
     .hero h1 {
-      font-size: 36px;
-      font-weight: 700;
-      margin-bottom: 16px;
+      font-size: 42px;
+      font-weight: 800;
+      margin-bottom: 12px;
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      letter-spacing: -0.5px;
     }
 
-    .hero p {
-      font-size: 16px;
+    .hero .subtitle {
+      font-size: 17px;
       color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 40px;
+      max-width: 560px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
     }
 
-    .grade-grid {
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .quick-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .quick-nav-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      border: 1px solid var(--border-light);
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .quick-nav-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+      color: inherit;
+    }
+
+    .quick-nav-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 12px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+
+    .quick-nav-card:nth-child(1) .quick-nav-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .quick-nav-card:nth-child(2) .quick-nav-icon { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .quick-nav-card:nth-child(3) .quick-nav-icon { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .quick-nav-card:nth-child(4) .quick-nav-icon { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+
+    .quick-nav-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .quick-nav-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .grade-selector {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-bottom: 40px;
+      gap: 20px;
     }
 
     .grade-card {
       background: var(--bg-card);
       border-radius: var(--radius-xl);
-      padding: 32px 24px;
-      text-align: center;
-      box-shadow: var(--shadow);
+      padding: 28px 24px;
       border: 1px solid var(--border-light);
-      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
     }
 
+    .grade-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .grade-card:nth-child(1)::before { background: linear-gradient(90deg, #667eea, #764ba2); }
+    .grade-card:nth-child(2)::before { background: linear-gradient(90deg, #f093fb, #f5576c); }
+    .grade-card:nth-child(3)::before { background: linear-gradient(90deg, #4facfe, #00f2fe); }
+
     .grade-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
       box-shadow: var(--shadow-lg);
+    }
+
+    .grade-card.active {
       border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-soft), var(--shadow-lg);
+    }
+
+    .grade-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
     }
 
     .grade-icon {
-      width: 72px;
-      height: 72px;
-      margin: 0 auto 20px;
+      width: 56px;
+      height: 56px;
       border-radius: var(--radius-lg);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
+      font-size: 28px;
     }
 
     .grade-card:nth-child(1) .grade-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
@@ -82,115 +201,56 @@
 
     .grade-name {
       font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 8px;
+      font-weight: 700;
     }
 
-    .grade-desc {
-      font-size: 14px;
+    .grade-count {
+      font-size: 13px;
       color: var(--text-muted);
-    }
-
-    .class-section {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .class-section.show {
-      display: block;
-    }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      margin-bottom: 20px;
-      background: none;
-      font-size: 14px;
-    }
-
-    .back-btn:hover {
-      color: var(--primary);
+      margin-top: 2px;
     }
 
     .class-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
     }
 
-    .class-card {
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-      padding: 20px 16px;
+    .class-btn {
+      padding: 12px 8px;
+      background: var(--bg-hover);
+      border-radius: var(--radius);
       text-align: center;
-      border: 1px solid var(--border);
-      transition: var(--transition);
-      cursor: pointer;
-    }
-
-    .class-card:hover {
-      border-color: var(--primary);
-      background: var(--primary-soft);
-      transform: scale(1.02);
-    }
-
-    .class-number {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 4px;
-    }
-
-    .class-label {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .quick-actions {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 40px;
-      flex-wrap: wrap;
-    }
-
-    .quick-action {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      color: var(--text-secondary);
       font-size: 14px;
       font-weight: 500;
+      color: var(--text-secondary);
+      transition: var(--transition);
+      cursor: pointer;
+      border: 1px solid transparent;
     }
 
-    .quick-action:hover {
-      border-color: var(--primary);
+    .class-btn:hover {
+      background: var(--primary-soft);
       color: var(--primary);
+      border-color: var(--primary);
+      transform: scale(1.02);
     }
 
     .features {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 20px;
-      margin-top: 60px;
-      padding: 40px 0;
+      padding: 32px 0;
       border-top: 1px solid var(--border);
     }
 
     .feature-item {
       text-align: center;
+      padding: 20px;
     }
 
     .feature-icon {
-      font-size: 32px;
+      font-size: 40px;
       margin-bottom: 12px;
     }
 
@@ -203,18 +263,67 @@
     .feature-desc {
       font-size: 13px;
       color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .notice-ticker {
+      background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
+      border: 1px solid #FED7AA;
+      border-radius: var(--radius-lg);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+
+    .notice-ticker-label {
+      background: var(--warning);
+      color: white;
+      padding: 4px 12px;
+      border-radius: var(--radius);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .notice-ticker-content {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .notice-ticker-text {
+      display: inline-block;
+      animation: marquee 20s linear infinite;
+      font-size: 14px;
+      color: #92400E;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
     }
 
     @media (max-width: 768px) {
       .hero h1 { font-size: 28px; }
-      .grade-grid { grid-template-columns: 1fr; gap: 16px; }
-      .features { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .hero .subtitle { font-size: 15px; }
+      .quick-nav { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .grade-selector { grid-template-columns: 1fr; gap: 16px; }
+      .features { grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 24px 0; }
       .class-grid { grid-template-columns: repeat(3, 1fr); }
+      .quick-nav-card { padding: 20px 16px; }
     }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      animation: fadeIn 0.4s ease forwards;
     }
   </style>
 </head>
@@ -222,30 +331,49 @@
   <header class="header" id="header"></header>
 
   <main class="container">
-    <section class="hero" id="heroSection">
+    <section class="hero">
       <div class="school-badge">🎓 南通市崇川初级中学</div>
       <h1>作业公布站</h1>
-      <p>便捷查看每日作业，支持实时更新，让学习更高效</p>
-
-      <div class="grade-grid" id="gradeGrid">
+      <p class="subtitle">便捷查看每日作业与课程表，支持实时更新推送，让家校沟通更高效、学习更有序</p>
+      
+      <div class="notice-ticker" id="noticeTicker" style="display:none">
+        <span class="notice-ticker-label">📢 公告</span>
+        <div class="notice-ticker-content">
+          <span class="notice-ticker-text" id="noticeText"></span>
+        </div>
       </div>
 
-      <div class="quick-actions">
-        <a href="/login" class="quick-action">
-          <span>🔐</span> 教师/管理员登录
+      <div class="quick-nav">
+        <a href="javascript:void(0)" onclick="scrollToGrades()" class="quick-nav-card">
+          <div class="quick-nav-icon">📚</div>
+          <div class="quick-nav-title">查看作业</div>
+          <div class="quick-nav-desc">选择班级查看作业</div>
         </a>
-        <a href="/stats" class="quick-action">
-          <span>📊</span> 访问统计
+        <a href="/timetable" class="quick-nav-card">
+          <div class="quick-nav-icon">📅</div>
+          <div class="quick-nav-title">课程表</div>
+          <div class="quick-nav-desc">查看班级课程安排</div>
+        </a>
+        <a href="/login" class="quick-nav-card">
+          <div class="quick-nav-icon">🔐</div>
+          <div class="quick-nav-title">教师登录</div>
+          <div class="quick-nav-desc">发布作业和公告</div>
+        </a>
+        <a href="/stats" class="quick-nav-card">
+          <div class="quick-nav-icon">📊</div>
+          <div class="quick-nav-title">数据统计</div>
+          <div class="quick-nav-desc">访问量与使用数据</div>
         </a>
       </div>
     </section>
 
-    <section class="class-section" id="classSection">
-      <button class="back-btn" onclick="showGrades()">
-        ← 返回选择年级
-      </button>
-      <h2 class="text-xl mb-20" id="currentGradeTitle">选择班级</h2>
-      <div class="class-grid" id="classGrid">
+    <section class="section" id="gradeSection">
+      <div class="section-header">
+        <h2 class="section-title">🏫 选择年级和班级</h2>
+      </div>
+
+      <div class="grade-selector" id="gradeGrid">
+        <div class="loading" style="grid-column:1/-1"><div class="spinner"></div>加载中...</div>
       </div>
     </section>
 
@@ -253,22 +381,22 @@
       <div class="feature-item">
         <div class="feature-icon">📱</div>
         <div class="feature-title">多端适配</div>
-        <div class="feature-desc">手机电脑均可使用</div>
+        <div class="feature-desc">手机电脑平板<br>全平台响应式设计</div>
       </div>
       <div class="feature-item">
         <div class="feature-icon">⚡</div>
         <div class="feature-title">实时更新</div>
-        <div class="feature-desc">WebSocket即时推送</div>
+        <div class="feature-desc">WebSocket即时推送<br>新作业新公告秒级通知</div>
       </div>
       <div class="feature-item">
         <div class="feature-icon">🌙</div>
         <div class="feature-title">深色模式</div>
-        <div class="feature-desc">保护视力舒适阅读</div>
+        <div class="feature-desc">自动跟随系统主题<br>夜间阅读更舒适</div>
       </div>
       <div class="feature-item">
         <div class="feature-icon">📎</div>
         <div class="feature-title">附件支持</div>
-        <div class="feature-desc">支持文件图片上传</div>
+        <div class="feature-desc">支持图片文档上传<br>作业资料随时下载</div>
       </div>
     </section>
   </main>
@@ -276,71 +404,72 @@
   <script src="/js/common.js"></script>
   <script>
     let gradesData = [];
-    let currentGrade = null;
 
     async function init() {
       initHeader('home');
-      await loadGrades();
       recordVisit('/');
+      await loadData();
+      loadLatestNotice();
     }
 
-    async function loadGrades() {
+    async function loadData() {
       try {
-        const data = await API.get('/api/config');
-        gradesData = data.data.grades;
-        
-        const grid = document.getElementById('gradeGrid');
-        grid.innerHTML = gradesData.map((grade, index) => `
-          <div class="grade-card" onclick="showClasses(${grade.id}, '${grade.name}', '${grade.fullName}')">
-            <div class="grade-icon">${['🌱', '🌿', '🌳'][index]}</div>
-            <div class="grade-name">${grade.fullName}</div>
-            <div class="grade-desc">点击查看班级</div>
-          </div>
-        `).join('');
-
-        await loadAllClasses();
+        const data = await API.get('/api/grades/classes/all');
+        gradesData = data.data || [];
+        renderGrades();
       } catch (e) {
-        showToast('加载数据失败', 'error');
+        document.getElementById('gradeGrid').innerHTML = 
+          '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">😢</div><div class="empty-text">加载数据失败，请刷新重试</div></div>';
       }
     }
 
-    async function loadAllClasses() {
+    async function loadLatestNotice() {
       try {
-        for (const grade of gradesData) {
-          const res = await API.get(`/api/grades/${grade.id}/classes`);
-          grade.classes = res.data || [];
+        const data = await API.get('/api/notices?important=true&pageSize=1');
+        if (data.data?.notices?.length > 0) {
+          const notice = data.data.notices[0];
+          document.getElementById('noticeTicker').style.display = 'flex';
+          document.getElementById('noticeText').textContent = `【${notice.title}】${notice.content.replace(/<[^>]+>/g, '').substring(0, 100)}`;
         }
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) {}
     }
 
-    function showClasses(gradeId, gradeName, gradeFullName) {
-      currentGrade = gradesData.find(g => g.id === gradeId);
-      document.getElementById('heroSection').style.display = 'none';
-      document.getElementById('classSection').classList.add('show');
-      document.getElementById('currentGradeTitle').textContent = `${gradeFullName} - 请选择班级`;
+    function renderGrades() {
+      const grid = document.getElementById('gradeGrid');
+      const icons = ['🌱', '🌿', '🌳'];
+      const levels = ['初一', '初二', '初三'];
       
-      const grid = document.getElementById('classGrid');
-      if (currentGrade.classes && currentGrade.classes.length > 0) {
-        grid.innerHTML = currentGrade.classes.map(cls => `
-          <div class="class-card" onclick="goToStudent(${gradeId}, '${cls.id}', '${cls.class_name}')">
-            <div class="class-number">${cls.class_number}</div>
-            <div class="class-label">${cls.class_name}</div>
+      grid.innerHTML = gradesData.map((grade, index) => {
+        const classes = grade.classes || [];
+        classes.sort((a, b) => a.class_num - b.class_num);
+        
+        return `
+          <div class="grade-card animate-in" style="animation-delay:${index * 0.1}s" onclick="event.stopPropagation()">
+            <div class="grade-header">
+              <div class="grade-icon">${icons[index]}</div>
+              <div>
+                <div class="grade-name">${grade.name}</div>
+                <div class="grade-count">${classes.length}个班级</div>
+              </div>
+            </div>
+            <div class="class-grid">
+              ${classes.map(cls => `
+                <div class="class-btn" onclick="goToClass('${grade.id}', '${cls.id}', '${encodeURIComponent(cls.name)}')">
+                  ${cls.class_num}班
+                </div>
+              `).join('')}
+            </div>
           </div>
-        `).join('');
-      } else {
-        grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📭</div><div class="empty-text">暂无班级，请管理员先创建班级</div></div>';
-      }
+        `;
+      }).join('');
     }
 
-    function showGrades() {
-      document.getElementById('heroSection').style.display = 'block';
-      document.getElementById('classSection').classList.remove('show');
+    function scrollToGrades() {
+      document.getElementById('gradeSection').scrollIntoView({ behavior: 'smooth' });
     }
 
-    function goToStudent(gradeId, classId, className) {
-      window.location.href = `/student?gradeId=${gradeId}&classId=${classId}&className=${encodeURIComponent(className)}`;
+    function goToClass(gradeId, classId, className) {
+      window.location.href = `/student?gradeId=${gradeId}&classId=${classId}&className=${className}`;
     }
 
     document.addEventListener('DOMContentLoaded', init);

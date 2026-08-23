@@ -1,15 +1,63 @@
 const express = require('express');
 const db = require('../database/init');
-const config = require('../config');
 const { success, error } = require('../utils/helpers');
 const { authMiddleware, optionalAuth, requireRole, canAccessClass } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/', optionalAuth, (req, res) => {
-  const { class_id, grade_id, subject_id, date, page = 1, pageSize = 20 } = req.query;
+function formatHomework(h) {
+  const subject = db.queryOne('subjects', { id: h.subject_id });
+  const teacher = db.queryOne('users', { id: h.teacher_id });
+  const cls = db.queryOne('classes', { id: h.class_id });
+  const grade = cls ? db.queryOne('grades', { id: cls.grade_id }) : null;
   
-  let homework = db.query('homework', { status: 'published' });
+  let links = [];
+  let attachments = [];
+  try {
+    links = h.links ? JSON.parse(h.links) : [];
+  } catch (e) { links = []; }
+  try {
+    attachments = h.attachments ? JSON.parse(h.attachments) : [];
+  } catch (e) { attachments = []; }
+  
+  return {
+    ...h,
+    links,
+    attachments,
+    subject_id: h.subject_id,
+    subject_name: subject?.name || '未知科目',
+    subjectName: subject?.name || '未知科目',
+    teacher_id: h.teacher_id,
+    teacher_name: teacher?.real_name || '未知教师',
+    teacherName: teacher?.real_name || '未知教师',
+    class_id: h.class_id,
+    class_name: cls?.name || '未知班级',
+    className: cls?.name || '未知班级',
+    grade_id: cls?.grade_id || null,
+    gradeId: cls?.grade_id || null,
+    grade_name: grade?.name || null,
+    gradeName: grade?.name || null,
+    deadline: h.due_date || h.deadline || null,
+    view_count: h.view_count || 0,
+    viewCount: h.view_count || 0,
+    created_at: h.created_at
+  };
+}
+
+router.get('/', optionalAuth, (req, res) => {
+  let class_id = req.query.class_id || req.query.classId;
+  let grade_id = req.query.grade_id || req.query.gradeId;
+  let subject_id = req.query.subject_id || req.query.subjectId;
+  let date = req.query.date;
+  let page = parseInt(req.query.page) || 1;
+  let pageSize = parseInt(req.query.pageSize) || 20;
+  
+  let homework = db.query('homework');
+  if (req.user && !['admin', 'super_admin', 'teacher'].includes(req.user.role)) {
+    homework = homework.filter(h => h.status === 'published');
+  } else if (!req.user) {
+    homework = homework.filter(h => h.status === 'published');
+  }
   
   if (class_id) {
     homework = homework.filter(h => h.class_id === class_id);
@@ -19,25 +67,21 @@ router.get('/', optionalAuth, (req, res) => {
   }
   
   if (subject_id) homework = homework.filter(h => h.subject_id === subject_id);
-  if (date) homework = homework.filter(h => (h.due_date || '').startsWith(date));
+  if (date) homework = homework.filter(h => (h.due_date || h.created_at || '').startsWith(date));
   
   homework.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   
   const total = homework.length;
   const start = (page - 1) * pageSize;
-  const pagedHw = homework.slice(start, start + parseInt(pageSize)).map(h => {
-    const subject = db.queryOne('subjects', { id: h.subject_id });
-    const teacher = db.queryOne('users', { id: h.teacher_id });
-    const cls = db.queryOne('classes', { id: h.class_id });
-    return {
-      ...h,
-      subjectName: subject?.name || '未知科目',
-      teacherName: teacher?.real_name || '未知教师',
-      className: cls?.name || '未知班级'
-    };
-  });
+  const pagedHw = homework.slice(start, start + pageSize).map(formatHomework);
   
-  res.json(success({ homework: pagedHw, total, page: parseInt(page), pageSize: parseInt(pageSize) }));
+  res.json(success({ 
+    list: pagedHw, 
+    homework: pagedHw,
+    total, 
+    page, 
+    pageSize 
+  }));
 });
 
 router.get('/my', authMiddleware, (req, res) => {
@@ -58,17 +102,7 @@ router.get('/my', authMiddleware, (req, res) => {
   
   homework.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   
-  const result = homework.map(h => {
-    const subject = db.queryOne('subjects', { id: h.subject_id });
-    const teacher = db.queryOne('users', { id: h.teacher_id });
-    const cls = db.queryOne('classes', { id: h.class_id });
-    return {
-      ...h,
-      subjectName: subject?.name || '未知科目',
-      teacherName: teacher?.real_name || '未知教师',
-      className: cls?.name || '未知班级'
-    };
-  });
+  const result = homework.map(formatHomework);
   
   res.json(success(result));
 });
@@ -79,59 +113,75 @@ router.get('/:id', optionalAuth, (req, res) => {
     return res.status(404).json(error('作业不存在'));
   }
 
-  const subject = db.queryOne('subjects', { id: hw.subject_id });
-  const teacher = db.queryOne('users', { id: hw.teacher_id });
-  const cls = db.queryOne('classes', { id: hw.class_id });
-  const grade = cls ? db.queryOne('grades', { id: cls.grade_id }) : null;
-
-  res.json(success({
-    ...hw,
-    subjectName: subject?.name || '未知科目',
-    teacherName: teacher?.real_name || '未知教师',
-    className: cls?.name || '未知班级',
-    gradeName: grade?.name || null
-  }));
+  db.update('homework', req.params.id, { view_count: (hw.view_count || 0) + 1 });
+  
+  res.json(success(formatHomework({ ...hw, view_count: (hw.view_count || 0) + 1 })));
 });
 
 router.post('/', authMiddleware, requireRole(['teacher', 'admin', 'super_admin']), (req, res) => {
-  const { title, content, class_id, subject_id, due_date, attachments } = req.body;
+  const { 
+    title, content, 
+    class_id, classId, 
+    subject_id, subjectId, subjectName,
+    due_date, deadline,
+    links, attachments,
+    status
+  } = req.body;
   const user = db.queryOne('users', { id: req.user.id });
 
-  if (!title || !content || !class_id) {
+  const finalClassId = class_id || classId;
+  if (!title || !content || !finalClassId) {
     return res.status(400).json(error('请填写完整信息（标题、内容、班级）'));
   }
 
-  const cls = db.queryOne('classes', { id: class_id });
+  const cls = db.queryOne('classes', { id: finalClassId });
   if (!cls) {
     return res.status(400).json(error('班级不存在'));
   }
 
-  if (!canAccessClass(user, class_id) && !['admin', 'super_admin'].includes(user.role)) {
+  if (!canAccessClass(user, finalClassId) && !['admin', 'super_admin'].includes(user.role)) {
     return res.status(403).json(error('您没有权限在该班级发布作业'));
+  }
+
+  let finalSubjectId = subject_id || subjectId;
+  if (!finalSubjectId && subjectName) {
+    const subject = db.queryOne('subjects', { name: subjectName });
+    finalSubjectId = subject?.id || null;
+  }
+  if (!finalSubjectId && user.subject_id) {
+    finalSubjectId = user.subject_id;
   }
 
   const homework = db.insert('homework', {
     title,
     content,
-    class_id,
+    class_id: finalClassId,
     grade_id: cls.grade_id,
-    subject_id: subject_id || user.subject_id || null,
+    subject_id: finalSubjectId || null,
     teacher_id: user.id,
-    due_date: due_date || null,
-    attachments: JSON.stringify(attachments || []),
-    status: 'published'
+    due_date: due_date || deadline || null,
+    links: links ? JSON.stringify(links) : null,
+    attachments: attachments ? JSON.stringify(attachments) : null,
+    view_count: 0,
+    status: status || 'published'
   });
 
   broadcastUpdate({
     type: 'homework_created',
-    payload: { ...homework, className: cls.name }
+    payload: formatHomework(homework)
   });
 
-  res.json(success(homework, '作业发布成功'));
+  res.json(success(formatHomework(homework), '作业发布成功'));
 });
 
 router.put('/:id', authMiddleware, requireRole(['teacher', 'admin', 'super_admin']), (req, res) => {
-  const { title, content, subject_id, due_date, attachments, status } = req.body;
+  const { 
+    title, content, 
+    subject_id, subjectId,
+    due_date, deadline,
+    links, attachments, 
+    status 
+  } = req.body;
   const user = db.queryOne('users', { id: req.user.id });
   const hw = db.queryOne('homework', { id: req.params.id });
 
@@ -143,18 +193,23 @@ router.put('/:id', authMiddleware, requireRole(['teacher', 'admin', 'super_admin
     return res.status(403).json(error('您没有权限修改此作业'));
   }
 
-  const updated = db.update('homework', req.params.id, {
-    title, content, subject_id, due_date,
-    attachments: attachments ? JSON.stringify(attachments) : undefined,
-    status
-  });
+  const updates = {};
+  if (title !== undefined) updates.title = title;
+  if (content !== undefined) updates.content = content;
+  if (subject_id !== undefined || subjectId !== undefined) updates.subject_id = subject_id || subjectId;
+  if (due_date !== undefined || deadline !== undefined) updates.due_date = due_date || deadline;
+  if (links !== undefined) updates.links = JSON.stringify(links || []);
+  if (attachments !== undefined) updates.attachments = JSON.stringify(attachments || []);
+  if (status !== undefined) updates.status = status;
+
+  const updated = db.update('homework', req.params.id, updates);
 
   broadcastUpdate({
     type: 'homework_updated',
-    payload: updated
+    payload: formatHomework(updated)
   });
 
-  res.json(success(updated, '作业更新成功'));
+  res.json(success(formatHomework(updated), '作业更新成功'));
 });
 
 router.delete('/:id', authMiddleware, requireRole(['teacher', 'admin', 'super_admin']), (req, res) => {

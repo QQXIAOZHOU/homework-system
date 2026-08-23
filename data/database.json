@@ -1,0 +1,666 @@
+{
+  "users": [
+    {
+      "id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
+      "username": "admin",
+      "password": "$2a$10$j13q1fAv5z9jbnCBq4snO.dPXfo2js3aF3jE4svP3aGFwYShaGTnm",
+      "real_name": "系统管理员",
+      "role": "super_admin",
+      "grade_id": null,
+      "class_id": null,
+      "subject_id": null,
+      "phone": "",
+      "email": "a****@**************",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.521Z",
+      "last_login": null
+    },
+    {
+      "id": "6402bf75-686f-4b3e-82b2-f98d04665437",
+      "username": "jiaowu",
+      "password": "$2a$10$j13q1fAv5z9jbnCBq4snO.dPXfo2js3aF3jE4svP3aGFwYShaGTnm",
+      "real_name": "教务处管理员",
+      "role": "admin",
+      "grade_id": null,
+      "class_id": null,
+      "subject_id": null,
+      "phone": "",
+      "email": "j*****@**************",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "3168aa10-6be3-4f6b-a9e9-10f21523c0e2",
+      "username": "teacher1",
+      "password": "$2a$10$RDspzs.YAdhVASJxboJ.0eZoDxXJamQGa/cxD4gxYyy9G/uV46/pC",
+      "real_name": "语文老师",
+      "role": "teacher",
+      "grade_id": "grade-7",
+      "class_id": null,
+      "subject_id": "subject-yuwen",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "1953936d-d54d-4e57-a721-debb4b11cbac",
+      "username": "teacher2",
+      "password": "$2a$10$RDspzs.YAdhVASJxboJ.0eZoDxXJamQGa/cxD4gxYyy9G/uV46/pC",
+      "real_name": "数学老师",
+      "role": "teacher",
+      "grade_id": "grade-7",
+      "class_id": null,
+      "subject_id": "subject-shuxue",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "2b0184a7-0024-424b-bdb5-d42266165d83",
+      "username": "teacher3",
+      "password": "$2a$10$RDspzs.YAdhVASJxboJ.0eZoDxXJamQGa/cxD4gxYyy9G/uV46/pC",
+      "real_name": "英语老师",
+      "role": "teacher",
+      "grade_id": "grade-7",
+      "class_id": null,
+      "subject_id": "subject-yingyu",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "d36f4a94-4ac4-4214-b16c-609c9246c12f",
+      "username": "teacher4",
+      "password": "$2a$10$RDspzs.YAdhVASJxboJ.0eZoDxXJamQGa/cxD4gxYyy9G/uV46/pC",
+      "real_name": "物理老师",
+      "role": "teacher",
+      "grade_id": "grade-7",
+      "class_id": null,
+      "subject_id": "subject-wuli",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "2a7c22c3-4f50-4f76-a8eb-5ba52b8727c1",
+      "username": "7101",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生11",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-1",
+      "subject_id": null,
+      "student_no": "202470101",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "1fd8dd3d-503c-493e-813d-6dccc27a0448",
+      "username": "7102",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生12",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-1",
+      "subject_id": null,
+      "student_no": "202470102",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "adeb90a2-1442-4d16-a662-59f8fd2f050e",
+      "username": "7103",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生13",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-1",
+      "subject_id": null,
+      "student_no": "202470103",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "55899f0d-aab1-45f3-a8db-53cbefc749ad",
+      "username": "7104",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生14",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-1",
+      "subject_id": null,
+      "student_no": "202470104",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "f8491a5e-e7ec-49f6-88cb-8a3d70bc7345",
+      "username": "7105",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生15",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-1",
+      "subject_id": null,
+      "student_no": "202470105",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "75602937-b6ba-4953-aed1-749a8c94fdaa",
+      "username": "7201",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生21",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-2",
+      "subject_id": null,
+      "student_no": "202470201",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "fbe7d434-9237-42a9-b984-1dc2f7c8e749",
+      "username": "7202",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生22",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-2",
+      "subject_id": null,
+      "student_no": "202470202",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "375b289e-926e-41be-8c6d-200af1d7aefb",
+      "username": "7203",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生23",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-2",
+      "subject_id": null,
+      "student_no": "202470203",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "167086f9-c024-481e-a087-fb61df5b4907",
+      "username": "7204",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生24",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-2",
+      "subject_id": null,
+      "student_no": "202470204",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "bd8d56b5-9112-4ac8-945b-30ffe2ba089b",
+      "username": "7205",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生25",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-2",
+      "subject_id": null,
+      "student_no": "202470205",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "d0b99b76-debb-46a7-b428-45286c79f52a",
+      "username": "7301",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生31",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-3",
+      "subject_id": null,
+      "student_no": "202470301",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "590dfad8-1564-45f9-8f91-5d8809d24942",
+      "username": "7302",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生32",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-3",
+      "subject_id": null,
+      "student_no": "202470302",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "062d1f58-548e-40df-bffd-b3c0ce801c0f",
+      "username": "7303",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生33",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-3",
+      "subject_id": null,
+      "student_no": "202470303",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "0b00fb87-4aec-4407-8960-0208b28f6a31",
+      "username": "7304",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生34",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-3",
+      "subject_id": null,
+      "student_no": "202470304",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    },
+    {
+      "id": "b1348adf-d484-42ac-a1b6-fb974c849f05",
+      "username": "7305",
+      "password": "$2a$10$RoPMdHE5Lf5ae4Kx2XL9WuDF/0pBuulCRperFmiqSHSKIRVxpZa/C",
+      "real_name": "学生35",
+      "role": "student",
+      "grade_id": "grade-7",
+      "class_id": "class-7-3",
+      "subject_id": null,
+      "student_no": "202470305",
+      "phone": "",
+      "email": "",
+      "status": "active",
+      "created_at": "2026-08-23T15:03:59.523Z",
+      "last_login": null
+    }
+  ],
+  "grades": [
+    {
+      "id": "grade-7",
+      "name": "七年级",
+      "level": 7,
+      "order_num": 1
+    },
+    {
+      "id": "grade-8",
+      "name": "八年级",
+      "level": 8,
+      "order_num": 2
+    },
+    {
+      "id": "grade-9",
+      "name": "九年级",
+      "level": 9,
+      "order_num": 3
+    }
+  ],
+  "classes": [
+    {
+      "id": "class-7-1",
+      "grade_id": "grade-7",
+      "name": "七年级(1)班",
+      "class_num": 1
+    },
+    {
+      "id": "class-7-2",
+      "grade_id": "grade-7",
+      "name": "七年级(2)班",
+      "class_num": 2
+    },
+    {
+      "id": "class-7-3",
+      "grade_id": "grade-7",
+      "name": "七年级(3)班",
+      "class_num": 3
+    },
+    {
+      "id": "class-7-4",
+      "grade_id": "grade-7",
+      "name": "七年级(4)班",
+      "class_num": 4
+    },
+    {
+      "id": "class-7-5",
+      "grade_id": "grade-7",
+      "name": "七年级(5)班",
+      "class_num": 5
+    },
+    {
+      "id": "class-7-6",
+      "grade_id": "grade-7",
+      "name": "七年级(6)班",
+      "class_num": 6
+    },
+    {
+      "id": "class-8-1",
+      "grade_id": "grade-8",
+      "name": "八年级(1)班",
+      "class_num": 1
+    },
+    {
+      "id": "class-8-2",
+      "grade_id": "grade-8",
+      "name": "八年级(2)班",
+      "class_num": 2
+    },
+    {
+      "id": "class-8-3",
+      "grade_id": "grade-8",
+      "name": "八年级(3)班",
+      "class_num": 3
+    },
+    {
+      "id": "class-8-4",
+      "grade_id": "grade-8",
+      "name": "八年级(4)班",
+      "class_num": 4
+    },
+    {
+      "id": "class-8-5",
+      "grade_id": "grade-8",
+      "name": "八年级(5)班",
+      "class_num": 5
+    },
+    {
+      "id": "class-8-6",
+      "grade_id": "grade-8",
+      "name": "八年级(6)班",
+      "class_num": 6
+    },
+    {
+      "id": "class-9-1",
+      "grade_id": "grade-9",
+      "name": "九年级(1)班",
+      "class_num": 1
+    },
+    {
+      "id": "class-9-2",
+      "grade_id": "grade-9",
+      "name": "九年级(2)班",
+      "class_num": 2
+    },
+    {
+      "id": "class-9-3",
+      "grade_id": "grade-9",
+      "name": "九年级(3)班",
+      "class_num": 3
+    },
+    {
+      "id": "class-9-4",
+      "grade_id": "grade-9",
+      "name": "九年级(4)班",
+      "class_num": 4
+    },
+    {
+      "id": "class-9-5",
+      "grade_id": "grade-9",
+      "name": "九年级(5)班",
+      "class_num": 5
+    },
+    {
+      "id": "class-9-6",
+      "grade_id": "grade-9",
+      "name": "九年级(6)班",
+      "class_num": 6
+    }
+  ],
+  "subjects": [
+    {
+      "id": "subject-yuwen",
+      "name": "语文",
+      "code": "yuwen"
+    },
+    {
+      "id": "subject-shuxue",
+      "name": "数学",
+      "code": "shuxue"
+    },
+    {
+      "id": "subject-yingyu",
+      "name": "英语",
+      "code": "yingyu"
+    },
+    {
+      "id": "subject-wuli",
+      "name": "物理",
+      "code": "wuli"
+    },
+    {
+      "id": "subject-huaxue",
+      "name": "化学",
+      "code": "huaxue"
+    },
+    {
+      "id": "subject-shengwu",
+      "name": "生物",
+      "code": "shengwu"
+    },
+    {
+      "id": "subject-zhengzhi",
+      "name": "道德与法治",
+      "code": "zhengzhi"
+    },
+    {
+      "id": "subject-lishi",
+      "name": "历史",
+      "code": "lishi"
+    },
+    {
+      "id": "subject-dili",
+      "name": "地理",
+      "code": "dili"
+    },
+    {
+      "id": "subject-tiyu",
+      "name": "体育",
+      "code": "tiyu"
+    },
+    {
+      "id": "subject-yinyue",
+      "name": "音乐",
+      "code": "yinyue"
+    },
+    {
+      "id": "subject-meishu",
+      "name": "美术",
+      "code": "meishu"
+    },
+    {
+      "id": "subject-xinxi",
+      "name": "信息技术",
+      "code": "xinxi"
+    }
+  ],
+  "homework": [],
+  "notices": [],
+  "homework_submissions": [],
+  "visit_stats": [],
+  "time_slots": [
+    {
+      "id": "slot-1",
+      "name": "第1节",
+      "start_time": "08:00",
+      "end_time": "08:45",
+      "period_type": "class",
+      "order_num": 1
+    },
+    {
+      "id": "slot-2",
+      "name": "第2节",
+      "start_time": "08:55",
+      "end_time": "09:40",
+      "period_type": "class",
+      "order_num": 2
+    },
+    {
+      "id": "slot-3",
+      "name": "课间操",
+      "start_time": "09:40",
+      "end_time": "10:05",
+      "period_type": "break",
+      "order_num": 3
+    },
+    {
+      "id": "slot-4",
+      "name": "第3节",
+      "start_time": "10:05",
+      "end_time": "10:50",
+      "period_type": "class",
+      "order_num": 4
+    },
+    {
+      "id": "slot-5",
+      "name": "第4节",
+      "start_time": "11:00",
+      "end_time": "11:45",
+      "period_type": "class",
+      "order_num": 5
+    },
+    {
+      "id": "slot-6",
+      "name": "午休",
+      "start_time": "11:45",
+      "end_time": "14:00",
+      "period_type": "lunch",
+      "order_num": 6
+    },
+    {
+      "id": "slot-7",
+      "name": "第5节",
+      "start_time": "14:00",
+      "end_time": "14:45",
+      "period_type": "class",
+      "order_num": 7
+    },
+    {
+      "id": "slot-8",
+      "name": "第6节",
+      "start_time": "14:55",
+      "end_time": "15:40",
+      "period_type": "class",
+      "order_num": 8
+    },
+    {
+      "id": "slot-9",
+      "name": "眼保健操",
+      "start_time": "15:40",
+      "end_time": "15:55",
+      "period_type": "break",
+      "order_num": 9
+    },
+    {
+      "id": "slot-10",
+      "name": "第7节",
+      "start_time": "15:55",
+      "end_time": "16:40",
+      "period_type": "class",
+      "order_num": 10
+    },
+    {
+      "id": "slot-11",
+      "name": "第8节",
+      "start_time": "16:50",
+      "end_time": "17:35",
+      "period_type": "class",
+      "order_num": 11
+    }
+  ],
+  "timetables": [],
+  "timetable_entries": [],
+  "system_config": [
+    {
+      "id": 1,
+      "key": "site_name",
+      "value": "南通市崇川初级中学作业公布站",
+      "description": "网站名称"
+    },
+    {
+      "id": 2,
+      "key": "school_name",
+      "value": "南通市崇川初级中学",
+      "description": "学校名称"
+    },
+    {
+      "id": 3,
+      "key": "semester",
+      "value": "2024-2025学年第二学期",
+      "description": "当前学期"
+    },
+    {
+      "id": 4,
+      "key": "allow_guest_view",
+      "value": "true",
+      "description": "允许游客查看作业"
+    },
+    {
+      "id": 5,
+      "key": "maintenance_mode",
+      "value": "false",
+      "description": "维护模式"
+    },
+    {
+      "id": 6,
+      "key": "homework_deadline_days",
+      "value": "7",
+      "description": "作业默认截止天数"
+    }
+  ],
+  "attachments": []
+}

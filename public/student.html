@@ -8,77 +8,76 @@
   <style>
     .student-layout {
       display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 24px;
-      padding: 24px 0;
+      grid-template-columns: 260px 1fr;
+      gap: 20px;
+      padding: 20px 0;
     }
 
-    .sidebar {
+    .sidebar-card {
       background: var(--bg-card);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       padding: 20px;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
       height: fit-content;
       position: sticky;
-      top: 88px;
-      border: 1px solid var(--border-light);
+      top: 84px;
     }
 
     .sidebar-title {
       font-size: 16px;
       font-weight: 600;
       margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .grade-list {
       display: flex;
-      flex-direction: column;
-      gap: 4px;
+      align-items: center;
+      gap: 8px;
     }
 
-    .grade-item {
+    .class-select-group {
+      margin-bottom: 16px;
+    }
+
+    .class-select-group label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .class-select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--text-primary);
+    }
+
+    .quick-links {
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+
+    .quick-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       padding: 10px 12px;
       border-radius: var(--radius);
-      cursor: pointer;
       font-size: 14px;
-      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
       transition: var(--transition);
+      text-decoration: none;
     }
 
-    .grade-item:hover {
-      background: var(--bg-hover);
-    }
-
-    .grade-item.active {
+    .quick-link:hover {
       background: var(--primary-soft);
       color: var(--primary);
-    }
-
-    .class-list {
-      margin-top: 8px;
-      margin-left: 12px;
-      padding-left: 12px;
-      border-left: 2px solid var(--border);
-    }
-
-    .class-item {
-      padding: 8px 12px;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 13px;
-      color: var(--text-secondary);
-      transition: var(--transition);
-    }
-
-    .class-item:hover {
-      color: var(--primary);
-      background: var(--bg-hover);
-    }
-
-    .class-item.active {
-      color: var(--primary);
-      font-weight: 500;
     }
 
     .main-content {
@@ -86,16 +85,11 @@
     }
 
     .page-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 12px;
     }
 
     .page-title {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 700;
     }
 
@@ -105,15 +99,48 @@
       margin-top: 4px;
     }
 
+    .live-indicator {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--success);
+      margin-top: 8px;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .notice-banner {
+      background: linear-gradient(135deg, var(--warning), #F59E0B);
+      color: white;
+      padding: 16px 20px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
     .filter-bar {
       display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 8px;
+      margin-bottom: 16px;
       flex-wrap: wrap;
     }
 
     .filter-btn {
-      padding: 8px 16px;
+      padding: 7px 14px;
       border-radius: var(--radius-full);
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -134,62 +161,13 @@
       color: white;
     }
 
-    .notice-banner {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      color: white;
-      padding: 16px 20px;
-      border-radius: var(--radius-lg);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .notice-icon {
-      font-size: 24px;
-      flex-shrink: 0;
-    }
-
-    .notice-content {
-      flex: 1;
-    }
-
-    .notice-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .notice-text {
-      font-size: 14px;
-      opacity: 0.9;
-      line-height: 1.6;
-    }
-
-    .notice-close {
-      background: rgba(255,255,255,0.2);
-      border: none;
-      color: white;
-      width: 28px;
-      height: 28px;
-      border-radius: var(--radius-full);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .homework-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
     .homework-card {
       background: var(--bg-card);
       border-radius: var(--radius-lg);
       padding: 20px;
+      margin-bottom: 12px;
       border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
       transition: var(--transition);
     }
 
@@ -202,34 +180,33 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 12px;
       gap: 12px;
+      margin-bottom: 12px;
     }
 
-    .homework-subject {
+    .subject-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-    }
-
-    .subject-dot {
-      width: 10px;
-      height: 10px;
+      padding: 4px 12px;
       border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
     }
 
     .homework-title {
       font-size: 17px;
       font-weight: 600;
-      margin-bottom: 8px;
+      margin-top: 8px;
+      line-height: 1.4;
     }
 
     .homework-meta {
       display: flex;
       gap: 16px;
+      flex-wrap: wrap;
       font-size: 13px;
       color: var(--text-muted);
-      flex-wrap: wrap;
+      margin-bottom: 12px;
     }
 
     .homework-meta-item {
@@ -242,9 +219,7 @@
       font-size: 14px;
       line-height: 1.8;
       color: var(--text-secondary);
-      margin: 12px 0;
       white-space: pre-wrap;
-      word-break: break-word;
     }
 
     .homework-content.collapsed {
@@ -264,22 +239,22 @@
     }
 
     .expand-btn {
+      background: none;
       color: var(--primary);
       font-size: 13px;
-      cursor: pointer;
-      background: none;
       padding: 4px 0;
+      margin-top: 8px;
       font-weight: 500;
     }
 
-    .homework-links {
+    .attachments-list {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-top: 12px;
     }
 
-    .link-item {
+    .attachment-item {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -288,87 +263,21 @@
       border-radius: var(--radius);
       font-size: 13px;
       color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
     }
 
-    .link-item:hover {
+    .attachment-item:hover {
       background: var(--primary-soft);
       color: var(--primary);
-    }
-
-    .attachments-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .attachment-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 14px;
-      background: var(--primary-soft);
-      color: var(--primary);
-      border-radius: var(--radius);
-      font-size: 13px;
-    }
-
-    .live-indicator {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--success);
-    }
-
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--success);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
     }
 
     @media (max-width: 768px) {
       .student-layout {
         grid-template-columns: 1fr;
       }
-      
-      .sidebar {
+      .sidebar-card {
         position: static;
-      }
-      
-      .class-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-left: 0;
-        padding-left: 0;
-        border-left: none;
-        margin-top: 12px;
-      }
-      
-      .class-item {
-        padding: 6px 12px;
-        background: var(--bg-hover);
-        border-radius: var(--radius-full);
-      }
-      
-      .grade-list {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      
-      .grade-item {
-        padding: 8px 14px;
-        background: var(--bg-hover);
-        border-radius: var(--radius-full);
       }
     }
   </style>
@@ -378,22 +287,41 @@
 
   <main class="container">
     <div class="student-layout">
-      <aside class="sidebar" id="sidebar">
-        <div class="sidebar-title">📚 年级班级</div>
-        <div class="grade-list" id="gradeList">
-          <div class="loading"><div class="spinner"></div>加载中...</div>
+      <aside>
+        <div class="sidebar-card">
+          <div class="sidebar-title">🏫 选择班级</div>
+          
+          <div class="class-select-group">
+            <label>年级</label>
+            <select class="class-select" id="gradeSelect" onchange="onGradeChange()">
+              <option value="">请选择年级</option>
+            </select>
+          </div>
+          <div class="class-select-group">
+            <label>班级</label>
+            <select class="class-select" id="classSelect" onchange="onClassChange()">
+              <option value="">请选择班级</option>
+            </select>
+          </div>
+
+          <div class="quick-links">
+            <a href="/timetable" class="quick-link">
+              <span>📅</span> 查看课程表
+            </a>
+            <a href="/" class="quick-link">
+              <span>🏠</span> 返回首页
+            </a>
+          </div>
         </div>
       </aside>
 
       <div class="main-content">
         <div class="page-header">
-          <div>
-            <h1 class="page-title" id="pageTitle">作业列表</h1>
-            <p class="page-subtitle" id="pageSubtitle">选择班级查看作业</p>
-          </div>
-          <div class="live-indicator" id="liveIndicator" style="display:none">
+          <h1 class="page-title" id="pageTitle">作业列表</h1>
+          <div class="page-subtitle" id="pageSubtitle">请从左侧选择班级查看作业</div>
+          <div class="live-indicator" id="liveIndicator">
             <span class="live-dot"></span>
-            实时同步中
+            实时连接中
           </div>
         </div>
 
@@ -403,10 +331,10 @@
           <button class="filter-btn active" data-filter="all">全部科目</button>
         </div>
 
-        <div class="homework-list" id="homeworkList">
+        <div id="homeworkList">
           <div class="empty-state">
             <div class="empty-icon">📖</div>
-            <div class="empty-text">请从左侧选择年级和班级</div>
+            <div class="empty-text">请选择年级和班级查看作业</div>
           </div>
         </div>
       </div>
@@ -418,6 +346,7 @@
     let gradesData = [];
     let currentGradeId = null;
     let currentClassId = null;
+    let currentClassName = '';
     let currentFilter = 'all';
     let ws = null;
     let allHomework = [];
@@ -425,92 +354,103 @@
 
     async function init() {
       initHeader('student');
+      recordVisit('/student');
       await loadGrades();
       
       const urlParams = new URLSearchParams(window.location.search);
       const gradeId = urlParams.get('gradeId');
       const classId = urlParams.get('classId');
+      const className = urlParams.get('className');
       
       if (gradeId && classId) {
-        selectClass(parseInt(gradeId), classId);
-      } else if (API.user && API.user.gradeId && API.user.classId) {
-        selectClass(API.user.gradeId, API.user.classId);
+        setTimeout(() => selectClass(gradeId, classId, decodeURIComponent(className || '')), 100);
+      } else if (API.user?.classId) {
+        setTimeout(() => selectClass(API.user.gradeId, API.user.classId, API.user.className || ''), 100);
       }
-
-      recordVisit('/student');
     }
 
     async function loadGrades() {
       try {
-        const data = await API.get('/api/grades');
-        gradesData = data.data;
-        renderGradeList();
+        const data = await API.get('/api/grades/classes/all');
+        gradesData = data.data || [];
+        
+        const gradeSelect = document.getElementById('gradeSelect');
+        gradesData.forEach(g => {
+          const opt = document.createElement('option');
+          opt.value = g.id;
+          opt.textContent = g.name;
+          gradeSelect.appendChild(opt);
+        });
       } catch (e) {
-        document.getElementById('gradeList').innerHTML = '<div class="text-muted">加载失败</div>';
+        showToast('加载年级失败', 'error');
       }
     }
 
-    function renderGradeList() {
-      const container = document.getElementById('gradeList');
-      container.innerHTML = gradesData.map(grade => `
-        <div>
-          <div class="grade-item ${currentGradeId === grade.id ? 'active' : ''}" onclick="toggleGrade(${grade.id})">
-            ${grade.fullName}
-          </div>
-          <div class="class-list" id="classList-${grade.id}" style="${currentGradeId === grade.id ? '' : 'display:none'}">
-            ${grade.classes.map(cls => `
-              <div class="class-item ${currentClassId === cls.id ? 'active' : ''}" onclick="event.stopPropagation();selectClass(${grade.id}, '${cls.id}')">
-                ${cls.class_name}
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function toggleGrade(gradeId) {
-      const classList = document.getElementById(`classList-${gradeId}`);
-      if (classList) {
-        classList.style.display = classList.style.display === 'none' ? 'block' : 'none';
+    function onGradeChange() {
+      const gradeId = document.getElementById('gradeSelect').value;
+      const classSelect = document.getElementById('classSelect');
+      classSelect.innerHTML = '<option value="">请选择班级</option>';
+      currentGradeId = gradeId;
+      
+      if (gradeId) {
+        const grade = gradesData.find(g => g.id === gradeId);
+        if (grade?.classes) {
+          [...grade.classes].sort((a,b) => a.class_num - b.class_num).forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = c.name;
+            classSelect.appendChild(opt);
+          });
+        }
       }
     }
 
-    async function selectClass(gradeId, classId) {
+    function onClassChange() {
+      const classId = document.getElementById('classSelect').value;
+      if (classId && currentGradeId) {
+        const grade = gradesData.find(g => g.id === currentGradeId);
+        const cls = grade?.classes?.find(c => c.id === classId);
+        selectClass(currentGradeId, classId, cls?.name || '');
+      }
+    }
+
+    async function selectClass(gradeId, classId, className) {
       currentGradeId = gradeId;
       currentClassId = classId;
+      currentClassName = className;
       
-      const grade = gradesData.find(g => g.id === gradeId);
-      const cls = grade?.classes.find(c => c.id === classId);
+      document.getElementById('gradeSelect').value = gradeId;
+      onGradeChange();
+      document.getElementById('classSelect').value = classId;
       
-      document.getElementById('pageTitle').textContent = cls?.class_name || '作业列表';
-      document.getElementById('pageSubtitle').textContent = `${grade?.fullName || ''} · 每日作业`;
-      
-      renderGradeList();
-      await loadHomeworkAndNotices();
-      connectWS(gradeId, classId);
-      document.getElementById('liveIndicator').style.display = 'inline-flex';
+      document.getElementById('pageTitle').textContent = className || '作业列表';
+      document.getElementById('pageSubtitle').textContent = '每日作业与公告';
       document.getElementById('filterBar').style.display = 'flex';
+      document.getElementById('liveIndicator').style.display = 'inline-flex';
+      
+      await loadHomeworkAndNotices();
+      connectWS();
       
       const newUrl = new URL(window.location);
       newUrl.searchParams.set('gradeId', gradeId);
       newUrl.searchParams.set('classId', classId);
+      if (className) newUrl.searchParams.set('className', encodeURIComponent(className));
       window.history.replaceState({}, '', newUrl);
     }
 
     async function loadHomeworkAndNotices() {
-      if (!currentGradeId || !currentClassId) return;
+      if (!currentClassId) return;
       
       document.getElementById('homeworkList').innerHTML = '<div class="loading"><div class="spinner"></div>加载作业中...</div>';
       
       try {
-        const token = API.token ? `?token=${API.token}` : '';
         const [homeworkRes, noticesRes] = await Promise.all([
-          fetch(`/api/homework/public/${currentGradeId}/${currentClassId}${token}`).then(r => r.json()),
-          fetch(`/api/notices/public/${currentGradeId}/${currentClassId}${token}`).then(r => r.json())
+          API.get(`/api/homework?class_id=${currentClassId}&pageSize=100`),
+          API.get(`/api/notices?class_id=${currentClassId}&pageSize=20`)
         ]);
         
-        allHomework = homeworkRes.data?.list || [];
-        allNotices = noticesRes.data || [];
+        allHomework = homeworkRes.data?.list || homeworkRes.data?.homework || [];
+        allNotices = noticesRes.data?.list || noticesRes.data?.notices || [];
         
         renderNotices();
         renderSubjectFilters();
@@ -522,7 +462,7 @@
     }
 
     function renderSubjectFilters() {
-      const subjects = [...new Set(allHomework.map(h => h.subject_name).filter(Boolean))];
+      const subjects = [...new Set(allHomework.map(h => h.subjectName).filter(Boolean))];
       const bar = document.getElementById('filterBar');
       bar.innerHTML = `
         <button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">全部科目</button>
@@ -543,7 +483,7 @@
       let filtered = allHomework;
       
       if (currentFilter !== 'all') {
-        filtered = allHomework.filter(h => h.subject_name === currentFilter);
+        filtered = allHomework.filter(h => h.subjectName === currentFilter);
       }
       
       if (filtered.length === 0) {
@@ -552,37 +492,27 @@
       }
 
       container.innerHTML = filtered.map(h => {
-        const subjectColor = h.subject_color || getSubjectColor(h.subject_name);
-        const links = h.links || [];
+        const subjectColor = getSubjectColor(h.subjectName);
         const attachments = h.attachments || [];
         
         return `
-          <div class="homework-card" data-id="${h.id}">
+          <div class="homework-card">
             <div class="homework-header">
               <div>
-                <div class="homework-subject">
-                  <span class="subject-dot" style="background:${subjectColor}"></span>
-                  <span class="badge badge-primary" style="background:${subjectColor}20;color:${subjectColor}">${h.subject_name || '其他'}</span>
-                </div>
-                <div class="homework-title mt-8">${h.title}</div>
+                <span class="subject-badge" style="background:${subjectColor}20;color:${subjectColor}">${h.subjectName || '其他'}</span>
+                <div class="homework-title">${h.title}</div>
               </div>
             </div>
             <div class="homework-meta">
-              <span class="homework-meta-item">👨‍🏫 ${h.teacher_name || '未知教师'}</span>
+              <span class="homework-meta-item">👨‍🏫 ${h.teacherName || '未知教师'}</span>
               <span class="homework-meta-item">🕐 ${formatDateTime(h.created_at)}</span>
-              ${h.deadline ? `<span class="homework-meta-item">📅 截止: ${formatDate(h.deadline)}</span>` : ''}
-              <span class="homework-meta-item">👁 ${h.view_count || 0}次查看</span>
+              ${h.due_date ? `<span class="homework-meta-item">📅 截止: ${h.due_date}</span>` : ''}
             </div>
-            <div class="homework-content" id="content-${h.id}">${h.content}</div>
-            <button class="expand-btn" onclick="toggleExpand('${h.id}')" id="expand-${h.id}" style="display:none">展开全文 ▼</button>
-            ${links.length > 0 ? `
-              <div class="homework-links">
-                ${links.map(l => `<a href="${l.url}" target="_blank" class="link-item">🔗 ${l.name || l.url}</a>`).join('')}
-              </div>
-            ` : ''}
+            <div class="homework-content collapsed" id="content-${h.id}">${h.content}</div>
+            <button class="expand-btn" onclick="toggleExpand('${h.id}')" id="expand-${h.id}">展开全文 ▼</button>
             ${attachments.length > 0 ? `
               <div class="attachments-list">
-                ${attachments.map(a => `<a href="${a.url}" target="_blank" class="attachment-item">📎 ${a.name}</a>`).join('')}
+                ${attachments.map(a => `<a href="${a.url || a}" target="_blank" class="attachment-item">📎 ${a.filename || a.name || '附件'}</a>`).join('')}
               </div>
             ` : ''}
           </div>
@@ -591,14 +521,18 @@
 
       setTimeout(() => {
         document.querySelectorAll('.homework-content').forEach(el => {
-          if (el.scrollHeight > 80) {
-            el.classList.add('collapsed');
+          if (el.scrollHeight <= 90) {
+            el.classList.remove('collapsed');
+            const btnId = 'expand-' + el.id.replace('content-', '');
+            const btn = document.getElementById(btnId);
+            if (btn) btn.style.display = 'none';
+          } else {
             const btnId = 'expand-' + el.id.replace('content-', '');
             const btn = document.getElementById(btnId);
             if (btn) btn.style.display = 'block';
           }
         });
-      }, 100);
+      }, 50);
     }
 
     function toggleExpand(id) {
@@ -615,33 +549,32 @@
 
     function renderNotices() {
       const container = document.getElementById('noticeContainer');
-      const urgentNotices = allNotices.filter(n => n.type === 'urgent');
+      const importantNotices = allNotices.filter(n => n.is_important);
       
-      if (urgentNotices.length === 0) {
+      if (importantNotices.length === 0) {
         container.innerHTML = '';
         return;
       }
 
-      container.innerHTML = urgentNotices.map(n => `
+      container.innerHTML = importantNotices.map(n => `
         <div class="notice-banner">
-          <div class="notice-icon">${n.type === 'urgent' ? '🚨' : '📢'}</div>
-          <div class="notice-content">
-            <div class="notice-title">${n.title}</div>
-            <div class="notice-text">${n.content}</div>
+          <div style="font-size:20px;flex-shrink:0">📢</div>
+          <div style="flex:1">
+            <div style="font-weight:600;margin-bottom:4px">${n.title}</div>
+            <div style="font-size:13px;opacity:0.9">${n.content}</div>
           </div>
-          <button class="notice-close" onclick="this.closest('.notice-banner').remove()">×</button>
         </div>
       `).join('');
     }
 
-    function connectWS(gradeId, classId) {
+    function connectWS() {
       if (ws) ws.close();
-      ws = connectWebSocket(gradeId, classId, (data) => {
+      ws = connectWebSocket(currentGradeId, currentClassId, (data) => {
         if (data.type === 'homework_created' || data.type === 'homework_updated') {
-          showToast('作业已更新', 'info');
+          showToast('📝 作业已更新', 'success');
           loadHomeworkAndNotices();
         } else if (data.type === 'notice_created') {
-          showToast('有新公告', 'info');
+          showToast('📢 有新公告', 'info');
           loadHomeworkAndNotices();
         }
       });

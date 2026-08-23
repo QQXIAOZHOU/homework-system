@@ -253,21 +253,27 @@ function initHeader(activeNav) {
     if (user.role === 'super_admin' || user.role === 'admin') {
       navHtml = `
         <a href="/admin" class="nav-link ${activeNav === 'admin' ? 'active' : ''}">管理后台</a>
+        <a href="/timetable" class="nav-link ${activeNav === 'timetable' ? 'active' : ''}">课程表</a>
         <a href="/stats" class="nav-link ${activeNav === 'stats' ? 'active' : ''}">数据统计</a>
       `;
     }
     if (user.role === 'teacher') {
       navHtml = `
         <a href="/teacher" class="nav-link ${activeNav === 'teacher' ? 'active' : ''}">作业管理</a>
+        <a href="/timetable" class="nav-link ${activeNav === 'timetable' ? 'active' : ''}">课程表</a>
       `;
     }
     if (user.role === 'student' || user.role === 'parent') {
       navHtml = `
         <a href="/student" class="nav-link ${activeNav === 'student' ? 'active' : ''}">作业查看</a>
+        <a href="/timetable" class="nav-link ${activeNav === 'timetable' ? 'active' : ''}">课程表</a>
       `;
     }
   } else {
-    navHtml = `<a href="/login" class="nav-link">登录</a>`;
+    navHtml = `
+      <a href="/timetable" class="nav-link ${activeNav === 'timetable' ? 'active' : ''}">课程表</a>
+      <a href="/login" class="nav-link">登录</a>
+    `;
   }
 
   header.innerHTML = `

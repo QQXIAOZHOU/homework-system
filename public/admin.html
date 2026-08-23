@@ -22,6 +22,7 @@
       position: sticky;
       top: 88px;
       border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
     }
 
     .menu-item {
@@ -41,11 +42,13 @@
     .menu-item:hover {
       background: var(--bg-hover);
       color: var(--text-primary);
+      transform: translateX(2px);
     }
 
     .menu-item.active {
-      background: var(--primary-soft);
-      color: var(--primary);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(75, 63, 227, 0.3);
     }
 
     .main-panel {
@@ -54,6 +57,12 @@
 
     .panel-section {
       display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .panel-section.active {
@@ -65,14 +74,18 @@
     }
 
     .page-title {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 700;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .page-desc {
       color: var(--text-muted);
       font-size: 14px;
-      margin-top: 4px;
+      margin-top: 8px;
     }
 
     .overview-grid {
@@ -87,12 +100,49 @@
       border-radius: var(--radius-lg);
       padding: 24px;
       border: 1px solid var(--border-light);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .overview-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .overview-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .overview-card:hover::before {
+      opacity: 1;
+    }
+
+    .overview-card:nth-child(1)::before { background: linear-gradient(90deg, #4B3FE3, #8B5CF6); }
+    .overview-card:nth-child(2)::before { background: linear-gradient(90deg, #22A5F7, #06B6D4); }
+    .overview-card:nth-child(3)::before { background: linear-gradient(90deg, #1DC981, #27D2BF); }
+    .overview-card:nth-child(4)::before { background: linear-gradient(90deg, #F87454, #EFAA17); }
+    .overview-card:nth-child(5)::before { background: linear-gradient(90deg, #E8463A, #EC4899); }
+    .overview-card:nth-child(6)::before { background: linear-gradient(90deg, #84CC16, #22C55E); }
+
+    .overview-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
     }
 
     .overview-value {
-      font-size: 32px;
+      font-size: 36px;
       font-weight: 700;
-      color: var(--primary);
+      color: var(--text-primary);
+      line-height: 1;
     }
 
     .overview-label {
@@ -107,25 +157,35 @@
       border: 1px solid var(--border-light);
       overflow: hidden;
       margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .content-card:hover {
+      box-shadow: var(--shadow-md);
     }
 
     .card-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-light);
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
+      background: linear-gradient(135deg, var(--bg-hover) 0%, transparent 100%);
     }
 
     .card-title {
       font-size: 16px;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .card-body {
-      padding: 20px;
+      padding: 24px;
     }
 
     .data-table {
@@ -134,7 +194,7 @@
     }
 
     .data-table th, .data-table td {
-      padding: 12px 16px;
+      padding: 14px 16px;
       text-align: left;
       border-bottom: 1px solid var(--border-light);
       font-size: 14px;
@@ -145,28 +205,42 @@
       font-weight: 600;
       color: var(--text-secondary);
       font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .data-table tr:hover td {
       background: var(--bg-hover);
     }
 
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
     .grade-section {
-      margin-bottom: 24px;
+      margin-bottom: 28px;
+    }
+
+    .grade-section:last-child {
+      margin-bottom: 0;
     }
 
     .grade-title {
       font-size: 18px;
       font-weight: 600;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--primary);
-      display: inline-block;
+      margin-bottom: 16px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, var(--primary-soft) 0%, transparent 100%);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .class-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 12px;
     }
 
@@ -177,6 +251,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+
+    .class-item:hover {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      transform: translateY(-2px);
     }
 
     .class-name {
@@ -185,17 +267,62 @@
 
     .class-count {
       font-size: 12px;
-      color: var(--text-muted);
+      color: var(--primary);
       background: var(--bg-card);
-      padding: 2px 8px;
+      padding: 4px 10px;
       border-radius: var(--radius-full);
+      font-weight: 600;
     }
 
     .form-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-primary {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .badge-success {
+      background: rgba(29, 201, 129, 0.1);
+      color: #1DC981;
+    }
+
+    .badge-danger {
+      background: rgba(232, 70, 58, 0.1);
+      color: var(--danger);
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--bg-hover);
+      border-radius: var(--radius);
+    }
+
+    .stat-item strong {
+      color: var(--primary);
+      font-size: 18px;
     }
 
     @media (max-width: 768px) {
@@ -208,6 +335,7 @@
         display: flex;
         overflow-x: auto;
         gap: 4px;
+        padding: 8px;
       }
       
       .menu-item {
@@ -222,6 +350,14 @@
       .data-table {
         display: block;
         overflow-x: auto;
+      }
+
+      .overview-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .overview-value {
+        font-size: 28px;
       }
     }
   </style>
@@ -256,26 +392,32 @@
         </div>
         <div class="overview-grid" id="overviewGrid">
           <div class="overview-card">
+            <div class="overview-icon">👥</div>
             <div class="overview-value" id="ovUsers">-</div>
             <div class="overview-label">总用户数</div>
           </div>
           <div class="overview-card">
+            <div class="overview-icon">👨‍🏫</div>
             <div class="overview-value" id="ovTeachers">-</div>
             <div class="overview-label">教师人数</div>
           </div>
           <div class="overview-card">
+            <div class="overview-icon">🎒</div>
             <div class="overview-value" id="ovStudents">-</div>
             <div class="overview-label">学生人数</div>
           </div>
           <div class="overview-card">
+            <div class="overview-icon">🏫</div>
             <div class="overview-value" id="ovClasses">-</div>
             <div class="overview-label">班级总数</div>
           </div>
           <div class="overview-card">
+            <div class="overview-icon">📝</div>
             <div class="overview-value" id="ovHomework">-</div>
             <div class="overview-label">作业总数</div>
           </div>
           <div class="overview-card">
+            <div class="overview-icon">👁️</div>
             <div class="overview-value" id="ovVisits">-</div>
             <div class="overview-label">今日访问</div>
           </div>
@@ -283,7 +425,7 @@
 
         <div class="content-card">
           <div class="card-header">
-            <span class="card-title">各年级统计</span>
+            <span class="card-title">📈 各年级统计</span>
           </div>
           <div class="card-body" id="gradeStats">
             <div class="loading"><div class="spinner"></div>加载中...</div>
@@ -301,7 +443,7 @@
         </div>
         <div class="content-card">
           <div class="card-header">
-            <span class="card-title">添加新班级</span>
+            <span class="card-title">➕ 添加新班级</span>
           </div>
           <div class="card-body">
             <div class="form-row">
@@ -309,7 +451,7 @@
                 <option value="">选择年级</option>
               </select>
               <input type="number" class="form-control" id="newClassNumber" placeholder="班级号 (如1,2,3)" min="1">
-              <input type="text" class="form-control" id="newClassName" placeholder="班级名称 (可选)">
+              <input type="text" class="form-control" id="newClassName" placeholder="班级名称 (可选，留空自动生成)">
             </div>
             <button class="btn btn-primary" onclick="addClass()">添加班级</button>
           </div>
@@ -323,7 +465,7 @@
         </div>
         <div class="content-card">
           <div class="card-header">
-            <span class="card-title">添加用户</span>
+            <span class="card-title">➕ 添加用户</span>
           </div>
           <div class="card-body">
             <div class="form-row">
@@ -349,7 +491,7 @@
         </div>
         <div class="content-card">
           <div class="card-header">
-            <span class="card-title">用户列表</span>
+            <span class="card-title">👥 用户列表</span>
             <div class="filter-group">
               <select class="filter-select" id="userRoleFilter" onchange="loadUsers()">
                 <option value="">全部角色</option>
@@ -409,21 +551,33 @@
       <div class="panel-section" id="panel-settings">
         <div class="page-header">
           <h1 class="page-title">系统设置</h1>
-          <p class="page-desc">系统配置和数据管理</p>
+          <p class="page-desc">系统配置和账号管理</p>
         </div>
         <div class="content-card">
           <div class="card-header">
-            <span class="card-title">系统信息</span>
+            <span class="card-title">ℹ️ 系统信息</span>
           </div>
           <div class="card-body">
-            <p><strong>学校名称：</strong>南通市崇川初级中学</p>
-            <p class="mt-8"><strong>系统版本：</strong>v2.0.0</p>
-            <p class="mt-8"><strong>默认管理员：</strong>admin（请及时修改密码）</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px">
+              <div class="stat-item">
+                <span>🏫</span>
+                <span>学校名称：</span>
+                <strong>南通市崇川初级中学</strong>
+              </div>
+              <div class="stat-item">
+                <span>🔖</span>
+                <span>系统版本：</span>
+                <strong>v2.0.0</strong>
+              </div>
+            </div>
+            <p class="text-muted" style="margin-top:16px;padding:12px;background:var(--bg-hover);border-radius:var(--radius);">
+              💡 默认管理员账号：admin / admin123，请及时修改密码
+            </p>
           </div>
         </div>
         <div class="content-card">
           <div class="card-header">
-            <span class="card-title">账号设置</span>
+            <span class="card-title">🔐 账号设置</span>
           </div>
           <div class="card-body">
             <div class="form-row">
@@ -465,16 +619,27 @@
     }
 
     async function loadGrades() {
-      const data = await API.get('/api/grades');
-      gradesData = data.data;
+      try {
+        const res = await API.get('/api/grades/classes/all');
+        gradesData = res.data || [];
+      } catch (e) {
+        console.error('加载年级失败:', e);
+        try {
+          const res = await API.get('/api/grades');
+          const grades = res.data || [];
+          gradesData = grades.map(g => ({ ...g, classes: [] }));
+        } catch (e2) {
+          gradesData = [];
+        }
+      }
       
       const gradeSelects = ['newClassGrade', 'newUserGrade'];
       gradeSelects.forEach(id => {
         const sel = document.getElementById(id);
         if (sel) {
           sel.innerHTML = '<option value="">选择年级</option>';
-          gradesData.forEach(g => {
-            sel.innerHTML += `<option value="${g.id}">${g.fullName}</option>`;
+          (gradesData || []).forEach(g => {
+            sel.innerHTML += `<option value="${g.id}">${g.fullName || g.name}</option>`;
           });
         }
       });
@@ -482,54 +647,91 @@
 
     async function loadOverview() {
       try {
-        const data = await API.get('/api/stats/overview');
-        const o = data.data.overview;
-        const v = data.data.visits;
+        const res = await API.get('/api/stats/overview');
+        const data = res.data || {};
+        const o = data.overview || data.summary || {};
+        const v = data.visits || {};
+        const gs = data.gradeStats || data.grade_stats || [];
         
-        document.getElementById('ovUsers').textContent = o.totalUsers;
-        document.getElementById('ovTeachers').textContent = o.teacherCount;
-        document.getElementById('ovStudents').textContent = o.studentCount;
-        document.getElementById('ovClasses').textContent = o.classCount;
-        document.getElementById('ovHomework').textContent = o.homeworkCount;
-        document.getElementById('ovVisits').textContent = v.todayVisits;
+        document.getElementById('ovUsers').textContent = o.totalUsers || o.total_users || o.userCount || 0;
+        document.getElementById('ovTeachers').textContent = o.teacherCount || o.teacher_count || 0;
+        document.getElementById('ovStudents').textContent = o.studentCount || o.student_count || 0;
+        document.getElementById('ovClasses').textContent = o.classCount || o.class_count || 0;
+        document.getElementById('ovHomework').textContent = o.homeworkCount || o.homework_count || 0;
+        document.getElementById('ovVisits').textContent = v.todayVisits || 0;
 
-        const gs = document.getElementById('gradeStats');
-        gs.innerHTML = data.data.gradeStats.map(g => `
-          <div class="grade-section">
-            <div class="grade-title">${g.full_name}</div>
-            <div class="flex gap-16 flex-wrap text-sm">
-              <span>班级数：<strong>${g.class_count}</strong></span>
-              <span>学生数：<strong>${g.student_count}</strong></span>
-              <span>教师数：<strong>${g.teacher_count}</strong></span>
-              <span>作业数：<strong>${g.homework_count}</strong></span>
+        const gradeStatsEl = document.getElementById('gradeStats');
+        if (!gs || gs.length === 0) {
+          gradeStatsEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-text">暂无统计数据</div></div>';
+        } else {
+          gradeStatsEl.innerHTML = gs.map(g => `
+            <div class="grade-section">
+              <div class="grade-title">
+                <span>🎓</span>
+                ${g.full_name || g.fullName || g.name}
+              </div>
+              <div class="stat-row">
+                <div class="stat-item">
+                  <span>🏫</span>
+                  <span>班级数</span>
+                  <strong>${g.class_count || g.classCount || 0}</strong>
+                </div>
+                <div class="stat-item">
+                  <span>🎒</span>
+                  <span>学生数</span>
+                  <strong>${g.student_count || g.studentCount || 0}</strong>
+                </div>
+                <div class="stat-item">
+                  <span>👨‍🏫</span>
+                  <span>教师数</span>
+                  <strong>${g.teacher_count || g.teacherCount || 0}</strong>
+                </div>
+                <div class="stat-item">
+                  <span>📝</span>
+                  <span>作业数</span>
+                  <strong>${g.homework_count || g.homeworkCount || 0}</strong>
+                </div>
+              </div>
             </div>
-          </div>
-        `).join('');
+          `).join('');
+        }
       } catch (e) {
         console.error(e);
+        document.getElementById('gradeStats').innerHTML = '<div class="text-danger">加载统计失败</div>';
       }
     }
 
     async function loadGradesPanel() {
       const container = document.getElementById('gradesContainer');
-      container.innerHTML = gradesData.map(grade => `
-        <div class="content-card">
-          <div class="card-header">
-            <span class="card-title">${grade.fullName}</span>
-            <span class="text-muted text-sm">${grade.classes.length} 个班级</span>
-          </div>
-          <div class="card-body">
-            <div class="class-grid">
-              ${grade.classes.map(c => `
-                <div class="class-item">
-                  <span class="class-name">${c.class_name}</span>
-                  <span class="class-count">${c.actual_student_count || 0}人</span>
-                </div>
-              `).join('')}
+      if (!gradesData || gradesData.length === 0) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏫</div><div class="empty-text">暂无年级数据</div></div>';
+        return;
+      }
+      
+      container.innerHTML = gradesData.map(grade => {
+        const classes = grade.classes || [];
+        return `
+          <div class="content-card">
+            <div class="card-header">
+              <span class="card-title">
+                <span>🎓</span>
+                ${grade.fullName || grade.name}
+              </span>
+              <span style="font-size:13px;color:var(--text-muted)">${classes.length} 个班级</span>
+            </div>
+            <div class="card-body">
+              <div class="class-grid">
+                ${classes.length === 0 ? '<div class="text-muted">暂无班级</div>' : classes.map(c => `
+                  <div class="class-item">
+                    <span class="class-name">${c.class_name || c.name}</span>
+                    <span class="class-count">${c.actual_student_count || 0}人</span>
+                  </div>
+                `).join('')}
+              </div>
             </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     async function addClass() {
@@ -545,13 +747,14 @@
       try {
         await API.post(`/api/grades/${gradeId}/classes`, {
           classNumber: parseInt(classNumber),
-          className: className || null
+          className: className
         });
         showToast('班级添加成功', 'success');
         document.getElementById('newClassNumber').value = '';
         document.getElementById('newClassName').value = '';
         await loadGrades();
         await loadGradesPanel();
+        await loadOverview();
       } catch (e) {
         showToast(e.message, 'error');
       }
@@ -565,9 +768,9 @@
       sel.innerHTML = '<option value="">选择班级</option>';
       if (!gradeId) return;
       
-      const grade = gradesData.find(g => g.id === parseInt(gradeId));
+      const grade = gradesData.find(g => g.id === gradeId || g.id === parseInt(gradeId));
       (grade?.classes || []).forEach(c => {
-        sel.innerHTML += `<option value="${c.id}">${c.class_name}</option>`;
+        sel.innerHTML += `<option value="${c.id}">${c.class_name || c.name}</option>`;
       });
     }
 
@@ -587,7 +790,7 @@
       try {
         await API.post('/api/users', {
           username, password, realName, role,
-          gradeId: gradeId ? parseInt(gradeId) : null,
+          gradeId: gradeId || null,
           classId: classId || null
         });
         showToast('用户添加成功', 'success');
@@ -606,20 +809,27 @@
       try {
         let url = '/api/users?pageSize=100';
         if (role) url += `&role=${role}`;
-        const data = await API.get(url);
+        const res = await API.get(url);
         const tbody = document.getElementById('userTableBody');
+        const data = res.data || {};
+        const users = data.list || data.users || [];
         
         const roleNames = { super_admin: '超管', admin: '管理员', teacher: '教师', student: '学生', parent: '家长' };
         
-        tbody.innerHTML = data.data.list.map(u => `
+        if (!users || users.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">👥</div><div class="empty-text">暂无用户</div></div></td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = users.map(u => `
           <tr>
-            <td class="font-mono text-sm">${u.username}</td>
-            <td>${u.real_name}</td>
-            <td><span class="badge badge-primary">${roleNames[u.role]}</span></td>
-            <td class="text-secondary text-sm">${u.grade_name || ''} ${u.class_name || ''}</td>
+            <td style="font-family:monospace;font-size:13px">${u.username}</td>
+            <td>${u.real_name || u.realName}</td>
+            <td><span class="badge badge-primary">${roleNames[u.role] || u.role}</span></td>
+            <td style="color:var(--text-secondary);font-size:13px">${u.grade_name || u.gradeName || ''} ${u.class_name || u.className || ''}</td>
             <td><span class="badge ${u.status ? 'badge-success' : 'badge-danger'}">${u.status ? '正常' : '禁用'}</span></td>
             <td>
-              <button class="btn-icon ${u.status ? 'danger' : ''}" onclick="toggleUserStatus('${u.id}', ${u.status ? 0 : 1})">
+              <button class="btn-icon ${u.status ? 'danger' : 'success'}" onclick="toggleUserStatus('${u.id}', ${!u.status})" title="${u.status ? '禁用' : '启用'}">
                 ${u.status ? '🚫' : '✅'}
               </button>
             </td>
@@ -627,6 +837,7 @@
         `).join('');
       } catch (e) {
         showToast(e.message, 'error');
+        document.getElementById('userTableBody').innerHTML = `<tr><td colspan="6" class="text-center text-danger">加载失败</td></tr>`;
       }
     }
 
@@ -642,27 +853,35 @@
 
     async function loadAdminHomework() {
       try {
-        const data = await API.get('/api/homework?pageSize=100');
+        const res = await API.get('/api/homework?pageSize=100');
         const tbody = document.getElementById('adminHomeworkBody');
+        const data = res.data || {};
+        const list = data.list || data.homework || [];
         
-        tbody.innerHTML = data.data.list.map(h => `
+        if (!list || list.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📝</div><div class="empty-text">暂无作业</div></div></td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = list.map(h => `
           <tr>
-            <td><span class="badge" style="background:${getSubjectColor(h.subject_name)}20;color:${getSubjectColor(h.subject_name)}">${h.subject_name || ''}</span></td>
-            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.title}</td>
-            <td class="text-sm text-secondary">${h.grade_name || ''} ${h.class_name || ''}</td>
-            <td class="text-sm">${h.teacher_name}</td>
-            <td class="text-sm text-secondary">${formatDateTime(h.created_at)}</td>
-            <td class="text-sm">${h.view_count || 0}</td>
-            <td><button class="btn-icon danger" onclick="deleteHomework('${h.id}')">🗑️</button></td>
+            <td><span class="badge" style="background:${getSubjectColor(h.subject_name || h.subjectName)}20;color:${getSubjectColor(h.subject_name || h.subjectName)}">${h.subject_name || h.subjectName || '其他'}</span></td>
+            <td style="font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.title}</td>
+            <td style="font-size:13px;color:var(--text-secondary)">${h.grade_name || h.gradeName || ''} ${h.class_name || h.className || ''}</td>
+            <td style="font-size:13px">${h.teacher_name || h.teacherName}</td>
+            <td style="font-size:13px;color:var(--text-secondary)">${formatDateTime(h.created_at)}</td>
+            <td style="font-size:13px">👁 ${h.view_count || h.viewCount || 0}</td>
+            <td><button class="btn-icon danger" onclick="deleteHomework('${h.id}')" title="删除">🗑️</button></td>
           </tr>
         `).join('');
       } catch (e) {
         console.error(e);
+        document.getElementById('adminHomeworkBody').innerHTML = `<tr><td colspan="7" class="text-center text-danger">加载失败</td></tr>`;
       }
     }
 
     async function deleteHomework(id) {
-      if (!await showModal({ title: '确认删除', content: '确定要删除这份作业吗？' })) return;
+      if (!await showModal({ title: '确认删除', content: '确定要删除这份作业吗？此操作不可恢复。' })) return;
       try {
         await API.delete(`/api/homework/${id}`);
         showToast('删除成功', 'success');

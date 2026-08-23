@@ -20,8 +20,18 @@
     }
 
     .page-title {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 700;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome-text {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 8px;
     }
 
     .stats-grid {
@@ -34,20 +44,55 @@
     .stat-card {
       background: var(--bg-card);
       border-radius: var(--radius-lg);
-      padding: 20px;
+      padding: 24px;
       border: 1px solid var(--border-light);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-card:hover::before {
+      opacity: 1;
+    }
+
+    .stat-card:nth-child(1)::before { background: linear-gradient(90deg, #4B3FE3, #8B5CF6); }
+    .stat-card:nth-child(2)::before { background: linear-gradient(90deg, #22A5F7, #06B6D4); }
+    .stat-card:nth-child(3)::before { background: linear-gradient(90deg, #1DC981, #27D2BF); }
+    .stat-card:nth-child(4)::before { background: linear-gradient(90deg, #F87454, #EFAA17); }
+
+    .stat-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
     }
 
     .stat-value {
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 700;
-      color: var(--primary);
+      color: var(--text-primary);
+      line-height: 1;
     }
 
     .stat-label {
       font-size: 13px;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 8px;
     }
 
     .content-card {
@@ -55,21 +100,31 @@
       border-radius: var(--radius-lg);
       border: 1px solid var(--border-light);
       overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .content-card:hover {
+      box-shadow: var(--shadow-md);
     }
 
     .card-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-light);
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
+      background: linear-gradient(135deg, var(--bg-hover) 0%, transparent 100%);
     }
 
     .card-title {
       font-size: 16px;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .filter-group {
@@ -79,9 +134,20 @@
     }
 
     .filter-select {
-      padding: 6px 12px;
+      padding: 8px 12px;
       font-size: 13px;
       border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-soft);
     }
 
     .homework-table {
@@ -91,7 +157,7 @@
 
     .homework-table th,
     .homework-table td {
-      padding: 12px 16px;
+      padding: 14px 16px;
       text-align: left;
       border-bottom: 1px solid var(--border-light);
       font-size: 14px;
@@ -102,10 +168,16 @@
       font-weight: 600;
       color: var(--text-secondary);
       font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .homework-table tr:hover td {
       background: var(--bg-hover);
+    }
+
+    .homework-table tr:last-child td {
+      border-bottom: none;
     }
 
     .action-btns {
@@ -114,8 +186,8 @@
     }
 
     .btn-icon {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: var(--radius);
       display: inline-flex;
       align-items: center;
@@ -123,11 +195,15 @@
       background: transparent;
       color: var(--text-muted);
       font-size: 16px;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
     }
 
     .btn-icon:hover {
       background: var(--bg-hover);
       color: var(--primary);
+      transform: scale(1.1);
     }
 
     .btn-icon.danger:hover {
@@ -137,7 +213,7 @@
 
     .editor-section {
       display: none;
-      padding: 20px;
+      padding: 24px;
     }
 
     .editor-section.show {
@@ -182,7 +258,7 @@
     .upload-icon {
       font-size: 48px;
       margin-bottom: 12px;
-      opacity: 0.5;
+      opacity: 0.6;
     }
 
     .uploaded-files {
@@ -193,15 +269,22 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 12px;
+      padding: 10px 14px;
       background: var(--bg-hover);
       border-radius: var(--radius);
       margin-bottom: 8px;
       font-size: 13px;
+      transition: var(--transition);
+    }
+
+    .uploaded-file:hover {
+      background: var(--primary-soft);
     }
 
     .notice-editor {
       margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-light);
     }
 
     .form-check {
@@ -214,6 +297,7 @@
     .form-check input[type="checkbox"] {
       width: 18px;
       height: 18px;
+      accent-color: var(--primary);
     }
 
     .form-check label {
@@ -225,6 +309,108 @@
       margin-bottom: 20px;
     }
 
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-hover);
+      padding: 4px;
+      border-radius: var(--radius-lg);
+      width: fit-content;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+
+    .tab:hover {
+      color: var(--text-primary);
+    }
+
+    .tab.active {
+      background: var(--bg-card);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .notice-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--primary);
+      transition: var(--transition);
+    }
+
+    .notice-card:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .notice-card.urgent {
+      border-left-color: var(--danger);
+      background: linear-gradient(135deg, rgba(232, 70, 58, 0.05) 0%, transparent 100%);
+    }
+
+    .notice-card.announcement {
+      border-left-color: #EFAA17;
+      background: linear-gradient(135deg, rgba(239, 170, 23, 0.05) 0%, transparent 100%);
+    }
+
+    .notice-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .notice-title {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .notice-time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .notice-content {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-danger {
+      background: rgba(232, 70, 58, 0.1);
+      color: var(--danger);
+    }
+
+    .badge-warning {
+      background: rgba(239, 170, 23, 0.1);
+      color: #EFAA17;
+    }
+
+    .badge-info {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
     @media (max-width: 768px) {
       .stats-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -233,6 +419,10 @@
       .homework-table {
         display: block;
         overflow-x: auto;
+      }
+
+      .stat-value {
+        font-size: 24px;
       }
     }
   </style>
@@ -244,7 +434,7 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">作业管理</h1>
-        <p class="text-secondary text-sm mt-4" id="welcomeText">欢迎使用教师端</p>
+        <p class="welcome-text" id="welcomeText">欢迎使用教师端</p>
       </div>
       <div class="flex gap-8">
         <button class="btn btn-outline" onclick="switchTab('notice')">📢 发布公告</button>
@@ -254,18 +444,22 @@
 
     <div class="stats-grid">
       <div class="stat-card">
+        <div class="stat-icon">📝</div>
         <div class="stat-value" id="statTotal">0</div>
         <div class="stat-label">累计发布作业</div>
       </div>
       <div class="stat-card">
+        <div class="stat-icon">📅</div>
         <div class="stat-value" id="statMonth">0</div>
         <div class="stat-label">本月发布</div>
       </div>
       <div class="stat-card">
+        <div class="stat-icon">👁️</div>
         <div class="stat-value" id="statViews">0</div>
         <div class="stat-label">总查看次数</div>
       </div>
       <div class="stat-card">
+        <div class="stat-icon">🏫</div>
         <div class="stat-value" id="statClasses">0</div>
         <div class="stat-label">所教班级</div>
       </div>
@@ -273,15 +467,15 @@
 
     <div class="tabs-container">
       <div class="tabs">
-        <button class="tab active" data-tab="homework" onclick="switchTab('homework')">作业管理</button>
-        <button class="tab" data-tab="notice" onclick="switchTab('notice')">公告管理</button>
+        <button class="tab active" data-tab="homework" onclick="switchTab('homework')">📝 作业管理</button>
+        <button class="tab" data-tab="notice" onclick="switchTab('notice')">📢 公告管理</button>
       </div>
     </div>
 
     <div id="homeworkTab">
       <div class="content-card">
         <div class="card-header">
-          <span class="card-title">作业列表</span>
+          <span class="card-title">📋 作业列表</span>
           <div class="filter-group">
             <select class="filter-select" id="gradeFilter" onchange="onGradeChange()">
               <option value="">全部年级</option>
@@ -314,31 +508,33 @@
     <div id="noticeTab" style="display:none">
       <div class="content-card">
         <div class="card-header">
-          <span class="card-title">公告列表</span>
+          <span class="card-title">📢 公告列表</span>
         </div>
-        <div style="padding:20px">
-          <div id="noticeList" class="mb-20"></div>
+        <div style="padding:24px">
+          <div id="noticeList" style="margin-bottom:24px"></div>
           <div class="notice-editor">
-            <h3 class="text-lg font-medium mb-16">发布新公告</h3>
+            <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+              <span>✨</span> 发布新公告
+            </h3>
             <div class="form-group">
               <label class="form-label">公告标题</label>
               <input type="text" class="form-control" id="noticeTitle" placeholder="请输入公告标题">
             </div>
-            <div class="form-row">
+            <div class="form-row" style="grid-template-columns:repeat(2,1fr)">
               <div class="form-group">
                 <label class="form-label">公告类型</label>
                 <select class="form-control" id="noticeType">
-                  <option value="notice">普通通知</option>
-                  <option value="announcement">重要公告</option>
-                  <option value="urgent">紧急通知</option>
+                  <option value="notice">📋 普通通知</option>
+                  <option value="announcement">⚠️ 重要公告</option>
+                  <option value="urgent">🚨 紧急通知</option>
                 </select>
               </div>
               <div class="form-group">
                 <label class="form-label">发布范围</label>
                 <select class="form-control" id="noticeScope" onchange="onNoticeScopeChange()">
-                  <option value="all">全校可见</option>
-                  <option value="grade">指定年级</option>
-                  <option value="class">指定班级</option>
+                  <option value="all">🌍 全校可见</option>
+                  <option value="grade">🎓 指定年级</option>
+                  <option value="class">🏫 指定班级</option>
                 </select>
               </div>
             </div>
@@ -356,9 +552,9 @@
             </div>
             <div class="form-group">
               <label class="form-label">公告内容</label>
-              <textarea class="form-control" id="noticeContent" rows="4" placeholder="请输入公告内容"></textarea>
+              <textarea class="form-control" id="noticeContent" rows="4" placeholder="请输入公告内容..."></textarea>
             </div>
-            <button class="btn btn-primary" onclick="publishNotice()">发布公告</button>
+            <button class="btn btn-primary" onclick="publishNotice()">📤 发布公告</button>
           </div>
         </div>
       </div>
@@ -413,7 +609,7 @@
             <div class="link-item-edit">
               <input type="text" id="linkName" placeholder="链接名称" style="max-width:120px">
               <input type="url" id="linkUrl" placeholder="https://...">
-              <button class="btn btn-primary btn-sm" onclick="addLink()">添加</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="addLink()">添加</button>
             </div>
             <div id="linksList"></div>
           </div>
@@ -423,7 +619,7 @@
           <div class="file-upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
             <div class="upload-icon">📁</div>
             <div>点击或拖拽文件到这里上传</div>
-            <div class="text-muted text-sm mt-4">支持图片、文档、压缩包等，单个文件最大50MB</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px">支持图片、文档、压缩包等，单个文件最大50MB</div>
           </div>
           <input type="file" id="fileInput" multiple style="display:none" onchange="handleFileUpload(this.files)">
           <div class="uploaded-files" id="uploadedFiles"></div>
@@ -451,7 +647,7 @@
       }
       
       initHeader('teacher');
-      document.getElementById('welcomeText').textContent = `欢迎您，${API.user.realName}老师`;
+      document.getElementById('welcomeText').textContent = `欢迎您，${API.user.realName}老师 👋`;
       
       await Promise.all([loadGrades(), loadSubjects()]);
       initFilters();
@@ -462,24 +658,34 @@
     }
 
     async function loadGrades() {
-      const data = await API.get('/api/grades');
-      gradesData = data.data;
+      try {
+        const data = await API.get('/api/grades/classes/all');
+        gradesData = data.data || [];
+      } catch (e) {
+        const data = await API.get('/api/grades');
+        gradesData = (data.data || []).map(g => ({ ...g, classes: [] }));
+      }
       
       const gradeSelects = ['gradeFilter', 'hwGrade', 'noticeGrade'];
       gradeSelects.forEach(id => {
         const sel = document.getElementById(id);
         if (sel) {
-          sel.innerHTML = '<option value="">' + (id === 'gradeFilter' ? '全部年级' : '请选择年级') + '</option>';
+          const isFilter = id === 'gradeFilter';
+          sel.innerHTML = '<option value="">' + (isFilter ? '全部年级' : '请选择年级') + '</option>';
           gradesData.forEach(g => {
-            sel.innerHTML += `<option value="${g.id}">${g.fullName}</option>`;
+            sel.innerHTML += `<option value="${g.id}">${g.fullName || g.name}</option>`;
           });
         }
       });
     }
 
     async function loadSubjects() {
-      const data = await API.get('/api/users/subjects');
-      subjects = data.data;
+      try {
+        const data = await API.get('/api/grades/subjects');
+        subjects = data.data || [];
+      } catch (e) {
+        subjects = [];
+      }
       const sel = document.getElementById('hwSubject');
       sel.innerHTML = '<option value="">其他</option>';
       subjects.forEach(s => {
@@ -499,40 +705,34 @@
       loadHomework();
     }
 
-    async function loadClasses(gradeSelId, classSelId) {
+    async function loadClasses(gradeSelId, classSelId, includeAll = true) {
       const gradeId = document.getElementById(gradeSelId).value;
       const classSel = document.getElementById(classSelId);
       
       if (!gradeId) {
-        classSel.innerHTML = '<option value="">全部班级</option>';
+        classSel.innerHTML = '<option value="">' + (includeAll ? '全部班级' : '请选择班级') + '</option>';
         return;
       }
       
-      const grade = gradesData.find(g => g.id === parseInt(gradeId));
-      classSel.innerHTML = '<option value="">全部班级</option>';
+      const grade = gradesData.find(g => g.id === gradeId || g.id === parseInt(gradeId));
+      classSel.innerHTML = '<option value="">' + (includeAll ? '全部班级' : '请选择班级') + '</option>';
       (grade?.classes || []).forEach(c => {
-        classSel.innerHTML += `<option value="${c.id}">${c.class_name}</option>`;
+        classSel.innerHTML += `<option value="${c.id}">${c.class_name || c.name}</option>`;
       });
     }
 
     async function loadHwClasses() {
-      await loadClasses('hwGrade', 'hwClass');
+      await loadClasses('hwGrade', 'hwClass', false);
     }
 
     async function loadNoticeClasses() {
-      const gradeId = document.getElementById('noticeGrade').value;
-      const classSel = document.getElementById('noticeClass');
+      const scope = document.getElementById('noticeScope').value;
+      document.getElementById('noticeGradeWrap').style.display = (scope === 'grade' || scope === 'class') ? 'block' : 'none';
+      document.getElementById('noticeClassWrap').style.display = scope === 'class' ? 'block' : 'none';
       
-      document.getElementById('noticeGradeWrap').style.display = document.getElementById('noticeScope').value === 'grade' || document.getElementById('noticeScope').value === 'class' ? 'block' : 'none';
-      document.getElementById('noticeClassWrap').style.display = document.getElementById('noticeScope').value === 'class' ? 'block' : 'none';
+      if (scope !== 'grade' && scope !== 'class') return;
       
-      if (!gradeId) return;
-      
-      const grade = gradesData.find(g => g.id === parseInt(gradeId));
-      classSel.innerHTML = '<option value="">请选择班级</option>';
-      (grade?.classes || []).forEach(c => {
-        classSel.innerHTML += `<option value="${c.id}">${c.class_name}</option>`;
-      });
+      await loadClasses('noticeGrade', 'noticeClass', false);
     }
 
     function onNoticeScopeChange() {
@@ -549,27 +749,28 @@
       
       try {
         const data = await API.get(url);
-        renderHomeworkTable(data.data.list);
-        updateStats(data.data.list);
+        const list = data.data.list || data.data.homework || [];
+        renderHomeworkTable(list);
+        updateStats(list);
       } catch (e) {
-        document.getElementById('homeworkTableBody').innerHTML = `<tr><td colspan="6" class="text-center text-danger">加载失败</td></tr>`;
+        document.getElementById('homeworkTableBody').innerHTML = `<tr><td colspan="6" class="text-center text-danger">加载失败，请刷新重试</td></tr>`;
       }
     }
 
     function renderHomeworkTable(list) {
       const tbody = document.getElementById('homeworkTableBody');
-      if (list.length === 0) {
+      if (!list || list.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">暂无作业，点击右上角发布</div></div></td></tr>';
         return;
       }
       
       tbody.innerHTML = list.map(h => `
         <tr>
-          <td><span class="badge" style="background:${getSubjectColor(h.subject_name)}20;color:${getSubjectColor(h.subject_name)}">${h.subject_name || '其他'}</span></td>
+          <td><span class="badge badge-info" style="background:${getSubjectColor(h.subject_name || h.subjectName)}20;color:${getSubjectColor(h.subject_name || h.subjectName)}">${h.subject_name || h.subjectName || '其他'}</span></td>
           <td style="font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.title}</td>
-          <td class="text-secondary text-sm">${h.grade_name || ''} ${h.class_name || ''}</td>
-          <td class="text-secondary text-sm">${formatDateTime(h.created_at)}</td>
-          <td class="text-sm">👁 ${h.view_count || 0}</td>
+          <td style="font-size:13px;color:var(--text-secondary)">${h.grade_name || h.gradeName || ''} ${h.class_name || h.className || ''}</td>
+          <td style="font-size:13px;color:var(--text-secondary)">${formatDateTime(h.created_at)}</td>
+          <td style="font-size:13px">👁 ${h.view_count || h.viewCount || 0}</td>
           <td>
             <div class="action-btns">
               <button class="btn-icon" onclick="viewHomework('${h.id}')" title="查看">👁</button>
@@ -587,8 +788,8 @@
       
       document.getElementById('statTotal').textContent = list.length;
       document.getElementById('statMonth').textContent = list.filter(h => new Date(h.created_at) >= monthStart).length;
-      document.getElementById('statViews').textContent = list.reduce((sum, h) => sum + (h.view_count || 0), 0);
-      document.getElementById('statClasses').textContent = new Set(list.map(h => h.class_id)).size;
+      document.getElementById('statViews').textContent = list.reduce((sum, h) => sum + (h.view_count || h.viewCount || 0), 0);
+      document.getElementById('statClasses').textContent = new Set(list.map(h => h.class_id || h.classId)).size;
     }
 
     function openHomeworkModal(id = null) {
@@ -599,19 +800,25 @@
       renderAttachments();
       
       if (id) {
-        document.getElementById('modalTitle').textContent = '编辑作业';
+        document.getElementById('modalTitle').textContent = '✏️ 编辑作业';
         document.getElementById('saveBtn').textContent = '保存修改';
         loadHomeworkForEdit(id);
       } else {
-        document.getElementById('modalTitle').textContent = '发布新作业';
+        document.getElementById('modalTitle').textContent = '✏️ 发布新作业';
         document.getElementById('saveBtn').textContent = '发布作业';
         document.getElementById('editingId').value = '';
         document.getElementById('hwTitle').value = '';
         document.getElementById('hwContent').value = '';
         document.getElementById('hwDeadline').value = '';
+        document.getElementById('hwSubject').value = API.user.subjectId || '';
         if (API.user.gradeId) {
           document.getElementById('hwGrade').value = API.user.gradeId;
           loadHwClasses();
+          if (API.user.classId) {
+            setTimeout(() => {
+              document.getElementById('hwClass').value = API.user.classId;
+            }, 100);
+          }
         }
       }
       
@@ -627,13 +834,13 @@
         const data = await API.get(`/api/homework/${id}`);
         const h = data.data;
         document.getElementById('editingId').value = id;
-        document.getElementById('hwGrade').value = h.grade_id;
+        document.getElementById('hwGrade').value = h.grade_id || h.gradeId;
         await loadHwClasses();
-        document.getElementById('hwClass').value = h.class_id;
-        document.getElementById('hwSubject').value = h.subject_id || '';
+        document.getElementById('hwClass').value = h.class_id || h.classId;
+        document.getElementById('hwSubject').value = h.subject_id || h.subjectId || '';
         document.getElementById('hwTitle').value = h.title;
         document.getElementById('hwContent').value = h.content;
-        document.getElementById('hwDeadline').value = h.deadline ? h.deadline.split('T')[0] : '';
+        document.getElementById('hwDeadline').value = h.deadline ? (h.deadline.split ? h.deadline.split('T')[0] : h.deadline) : '';
         currentLinks = h.links || [];
         currentAttachments = h.attachments || [];
         renderLinks();
@@ -663,10 +870,14 @@
 
     function renderLinks() {
       const container = document.getElementById('linksList');
+      if (!currentLinks || currentLinks.length === 0) {
+        container.innerHTML = '';
+        return;
+      }
       container.innerHTML = currentLinks.map((l, i) => `
         <div class="link-item-edit">
           <span style="flex:1">🔗 ${l.name}</span>
-          <button class="btn btn-danger btn-sm" onclick="removeLink(${i})">删除</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="removeLink(${i})">删除</button>
         </div>
       `).join('');
     }
@@ -703,10 +914,14 @@
 
     function renderAttachments() {
       const container = document.getElementById('uploadedFiles');
+      if (!currentAttachments || currentAttachments.length === 0) {
+        container.innerHTML = '';
+        return;
+      }
       container.innerHTML = currentAttachments.map((a, i) => `
         <div class="uploaded-file">
           <span>📎 ${a.name}</span>
-          <button class="btn btn-outline btn-sm" onclick="removeAttachment(${i})">移除</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="removeAttachment(${i})">移除</button>
         </div>
       `).join('');
     }
@@ -721,13 +936,13 @@
       const deadline = document.getElementById('hwDeadline').value;
 
       if (!gradeId || !classId || !title || !content) {
-        showToast('请填写必填项', 'error');
+        showToast('请填写必填项（带*的字段）', 'error');
         return;
       }
 
       const payload = {
-        gradeId: parseInt(gradeId),
-        classId,
+        gradeId: gradeId,
+        classId: classId,
         subjectId: subjectId || null,
         subjectName: subjectId ? subjectName : '其他',
         title,
@@ -740,10 +955,10 @@
       try {
         if (editingId) {
           await API.put(`/api/homework/${editingId}`, payload);
-          showToast('作业更新成功', 'success');
+          showToast('作业更新成功 ✅', 'success');
         } else {
           await API.post('/api/homework', payload);
-          showToast('作业发布成功', 'success');
+          showToast('作业发布成功 ✅', 'success');
         }
         closeHomeworkModal();
         loadHomework();
@@ -768,15 +983,19 @@
     }
 
     function viewHomework(id) {
-      window.open(`/student?gradeId=&classId=#${id}`, '_blank');
+      const gradeId = document.getElementById('gradeFilter').value || '';
+      const classId = document.getElementById('classFilter').value || '';
+      window.open(`/student?gradeId=${gradeId}&classId=${classId}#${id}`, '_blank');
     }
 
     async function loadNotices() {
       try {
-        const data = await API.get('/api/notices');
-        renderNotices(data.data);
+        const data = await API.get('/api/notices?pageSize=100');
+        const list = data.data.list || data.data.notices || [];
+        renderNotices(list);
       } catch (e) {
         console.error(e);
+        document.getElementById('noticeList').innerHTML = '<div class="text-danger">加载公告失败</div>';
       }
     }
 
@@ -788,20 +1007,20 @@
       }
       
       container.innerHTML = list.map(n => `
-        <div class="card mb-12" style="padding:16px">
-          <div class="flex justify-between items-start">
-            <div>
-              <div class="flex items-center gap-8 mb-8">
-                <span class="badge ${n.type === 'urgent' ? 'badge-danger' : n.type === 'announcement' ? 'badge-warning' : 'badge-info'}">
-                  ${n.type === 'urgent' ? '紧急' : n.type === 'announcement' ? '重要' : '通知'}
-                </span>
-                <span class="font-medium">${n.title}</span>
-              </div>
-              <div class="text-secondary text-sm">${formatDateTime(n.created_at)}</div>
-              <div class="mt-8">${n.content}</div>
+        <div class="notice-card ${n.type === 'urgent' ? 'urgent' : n.type === 'announcement' ? 'announcement' : ''}">
+          <div class="notice-header">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="badge ${n.type === 'urgent' ? 'badge-danger' : n.type === 'announcement' ? 'badge-warning' : 'badge-info'}">
+                ${n.type === 'urgent' ? '紧急' : n.type === 'announcement' ? '重要' : '通知'}
+              </span>
+              <span class="notice-title">${n.title}</span>
             </div>
-            <button class="btn-icon danger" onclick="deleteNotice('${n.id}')">🗑️</button>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="notice-time">${formatDateTime(n.created_at)}</span>
+              <button class="btn-icon danger" onclick="deleteNotice('${n.id}')" title="删除">🗑️</button>
+            </div>
           </div>
+          <div class="notice-content">${n.content}</div>
         </div>
       `).join('');
     }
@@ -824,12 +1043,13 @@
           title,
           content,
           type,
-          gradeId: scope === 'all' ? null : (gradeId ? parseInt(gradeId) : null),
+          scope,
+          gradeId: scope === 'all' ? null : (gradeId || null),
           classId: scope === 'class' ? classId : null,
           isAllGrades: scope === 'all',
           isAllClasses: scope !== 'class'
         });
-        showToast('公告发布成功', 'success');
+        showToast('公告发布成功 ✅', 'success');
         document.getElementById('noticeTitle').value = '';
         document.getElementById('noticeContent').value = '';
         loadNotices();
@@ -854,6 +1074,12 @@
       document.getElementById('homeworkTab').style.display = tab === 'homework' ? 'block' : 'none';
       document.getElementById('noticeTab').style.display = tab === 'notice' ? 'block' : 'none';
     }
+
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) {
+        closeHomeworkModal();
+      }
+    });
 
     document.addEventListener('DOMContentLoaded', init);
   </script>

@@ -47,11 +47,37 @@ router.get('/overview', authMiddleware, requireRole(['admin', 'super_admin', 'te
   const noticeCount = db.count('notices');
   const classCount = db.count('classes');
   
-  const homeworkByGrade = {};
   const grades = db.query('grades');
+  const classes = db.query('classes');
   const homework = db.query('homework');
+  const users = db.query('users');
+  
+  const gradeStats = grades.map(g => {
+    const gradeClasses = classes.filter(c => c.grade_id === g.id);
+    const classIds = gradeClasses.map(c => c.id);
+    const gradeStudents = users.filter(u => u.grade_id === g.id && u.role === 'student' && u.status === 'active');
+    const gradeTeachers = users.filter(u => u.grade_id === g.id && u.role === 'teacher' && u.status === 'active');
+    const gradeHomework = homework.filter(h => classIds.includes(h.class_id));
+    
+    return {
+      id: g.id,
+      name: g.name,
+      full_name: g.name,
+      fullName: g.name,
+      class_count: gradeClasses.length,
+      classCount: gradeClasses.length,
+      student_count: gradeStudents.length,
+      studentCount: gradeStudents.length,
+      teacher_count: gradeTeachers.length,
+      teacherCount: gradeTeachers.length,
+      homework_count: gradeHomework.length,
+      homeworkCount: gradeHomework.length
+    };
+  });
+
+  const homeworkByGrade = {};
   grades.forEach(g => {
-    const classIds = db.query('classes', { grade_id: g.id }).map(c => c.id);
+    const classIds = classes.filter(c => c.grade_id === g.id).map(c => c.id);
     homeworkByGrade[g.name] = homework.filter(h => classIds.includes(h.class_id)).length;
   });
   
@@ -66,14 +92,30 @@ router.get('/overview', authMiddleware, requireRole(['admin', 'super_admin', 'te
       totalVisits: visits.length,
       todayVisits,
       weekVisits,
-      deviceStats: Object.entries(deviceStats).map(([device_type, count]) => ({ device_type, count }))
+      deviceStats: Object.entries(deviceStats).map(([device_type, count]) => ({ device_type, deviceType: device_type, count }))
     },
     recentVisits,
+    overview: {
+      totalUsers: userCount,
+      total_users: userCount,
+      teacherCount: teacherCount,
+      teacher_count: teacherCount,
+      studentCount: studentCount,
+      student_count: studentCount,
+      homeworkCount: homeworkCount,
+      homework_count: homeworkCount,
+      noticeCount: noticeCount,
+      notice_count: noticeCount,
+      classCount: classCount,
+      class_count: classCount
+    },
     summary: {
       userCount, teacherCount, studentCount,
       homeworkCount, noticeCount, classCount,
       homeworkByGrade, homeworkBySubject
-    }
+    },
+    gradeStats,
+    grade_stats: gradeStats
   }));
 });
 
@@ -102,11 +144,16 @@ router.get('/class/:id', authMiddleware, requireRole(['admin', 'super_admin', 't
     });
   }
   
+  const cls = db.queryOne('classes', { id: classId });
   res.json(success({
-    className: db.queryOne('classes', { id: classId })?.name,
+    className: cls?.name,
+    class_name: cls?.name,
     studentCount: students.length,
+    student_count: students.length,
     homeworkCount: homework.length,
+    homework_count: homework.length,
     noticeCount: notices.length,
+    notice_count: notices.length,
     subjectStats,
     last7Days
   }));

@@ -571,35 +571,33 @@
           <div class="time-range">${slot.start_time}-${slot.end_time}</div>
         </td>`;
         
-        weekdays.forEach(day => {
-          if (slot.period_type === 'break') {
-            html += `<td class="break-cell" colspan="7"></td>`;
-            return;
-          }
-          if (slot.period_type === 'lunch') {
-            html += `<td class="lunch-cell" colspan="7"></td>`;
-            return;
-          }
-          
-          const entry = grid[slot.id]?.[day.id];
-          html += '<td class="course-cell">';
-          
-          if (entry && entry.subject_id) {
-            const subject = subjects.find(s => s.id === entry.subject_id);
-            const subjectCode = subject?.code || 'default';
-            html += `<div class="course-card subject-${subjectCode}" onclick="openEditModal('${slot.id}', ${day.id}, '${entry.id || ''}')">
-              <div class="course-name">${entry.subjectName || subject?.name || ''}</div>
-              ${entry.teacher_name ? `<div class="course-teacher">👤 ${entry.teacher_name}</div>` : ''}
-              ${entry.classroom ? `<div class="course-room">📍 ${entry.classroom}</div>` : ''}
-            </div>`;
-          } else {
-            const canEdit = API.isLoggedIn() && API.hasRole('teacher', 'admin', 'super_admin');
-            html += `<div class="course-card empty" ${canEdit ? `onclick="openEditModal('${slot.id}', ${day.id})"` : ''}>
-              ${canEdit ? '+ 添加' : ''}
-            </div>`;
-          }
-          html += '</td>';
-        });
+        if (slot.period_type === 'break' || slot.period_type === 'lunch') {
+          const colSpan = weekdays.length;
+          const cellClass = slot.period_type === 'lunch' ? 'lunch-cell' : 'break-cell';
+          const breakText = slot.period_type === 'lunch' ? '🍱 午休时间' : '💪 课间休息';
+          html += `<td class="${cellClass}" colspan="${colSpan}">${breakText}</td>`;
+        } else {
+          weekdays.forEach(day => {
+            const entry = grid[slot.id]?.[day.id];
+            html += '<td class="course-cell">';
+            
+            if (entry && entry.subject_id) {
+              const subject = subjects.find(s => s.id === entry.subject_id);
+              const subjectCode = subject?.code || 'default';
+              html += `<div class="course-card subject-${subjectCode}" onclick="openEditModal('${slot.id}', ${day.id}, '${entry.id || ''}')">
+                <div class="course-name">${entry.subjectName || subject?.name || ''}</div>
+                ${entry.teacher_name ? `<div class="course-teacher">👤 ${entry.teacher_name}</div>` : ''}
+                ${entry.classroom ? `<div class="course-room">📍 ${entry.classroom}</div>` : ''}
+              </div>`;
+            } else {
+              const canEdit = API.isLoggedIn() && API.hasRole('teacher', 'admin', 'super_admin');
+              html += `<div class="course-card empty" ${canEdit ? `onclick="openEditModal('${slot.id}', ${day.id})"` : ''}>
+                ${canEdit ? '+ 添加' : ''}
+              </div>`;
+            }
+            html += '</td>';
+          });
+        }
         html += '</tr>';
       });
       
