@@ -6,37 +6,78 @@
   <title>管理后台 - 作业公布站</title>
   <link rel="stylesheet" href="/css/common.css">
   <style>
+    /* ========== 管理后台布局 ========== */
     .admin-layout {
       display: grid;
       grid-template-columns: 240px 1fr;
       gap: 24px;
       padding: 24px 0;
-      min-height: calc(100vh - 64px);
+      min-height: calc(100vh - 68px);
     }
 
+    /* ========== 侧边栏 ========== */
     .sidebar-menu {
       background: var(--bg-card);
       border-radius: var(--radius-lg);
       padding: 12px;
       height: fit-content;
       position: sticky;
-      top: 88px;
+      top: 92px;
       border: 1px solid var(--border-light);
       box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px 12px;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 8px;
+    }
+
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-collapse-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .sidebar-collapse-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
     }
 
     .menu-item {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 12px 16px;
+      padding: 11px 14px;
       border-radius: var(--radius);
       cursor: pointer;
       font-size: 14px;
       font-weight: 500;
       color: var(--text-secondary);
       transition: var(--transition);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
+      position: relative;
+      user-select: none;
     }
 
     .menu-item:hover {
@@ -51,6 +92,40 @@
       box-shadow: 0 4px 12px rgba(75, 63, 227, 0.3);
     }
 
+    .menu-item .menu-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .menu-item .menu-label {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-menu.collapsed .menu-label,
+    .sidebar-menu.collapsed .sidebar-header {
+      display: none;
+    }
+
+    .sidebar-menu.collapsed {
+      width: 56px;
+      padding: 8px;
+    }
+
+    .sidebar-menu.collapsed .menu-item {
+      justify-content: center;
+      padding: 11px 8px;
+    }
+
+    /* 移动端抽屉式侧边栏 */
+    .sidebar-overlay {
+      display: none;
+    }
+
+    /* ========== 面板区域 ========== */
     .main-panel {
       min-width: 0;
     }
@@ -88,6 +163,7 @@
       margin-top: 8px;
     }
 
+    /* ========== 数据概览 - stat-card ========== */
     .overview-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -95,62 +171,155 @@
       margin-bottom: 24px;
     }
 
-    .overview-card {
+    .stat-card {
       background: var(--bg-card);
       border-radius: var(--radius-lg);
-      padding: 24px;
       border: 1px solid var(--border-light);
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
       transition: var(--transition);
       position: relative;
       overflow: hidden;
     }
 
-    .overview-card::before {
+    .stat-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
       opacity: 0;
       transition: var(--transition);
     }
 
-    .overview-card:hover {
+    .stat-card:nth-child(1)::before { background: linear-gradient(90deg, #4B3FE3, #8B5CF6); }
+    .stat-card:nth-child(2)::before { background: linear-gradient(90deg, #22A5F7, #06B6D4); }
+    .stat-card:nth-child(3)::before { background: linear-gradient(90deg, #1DC981, #27D2BF); }
+    .stat-card:nth-child(4)::before { background: linear-gradient(90deg, #F87454, #EFAA17); }
+    .stat-card:nth-child(5)::before { background: linear-gradient(90deg, #E8463A, #EC4899); }
+    .stat-card:nth-child(6)::before { background: linear-gradient(90deg, #84CC16, #22C55E); }
+
+    .stat-card:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-md);
     }
 
-    .overview-card:hover::before {
+    .stat-card:hover::before {
       opacity: 1;
     }
 
-    .overview-card:nth-child(1)::before { background: linear-gradient(90deg, #4B3FE3, #8B5CF6); }
-    .overview-card:nth-child(2)::before { background: linear-gradient(90deg, #22A5F7, #06B6D4); }
-    .overview-card:nth-child(3)::before { background: linear-gradient(90deg, #1DC981, #27D2BF); }
-    .overview-card:nth-child(4)::before { background: linear-gradient(90deg, #F87454, #EFAA17); }
-    .overview-card:nth-child(5)::before { background: linear-gradient(90deg, #E8463A, #EC4899); }
-    .overview-card:nth-child(6)::before { background: linear-gradient(90deg, #84CC16, #22C55E); }
+    .stat-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
 
-    .overview-icon {
-      font-size: 32px;
+    .stat-card:hover .stat-card-icon {
+      transform: scale(1.08);
+    }
+
+    .stat-card:nth-child(1) .stat-card-icon { background: rgba(75,63,227,0.1); }
+    .stat-card:nth-child(2) .stat-card-icon { background: rgba(34,165,247,0.1); }
+    .stat-card:nth-child(3) .stat-card-icon { background: rgba(29,201,129,0.1); }
+    .stat-card:nth-child(4) .stat-card-icon { background: rgba(248,116,84,0.1); }
+    .stat-card:nth-child(5) .stat-card-icon { background: rgba(232,70,58,0.1); }
+    .stat-card:nth-child(6) .stat-card-icon { background: rgba(132,204,22,0.1); }
+
+    .stat-card-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .stat-card-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ========== CSS柱状图 ========== */
+    .chart-container {
+      padding: 20px;
+    }
+
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      height: 200px;
+      padding: 0 8px;
+      border-bottom: 2px solid var(--border-light);
       margin-bottom: 12px;
     }
 
-    .overview-value {
-      font-size: 36px;
+    .bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .bar {
+      width: 100%;
+      max-width: 48px;
+      border-radius: 6px 6px 0 0;
+      transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      min-height: 4px;
+    }
+
+    .bar:hover {
+      filter: brightness(1.1);
+    }
+
+    .bar-value {
+      font-size: 11px;
       font-weight: 700;
-      color: var(--text-primary);
-      line-height: 1;
+      color: var(--text-secondary);
     }
 
-    .overview-label {
-      font-size: 14px;
+    .bar-label {
+      font-size: 12px;
       color: var(--text-muted);
-      margin-top: 8px;
+      text-align: center;
+      white-space: nowrap;
     }
 
+    .chart-legend {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    /* ========== 内容卡片 ========== */
     .content-card {
       background: var(--bg-card);
       border-radius: var(--radius-lg);
@@ -188,6 +357,7 @@
       padding: 24px;
     }
 
+    /* ========== 数据表格 ========== */
     .data-table {
       width: 100%;
       border-collapse: collapse;
@@ -207,6 +377,35 @@
       font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .data-table th.sortable {
+      cursor: pointer;
+    }
+
+    .data-table th.sortable:hover {
+      color: var(--text-primary);
+    }
+
+    .data-table th.sortable::after {
+      content: '\2195';
+      margin-left: 4px;
+      opacity: 0.3;
+      font-size: 11px;
+    }
+
+    .data-table th.sortable.asc::after {
+      content: '\2191';
+      opacity: 0.8;
+      color: var(--primary);
+    }
+
+    .data-table th.sortable.desc::after {
+      content: '\2193';
+      opacity: 0.8;
+      color: var(--primary);
     }
 
     .data-table tr:hover td {
@@ -217,12 +416,21 @@
       border-bottom: none;
     }
 
-    .grade-section {
-      margin-bottom: 28px;
+    .data-table .checkbox-cell {
+      width: 40px;
+      text-align: center;
     }
 
-    .grade-section:last-child {
-      margin-bottom: 0;
+    .data-table input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* ========== 年级班级 ========== */
+    .grade-section {
+      margin-bottom: 28px;
     }
 
     .grade-title {
@@ -253,6 +461,7 @@
       justify-content: space-between;
       transition: var(--transition);
       border: 1px solid transparent;
+      cursor: pointer;
     }
 
     .class-item:hover {
@@ -274,6 +483,19 @@
       font-weight: 600;
     }
 
+    .class-actions {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .class-actions .btn-icon {
+      width: 28px;
+      height: 28px;
+      font-size: 13px;
+    }
+
+    /* ========== 表单行 ========== */
     .form-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -281,6 +503,121 @@
       margin-bottom: 16px;
     }
 
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .form-error {
+      font-size: 12px;
+      color: var(--danger);
+      display: none;
+    }
+
+    .form-error.show {
+      display: block;
+    }
+
+    input.invalid, select.invalid {
+      border-color: var(--danger) !important;
+      box-shadow: 0 0 0 3px rgba(232, 70, 58, 0.1) !important;
+    }
+
+    input.valid, select.valid {
+      border-color: var(--success) !important;
+      box-shadow: 0 0 0 3px rgba(29, 201, 129, 0.1) !important;
+    }
+
+    /* ========== 筛选工具栏 ========== */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-hover);
+    }
+
+    .filter-bar .search-box {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .filter-bar input[type="text"],
+    .filter-bar input[type="search"],
+    .filter-bar input[type="date"] {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-primary);
+    }
+
+    .filter-bar input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(75, 63, 227, 0.08);
+    }
+
+    .filter-select {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(75, 63, 227, 0.08);
+    }
+
+    /* ========== 批量操作栏 ========== */
+    .batch-bar {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      background: var(--primary-soft);
+      border-bottom: 1px solid var(--border-light);
+      font-size: 14px;
+      font-weight: 500;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .batch-bar.show {
+      display: flex;
+    }
+
+    .batch-bar .count {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* ========== 徽章 ========== */
     .badge {
       display: inline-flex;
       align-items: center;
@@ -290,21 +627,13 @@
       font-weight: 500;
     }
 
-    .badge-primary {
-      background: var(--primary-soft);
-      color: var(--primary);
-    }
+    .badge-primary { background: var(--primary-soft); color: var(--primary); }
+    .badge-success { background: rgba(29, 201, 129, 0.1); color: #1DC981; }
+    .badge-danger { background: rgba(232, 70, 58, 0.1); color: var(--danger); }
+    .badge-warning { background: rgba(239, 170, 23, 0.1); color: var(--warning); }
+    .badge-info { background: rgba(34, 165, 247, 0.1); color: var(--info); }
 
-    .badge-success {
-      background: rgba(29, 201, 129, 0.1);
-      color: #1DC981;
-    }
-
-    .badge-danger {
-      background: rgba(232, 70, 58, 0.1);
-      color: var(--danger);
-    }
-
+    /* ========== 统计行 ========== */
     .stat-row {
       display: flex;
       gap: 24px;
@@ -325,110 +654,423 @@
       font-size: 18px;
     }
 
+    /* ========== 分页 ========== */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .pagination button {
+      min-width: 36px;
+      height: 36px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .pagination button:hover:not(:disabled) {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .pagination button.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .pagination button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .page-info {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0 8px;
+    }
+
+    /* ========== 操作日志面板 ========== */
+    .log-filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .log-type-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .log-type-create { background: rgba(29,201,129,0.1); color: #1DC981; }
+    .log-type-update { background: rgba(34,165,247,0.1); color: #22A5F7; }
+    .log-type-delete { background: rgba(232,70,58,0.1); color: #E8463A; }
+    .log-type-login { background: rgba(75,63,227,0.1); color: #4B3FE3; }
+    .log-type-setting { background: rgba(239,170,23,0.1); color: #EFAA17; }
+
+    /* ========== 骨架屏过渡 ========== */
+    .panel-skeleton {
+      padding: 24px;
+    }
+
+    .skeleton-block {
+      height: 16px;
+      background: linear-gradient(90deg, var(--skeleton-base, #E5E7EB) 25%, var(--skeleton-shine, #F0F0F5) 50%, var(--skeleton-base, #E5E7EB) 75%);
+      background-size: 200% 100%;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      animation: skeletonShimmer 1.5s ease-in-out infinite;
+    }
+
+    .skeleton-block:nth-child(1) { width: 40%; height: 28px; }
+    .skeleton-block:nth-child(2) { width: 60%; }
+    .skeleton-block:nth-child(3) { width: 100%; height: 200px; border-radius: var(--radius-lg); }
+    .skeleton-block:nth-child(4) { width: 80%; }
+
+    @keyframes skeletonShimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ========== 系统设置 ========== */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .setting-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .setting-item label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* ========== 类切换按钮 ========== */
+    .btn-group {
+      display: inline-flex;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-group button {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      border: none;
+      border-right: 1px solid var(--border);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-group button:last-child {
+      border-right: none;
+    }
+
+    .btn-group button.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-group button:hover:not(.active) {
+      background: var(--bg-hover);
+    }
+
+    /* ========== 移动端卡片列表 ========== */
+    .mobile-card-list {
+      display: none;
+    }
+
+    .mobile-card-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .mobile-card-item .mc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .mobile-card-item .mc-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-size: 13px;
+    }
+
+    .mobile-card-item .mc-label {
+      color: var(--text-muted);
+    }
+
+    .mobile-card-item .mc-value {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    /* ========== 响应式 ========== */
     @media (max-width: 768px) {
       .admin-layout {
         grid-template-columns: 1fr;
       }
-      
+
       .sidebar-menu {
-        position: static;
+        position: fixed;
+        top: 0;
+        left: -260px;
+        width: 260px;
+        height: 100vh;
+        z-index: 200;
+        border-radius: 0;
+        padding-top: 60px;
+        overflow-y: auto;
+        transition: left 0.3s ease;
+      }
+
+      .sidebar-menu.mobile-open {
+        left: 0;
+      }
+
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 199;
+      }
+
+      .sidebar-overlay.show {
+        display: block;
+      }
+
+      .sidebar-collapse-btn.mobile-menu-trigger {
         display: flex;
-        overflow-x: auto;
-        gap: 4px;
-        padding: 8px;
       }
-      
-      .menu-item {
-        white-space: nowrap;
-        margin-bottom: 0;
+
+      .sidebar-close-btn {
+        display: flex;
       }
-      
+
+      .sidebar-menu.collapsed {
+        width: 260px;
+      }
+
+      .sidebar-menu.collapsed .menu-label,
+      .sidebar-menu.collapsed .sidebar-header {
+        display: flex;
+      }
+
       .form-row {
         grid-template-columns: 1fr;
       }
-      
-      .data-table {
+
+      .form-row-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .data-table-wrapper {
+        display: none;
+      }
+
+      .mobile-card-list {
         display: block;
-        overflow-x: auto;
       }
 
       .overview-grid {
         grid-template-columns: repeat(2, 1fr);
       }
 
-      .overview-value {
-        font-size: 28px;
+      .stat-card-value {
+        font-size: 22px;
+      }
+
+      .stat-card-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+      }
+
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filter-bar .search-box {
+        min-width: 100%;
+      }
+
+      .bar-chart {
+        height: 150px;
+        gap: 6px;
+      }
+
+      .batch-bar {
+        flex-wrap: wrap;
+      }
+
+      .card-header {
+        padding: 14px 16px;
+      }
+
+      .card-body {
+        padding: 16px;
       }
     }
+
+    @media (max-width: 480px) {
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 数字动画 */
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .count-animate {
+      animation: countUp 0.4s ease forwards;
+    }
+
+    /* hidden辅助 */
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
   <header class="header" id="header"></header>
 
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
+
   <main class="container admin-layout">
-    <aside class="sidebar-menu">
+    <aside class="sidebar-menu" id="sidebarMenu">
+      <div class="sidebar-header">
+        <span class="sidebar-title">控制台</span>
+        <button class="sidebar-collapse-btn" onclick="toggleSidebar()" title="折叠/展开">&#9776;</button>
+      </div>
       <div class="menu-item active" data-panel="overview" onclick="switchPanel('overview')">
-        <span>📊</span> 数据概览
+        <span class="menu-icon">📊</span><span class="menu-label">数据概览</span>
       </div>
       <div class="menu-item" data-panel="grades" onclick="switchPanel('grades')">
-        <span>🏫</span> 年级班级
+        <span class="menu-icon">🏫</span><span class="menu-label">年级班级</span>
       </div>
       <div class="menu-item" data-panel="users" onclick="switchPanel('users')">
-        <span>👥</span> 用户管理
+        <span class="menu-icon">👥</span><span class="menu-label">用户管理</span>
       </div>
       <div class="menu-item" data-panel="homework" onclick="switchPanel('homework')">
-        <span>📝</span> 作业管理
+        <span class="menu-icon">📝</span><span class="menu-label">作业管理</span>
       </div>
       <div class="menu-item" onclick="window.location.href='/timetable'">
-        <span>📅</span> 课程表管理
+        <span class="menu-icon">📅</span><span class="menu-label">课程表管理</span>
+      </div>
+      <div class="menu-item" data-panel="logs" onclick="switchPanel('logs')">
+        <span class="menu-icon">📋</span><span class="menu-label">操作日志</span>
       </div>
       <div class="menu-item" data-panel="settings" onclick="switchPanel('settings')">
-        <span>⚙️</span> 系统设置
+        <span class="menu-icon">⚙️</span><span class="menu-label">系统设置</span>
       </div>
     </aside>
 
     <div class="main-panel">
+
+      <!-- ===== 数据概览 ===== -->
       <div class="panel-section active" id="panel-overview">
         <div class="page-header">
           <h1 class="page-title">数据概览</h1>
           <p class="page-desc">系统运行状态和数据统计</p>
         </div>
         <div class="overview-grid" id="overviewGrid">
-          <div class="overview-card">
-            <div class="overview-icon">👥</div>
-            <div class="overview-value" id="ovUsers">-</div>
-            <div class="overview-label">总用户数</div>
+          <div class="stat-card">
+            <div class="stat-card-icon">👥</div>
+            <div>
+              <div class="stat-card-value" id="ovUsers">-</div>
+              <div class="stat-card-label">总用户数</div>
+            </div>
           </div>
-          <div class="overview-card">
-            <div class="overview-icon">👨‍🏫</div>
-            <div class="overview-value" id="ovTeachers">-</div>
-            <div class="overview-label">教师人数</div>
+          <div class="stat-card">
+            <div class="stat-card-icon">👨‍🏫</div>
+            <div>
+              <div class="stat-card-value" id="ovTeachers">-</div>
+              <div class="stat-card-label">教师人数</div>
+            </div>
           </div>
-          <div class="overview-card">
-            <div class="overview-icon">🎒</div>
-            <div class="overview-value" id="ovStudents">-</div>
-            <div class="overview-label">学生人数</div>
+          <div class="stat-card">
+            <div class="stat-card-icon">🎒</div>
+            <div>
+              <div class="stat-card-value" id="ovStudents">-</div>
+              <div class="stat-card-label">学生人数</div>
+            </div>
           </div>
-          <div class="overview-card">
-            <div class="overview-icon">🏫</div>
-            <div class="overview-value" id="ovClasses">-</div>
-            <div class="overview-label">班级总数</div>
+          <div class="stat-card">
+            <div class="stat-card-icon">🏫</div>
+            <div>
+              <div class="stat-card-value" id="ovClasses">-</div>
+              <div class="stat-card-label">班级总数</div>
+            </div>
           </div>
-          <div class="overview-card">
-            <div class="overview-icon">📝</div>
-            <div class="overview-value" id="ovHomework">-</div>
-            <div class="overview-label">作业总数</div>
+          <div class="stat-card">
+            <div class="stat-card-icon">📝</div>
+            <div>
+              <div class="stat-card-value" id="ovHomework">-</div>
+              <div class="stat-card-label">作业总数</div>
+            </div>
           </div>
-          <div class="overview-card">
-            <div class="overview-icon">👁️</div>
-            <div class="overview-value" id="ovVisits">-</div>
-            <div class="overview-label">今日访问</div>
+          <div class="stat-card">
+            <div class="stat-card-icon">👁️</div>
+            <div>
+              <div class="stat-card-value" id="ovVisits">-</div>
+              <div class="stat-card-label">今日访问</div>
+            </div>
           </div>
         </div>
 
         <div class="content-card">
           <div class="card-header">
-            <span class="card-title">📈 各年级统计</span>
+            <span class="card-title">📈 各年级作业数统计</span>
+          </div>
+          <div class="card-body" id="gradeChartArea">
+            <div class="loading"><div class="spinner"></div>加载中...</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">📊 各年级详情</span>
           </div>
           <div class="card-body" id="gradeStats">
             <div class="loading"><div class="spinner"></div>加载中...</div>
@@ -436,6 +1078,7 @@
         </div>
       </div>
 
+      <!-- ===== 年级班级 ===== -->
       <div class="panel-section" id="panel-grades">
         <div class="page-header">
           <h1 class="page-title">年级班级管理</h1>
@@ -450,17 +1093,27 @@
           </div>
           <div class="card-body">
             <div class="form-row">
-              <select class="form-control" id="newClassGrade">
-                <option value="">选择年级</option>
-              </select>
-              <input type="number" class="form-control" id="newClassNumber" placeholder="班级号 (如1,2,3)" min="1">
-              <input type="text" class="form-control" id="newClassName" placeholder="班级名称 (可选，留空自动生成)">
+              <div class="form-group">
+                <label>年级</label>
+                <select class="form-control" id="newClassGrade">
+                  <option value="">选择年级</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>班级号</label>
+                <input type="number" class="form-control" id="newClassNumber" placeholder="如1, 2, 3" min="1">
+              </div>
+              <div class="form-group">
+                <label>班级名称（可选）</label>
+                <input type="text" class="form-control" id="newClassName" placeholder="留空自动生成">
+              </div>
             </div>
             <button class="btn btn-primary" onclick="addClass()">添加班级</button>
           </div>
         </div>
       </div>
 
+      <!-- ===== 用户管理 ===== -->
       <div class="panel-section" id="panel-users">
         <div class="page-header">
           <h1 class="page-title">用户管理</h1>
@@ -472,44 +1125,92 @@
           </div>
           <div class="card-body">
             <div class="form-row">
-              <input type="text" class="form-control" id="newUsername" placeholder="用户名">
-              <input type="password" class="form-control" id="newPassword" placeholder="密码">
-              <input type="text" class="form-control" id="newRealName" placeholder="真实姓名">
+              <div class="form-group">
+                <label>用户名 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="newUsername" placeholder="请输入用户名">
+                <div class="form-error" id="err-newUsername"></div>
+              </div>
+              <div class="form-group">
+                <label>密码 <span class="text-danger">*</span></label>
+                <input type="password" class="form-control" id="newPassword" placeholder="至少6位">
+                <div class="form-error" id="err-newPassword"></div>
+              </div>
+              <div class="form-group">
+                <label>真实姓名 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="newRealName" placeholder="请输入真实姓名">
+                <div class="form-error" id="err-newRealName"></div>
+              </div>
             </div>
             <div class="form-row">
-              <select class="form-control" id="newRole" onchange="onRoleChange()">
-                <option value="teacher">教师</option>
-                <option value="student">学生</option>
-                <option value="admin">教务管理员</option>
-              </select>
-              <select class="form-control" id="newUserGrade" onchange="loadNewUserClasses()">
-                <option value="">选择年级</option>
-              </select>
-              <select class="form-control" id="newUserClass">
-                <option value="">选择班级</option>
-              </select>
+              <div class="form-group">
+                <label>角色 <span class="text-danger">*</span></label>
+                <select class="form-control" id="newRole" onchange="onRoleChange()">
+                  <option value="teacher">教师</option>
+                  <option value="student">学生</option>
+                  <option value="admin">教务管理员</option>
+                </select>
+              </div>
+              <div class="form-group" id="gradeFieldGroup">
+                <label>年级</label>
+                <select class="form-control" id="newUserGrade" onchange="loadNewUserClasses()">
+                  <option value="">选择年级</option>
+                </select>
+              </div>
+              <div class="form-group" id="classFieldGroup">
+                <label>班级</label>
+                <select class="form-control" id="newUserClass">
+                  <option value="">选择班级</option>
+                </select>
+              </div>
             </div>
             <button class="btn btn-primary" onclick="addUser()">添加用户</button>
           </div>
         </div>
+
         <div class="content-card">
           <div class="card-header">
             <span class="card-title">👥 用户列表</span>
-            <div class="filter-group">
-              <select class="filter-select" id="userRoleFilter" onchange="loadUsers()">
-                <option value="">全部角色</option>
-                <option value="teacher">教师</option>
-                <option value="student">学生</option>
-                <option value="admin">管理员</option>
-              </select>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-outline btn-sm" onclick="exportUsersCSV()">📥 导出CSV</button>
+              <label class="btn btn-outline btn-sm" style="cursor:pointer">
+                📤 导入CSV
+                <input type="file" accept=".csv" onchange="importUsersCSV(event)" style="display:none">
+              </label>
             </div>
           </div>
-          <div style="overflow-x:auto">
-            <table class="data-table">
+          <div class="filter-bar">
+            <div class="search-box">
+              <input type="search" id="userSearch" placeholder="搜索用户名或姓名..." oninput="debouncedLoadUsers()">
+            </div>
+            <select class="filter-select" id="userRoleFilter" onchange="loadUsers()">
+              <option value="">全部角色</option>
+              <option value="teacher">教师</option>
+              <option value="student">学生</option>
+              <option value="admin">管理员</option>
+            </select>
+            <select class="filter-select" id="userStatusFilter" onchange="loadUsers()">
+              <option value="">全部状态</option>
+              <option value="1">正常</option>
+              <option value="0">禁用</option>
+            </select>
+            <select class="filter-select" id="userGradeFilter" onchange="loadUsers()">
+              <option value="">全部年级</option>
+            </select>
+          </div>
+          <div class="batch-bar" id="userBatchBar">
+            <span>已选 <span class="count" id="userSelectedCount">0</span> 项</span>
+            <button class="btn btn-sm btn-success" onclick="batchToggleUsers(true)">✅ 批量启用</button>
+            <button class="btn btn-sm btn-warning" onclick="batchToggleUsers(false)">🚫 批量禁用</button>
+            <button class="btn btn-sm btn-danger" onclick="batchDeleteUsers()">🗑️ 批量删除</button>
+            <button class="btn btn-sm btn-outline" onclick="clearUserSelection()">取消选择</button>
+          </div>
+          <div class="data-table-wrapper" style="overflow-x:auto">
+            <table class="data-table" id="userTable">
               <thead>
                 <tr>
-                  <th>用户名</th>
-                  <th>姓名</th>
+                  <th class="checkbox-cell"><input type="checkbox" id="userSelectAll" onchange="toggleAllUsers(this)"></th>
+                  <th class="sortable" data-sort="username" onclick="sortUsers('username')">用户名</th>
+                  <th class="sortable" data-sort="realName" onclick="sortUsers('realName')">姓名</th>
                   <th>角色</th>
                   <th>年级班级</th>
                   <th>状态</th>
@@ -517,110 +1218,483 @@
                 </tr>
               </thead>
               <tbody id="userTableBody">
-                <tr><td colspan="6" class="loading"><div class="spinner"></div>加载中...</td></tr>
+                <tr><td colspan="7"><div class="loading"><div class="spinner"></div>加载中...</div></td></tr>
               </tbody>
             </table>
           </div>
+          <div class="mobile-card-list" id="userMobileList"></div>
+          <div class="pagination" id="userPagination"></div>
         </div>
       </div>
 
+      <!-- ===== 作业管理 ===== -->
       <div class="panel-section" id="panel-homework">
         <div class="page-header">
           <h1 class="page-title">作业管理</h1>
           <p class="page-desc">查看和管理所有作业</p>
         </div>
         <div class="content-card">
-          <div style="overflow-x:auto">
-            <table class="data-table">
+          <div class="card-header">
+            <span class="card-title">📝 作业列表</span>
+            <button class="btn btn-sm btn-outline" onclick="exportHomeworkCSV()">📥 导出</button>
+          </div>
+          <div class="filter-bar">
+            <div class="search-box">
+              <input type="search" id="hwSearch" placeholder="搜索作业标题..." oninput="debouncedLoadHomework()">
+            </div>
+            <input type="date" id="hwDateFrom" onchange="loadAdminHomework()">
+            <span style="color:var(--text-muted);font-size:13px">至</span>
+            <input type="date" id="hwDateTo" onchange="loadAdminHomework()">
+            <select class="filter-select" id="hwSubjectFilter" onchange="loadAdminHomework()">
+              <option value="">全部科目</option>
+            </select>
+            <select class="filter-select" id="hwGradeFilter" onchange="loadAdminHomework()">
+              <option value="">全部年级</option>
+            </select>
+          </div>
+          <div class="batch-bar" id="hwBatchBar">
+            <span>已选 <span class="count" id="hwSelectedCount">0</span> 项</span>
+            <button class="btn btn-sm btn-danger" onclick="batchDeleteHomework()">🗑️ 批量删除</button>
+            <button class="btn btn-sm btn-outline" onclick="clearHwSelection()">取消选择</button>
+          </div>
+          <div class="data-table-wrapper" style="overflow-x:auto">
+            <table class="data-table" id="hwTable">
               <thead>
                 <tr>
+                  <th class="checkbox-cell"><input type="checkbox" id="hwSelectAll" onchange="toggleAllHomework(this)"></th>
                   <th>科目</th>
-                  <th>标题</th>
+                  <th class="sortable" data-sort="title" onclick="sortHomework('title')">标题</th>
                   <th>班级</th>
                   <th>教师</th>
-                  <th>发布时间</th>
+                  <th class="sortable" data-sort="created_at" onclick="sortHomework('created_at')">发布时间</th>
                   <th>查看</th>
                   <th>操作</th>
                 </tr>
               </thead>
               <tbody id="adminHomeworkBody">
-                <tr><td colspan="7" class="loading"><div class="spinner"></div>加载中...</td></tr>
+                <tr><td colspan="8"><div class="loading"><div class="spinner"></div>加载中...</div></td></tr>
               </tbody>
             </table>
+          </div>
+          <div class="mobile-card-list" id="hwMobileList"></div>
+          <div class="pagination" id="hwPagination"></div>
+        </div>
+      </div>
+
+      <!-- ===== 操作日志 ===== -->
+      <div class="panel-section" id="panel-logs">
+        <div class="page-header">
+          <h1 class="page-title">操作日志</h1>
+          <p class="page-desc">管理员关键操作记录</p>
+        </div>
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">📋 日志列表</span>
+            <button class="btn btn-sm btn-outline" onclick="exportLogs()">📥 导出日志</button>
+          </div>
+          <div class="filter-bar">
+            <div class="search-box">
+              <input type="search" id="logSearch" placeholder="搜索操作内容..." oninput="debouncedLoadLogs()">
+            </div>
+            <select class="filter-select" id="logTypeFilter" onchange="loadLogs()">
+              <option value="">全部类型</option>
+              <option value="create">创建</option>
+              <option value="update">修改</option>
+              <option value="delete">删除</option>
+              <option value="login">登录</option>
+              <option value="setting">设置</option>
+            </select>
+            <input type="date" id="logDateFrom" onchange="loadLogs()">
+            <span style="color:var(--text-muted);font-size:13px">至</span>
+            <input type="date" id="logDateTo" onchange="loadLogs()">
+          </div>
+          <div class="card-body" id="logsContainer">
+            <div class="loading"><div class="spinner"></div>加载中...</div>
           </div>
         </div>
       </div>
 
+      <!-- ===== 系统设置 ===== -->
       <div class="panel-section" id="panel-settings">
         <div class="page-header">
           <h1 class="page-title">系统设置</h1>
           <p class="page-desc">系统配置和账号管理</p>
         </div>
+
+        <!-- 学校信息 -->
         <div class="content-card">
           <div class="card-header">
-            <span class="card-title">ℹ️ 系统信息</span>
+            <span class="card-title">🏫 学校信息</span>
           </div>
           <div class="card-body">
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px">
-              <div class="stat-item">
-                <span>🏫</span>
-                <span>学校名称：</span>
-                <strong>南通市崇川初级中学</strong>
+            <div class="settings-grid">
+              <div class="setting-item">
+                <label>学校名称</label>
+                <input type="text" class="form-control" id="cfgSchoolName" placeholder="请输入学校名称">
               </div>
-              <div class="stat-item">
-                <span>🔖</span>
-                <span>系统版本：</span>
-                <strong>v2.0.0</strong>
+              <div class="setting-item">
+                <label>系统版本</label>
+                <input type="text" class="form-control" id="cfgVersion" value="v2.0.0" readonly style="opacity:0.6">
               </div>
             </div>
-            <p class="text-muted" style="margin-top:16px;padding:12px;background:var(--bg-hover);border-radius:var(--radius);">
-              💡 默认管理员账号：admin / admin123，请及时修改密码
-            </p>
           </div>
         </div>
+
+        <!-- 学期设置 -->
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">📅 学期设置</span>
+          </div>
+          <div class="card-body">
+            <div class="settings-grid">
+              <div class="setting-item">
+                <label>当前学期</label>
+                <select class="form-control" id="cfgSemester">
+                  <option value="2024-2025-1">2024-2025 第一学期</option>
+                  <option value="2024-2025-2">2024-2025 第二学期</option>
+                  <option value="2025-2026-1">2025-2026 第一学期</option>
+                  <option value="2025-2026-2">2025-2026 第二学期</option>
+                </select>
+              </div>
+              <div class="setting-item">
+                <label>开学日期</label>
+                <input type="date" class="form-control" id="cfgStartDate">
+              </div>
+            </div>
+            <button class="btn btn-primary btn-sm mt-16" onclick="saveSemesterSettings()">保存学期设置</button>
+          </div>
+        </div>
+
+        <!-- 公告模板 -->
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">📢 公告模板管理</span>
+            <button class="btn btn-sm btn-primary" onclick="addAnnouncement()">➕ 添加公告</button>
+          </div>
+          <div class="card-body" id="announcementList">
+            <div class="empty-state" style="padding:30px">
+              <div class="empty-icon" style="font-size:40px">📢</div>
+              <div class="empty-text">暂无公告模板</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 系统参数 -->
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">🔧 系统参数</span>
+          </div>
+          <div class="card-body">
+            <div class="settings-grid">
+              <div class="setting-item">
+                <label>每页显示条数</label>
+                <select class="form-control" id="cfgPageSize">
+                  <option value="10">10条</option>
+                  <option value="20" selected>20条</option>
+                  <option value="50">50条</option>
+                  <option value="100">100条</option>
+                </select>
+              </div>
+              <div class="setting-item">
+                <label>作业最大附件数</label>
+                <input type="number" class="form-control" id="cfgMaxAttachments" value="5" min="1" max="20">
+              </div>
+              <div class="setting-item">
+                <label>允许学生注册</label>
+                <select class="form-control" id="cfgAllowRegister">
+                  <option value="false">关闭</option>
+                  <option value="true">开启</option>
+                </select>
+              </div>
+              <div class="setting-item">
+                <label>系统维护模式</label>
+                <select class="form-control" id="cfgMaintenance">
+                  <option value="false">正常运行</option>
+                  <option value="true">维护模式</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-sm mt-16" onclick="saveSystemParams()">保存系统参数</button>
+          </div>
+        </div>
+
+        <!-- 数据备份恢复 -->
+        <div class="content-card">
+          <div class="card-header">
+            <span class="card-title">💾 数据备份与恢复</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-16" style="font-size:13px">导出系统数据为 JSON 备份文件，或从备份文件恢复数据。</p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+              <button class="btn btn-primary" onclick="exportBackup()">📦 导出备份</button>
+              <label class="btn btn-outline" style="cursor:pointer">
+                📂 恢复备份
+                <input type="file" accept=".json" onchange="importBackup(event)" style="display:none">
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 账号设置 -->
         <div class="content-card">
           <div class="card-header">
             <span class="card-title">🔐 账号设置</span>
           </div>
           <div class="card-body">
             <div class="form-row">
-              <input type="password" class="form-control" id="oldPassword" placeholder="原密码">
-              <input type="password" class="form-control" id="newPassword1" placeholder="新密码">
-              <input type="password" class="form-control" id="newPassword2" placeholder="确认新密码">
+              <div class="form-group">
+                <label>原密码</label>
+                <input type="password" class="form-control" id="oldPassword" placeholder="请输入原密码">
+              </div>
+              <div class="form-group">
+                <label>新密码</label>
+                <input type="password" class="form-control" id="newPassword1" placeholder="至少6位">
+                <div class="form-error" id="err-newPw1"></div>
+              </div>
+              <div class="form-group">
+                <label>确认新密码</label>
+                <input type="password" class="form-control" id="newPassword2" placeholder="再次输入新密码">
+                <div class="form-error" id="err-newPw2"></div>
+              </div>
             </div>
             <button class="btn btn-primary" onclick="changePassword()">修改密码</button>
           </div>
         </div>
       </div>
+
     </div>
   </main>
 
   <script src="/js/common.js"></script>
   <script>
+    // ============================================================
+    // 全局状态
+    // ============================================================
     let gradesData = [];
+    let allUsers = [];
+    let allHomework = [];
+    let allLogs = [];
+    let userSort = { field: '', dir: 'asc' };
+    let hwSort = { field: '', dir: 'asc' };
+    let userPage = { current: 1, pageSize: 20, total: 0 };
+    let hwPage = { current: 1, pageSize: 20, total: 0 };
+    let selectedUserIds = new Set();
+    let selectedHwIds = new Set();
 
+    const ROLE_NAMES = { super_admin: '超管', admin: '管理员', teacher: '教师', student: '学生', parent: '家长' };
+    const SUBJECTS = ['语文', '数学', '英语', '物理', '化学', '生物', '政治', '历史', '地理', '体育', '音乐', '美术', '信息技术', '劳动技术', '科学', '道德与法治'];
+
+    // ============================================================
+    // 初始化
+    // ============================================================
     async function init() {
       if (!API.isLoggedIn() || !API.hasRole('super_admin', 'admin')) {
         window.location.href = '/login';
         return;
       }
-      
       initHeader('admin');
+      setupSubjectFilter();
       await loadGrades();
+      setupGradeFilters();
       await Promise.all([
         loadOverview(),
         loadGradesPanel(),
         loadUsers(),
-        loadAdminHomework()
+        loadAdminHomework(),
+        loadLogs()
       ]);
+      loadSystemSettings();
       recordVisit('/admin');
+      onRoleChange();
     }
 
+    function setupSubjectFilter() {
+      const sel = document.getElementById('hwSubjectFilter');
+      SUBJECTS.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        sel.appendChild(opt);
+      });
+    }
+
+    function setupGradeFilters() {
+      const sel = document.getElementById('userGradeFilter');
+      sel.innerHTML = '<option value="">全部年级</option>';
+      (gradesData || []).forEach(g => {
+        sel.innerHTML += `<option value="${g.id}">${escapeHtml(g.fullName || g.name)}</option>`;
+      });
+    }
+
+    // ============================================================
+    // XSS防护 - 使用 common.js 中的 escapeHtml
+    // ============================================================
+    function safe(str) { return escapeHtml(str); }
+
+    // ============================================================
+    // 侧边栏
+    // ============================================================
     function switchPanel(panel) {
-      document.querySelectorAll('.menu-item').forEach(m => m.classList.toggle('active', m.dataset.panel === panel));
-      document.querySelectorAll('.panel-section').forEach(p => p.classList.toggle('active', p.id === 'panel-' + panel));
+      document.querySelectorAll('.menu-item').forEach(m => {
+        m.classList.toggle('active', m.dataset.panel === panel);
+      });
+
+      // 骨架屏过渡
+      const target = document.getElementById('panel-' + panel);
+      document.querySelectorAll('.panel-section').forEach(p => {
+        if (p.id === 'panel-' + panel) {
+          p.classList.add('active');
+        } else {
+          p.classList.remove('active');
+        }
+      });
+
+      // 移动端关闭侧边栏
+      closeMobileSidebar();
     }
 
+    function toggleSidebar() {
+      const menu = document.getElementById('sidebarMenu');
+      if (window.innerWidth <= 768) {
+        menu.classList.toggle('mobile-open');
+        document.getElementById('sidebarOverlay').classList.toggle('show');
+      } else {
+        menu.classList.toggle('collapsed');
+      }
+    }
+
+    function closeMobileSidebar() {
+      document.getElementById('sidebarMenu').classList.remove('mobile-open');
+      document.getElementById('sidebarOverlay').classList.remove('show');
+    }
+
+    // ============================================================
+    // 数字动画
+    // ============================================================
+    function animateNumber(el, target) {
+      const num = parseInt(target) || 0;
+      if (num === 0) { el.textContent = '0'; return; }
+      const duration = 600;
+      const start = 0;
+      const startTime = performance.now();
+      el.classList.add('count-animate');
+      function tick(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(start + (num - start) * eased);
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // ============================================================
+    // 数据概览
+    // ============================================================
+    async function loadOverview() {
+      try {
+        const res = await API.get('/api/stats/overview');
+        const data = res.data || {};
+        const o = data.overview || data.summary || {};
+        const v = data.visits || {};
+        const gs = data.gradeStats || data.grade_stats || [];
+
+        animateNumber(document.getElementById('ovUsers'), o.totalUsers || o.total_users || o.userCount || 0);
+        animateNumber(document.getElementById('ovTeachers'), o.teacherCount || o.teacher_count || 0);
+        animateNumber(document.getElementById('ovStudents'), o.studentCount || o.student_count || 0);
+        animateNumber(document.getElementById('ovClasses'), o.classCount || o.class_count || 0);
+        animateNumber(document.getElementById('ovHomework'), o.homeworkCount || o.homework_count || 0);
+        animateNumber(document.getElementById('ovVisits'), v.todayVisits || 0);
+
+        renderBarChart(gs);
+        renderGradeStats(gs);
+      } catch (e) {
+        console.error(e);
+        document.getElementById('gradeChartArea').innerHTML = '<div class="text-danger">加载统计失败</div>';
+        document.getElementById('gradeStats').innerHTML = '<div class="text-danger">加载统计失败</div>';
+      }
+    }
+
+    function renderBarChart(gs) {
+      const area = document.getElementById('gradeChartArea');
+      if (!gs || gs.length === 0) {
+        area.innerHTML = '<div class="empty-state" style="padding:30px"><div class="empty-icon" style="font-size:40px">📊</div><div class="empty-text">暂无统计数据</div></div>';
+        return;
+      }
+
+      const maxVal = Math.max(...gs.map(g => g.homework_count || g.homeworkCount || 0), 1);
+      const colors = ['#4B3FE3', '#22A5F7', '#1DC981', '#F87454', '#E8463A', '#8B5CF6', '#06B6D4', '#EFAA17'];
+
+      let barsHtml = gs.map((g, i) => {
+        const count = g.homework_count || g.homeworkCount || 0;
+        const height = Math.max((count / maxVal) * 160, 4);
+        const name = g.full_name || g.fullName || g.name || '';
+        const shortName = name.replace(/年级$/, '').replace(/^初/, '');
+        return `
+          <div class="bar-group">
+            <div class="bar-value">${count}</div>
+            <div class="bar" style="height:${height}px;background:${colors[i % colors.length]}" title="${safe(name)}: ${count}份作业"></div>
+            <div class="bar-label">${safe(shortName)}</div>
+          </div>
+        `;
+      }).join('');
+
+      area.innerHTML = `
+        <div class="chart-container">
+          <div class="bar-chart">${barsHtml}</div>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#4B3FE3"></div><span>作业数量</span></div>
+          </div>
+        </div>
+      `;
+
+      // 动画：从0高度展开
+      setTimeout(() => {
+        area.querySelectorAll('.bar').forEach(bar => {
+          const h = bar.style.height;
+          bar.style.height = '4px';
+          requestAnimationFrame(() => { bar.style.height = h; });
+        });
+      }, 50);
+    }
+
+    function renderGradeStats(gs) {
+      const el = document.getElementById('gradeStats');
+      if (!gs || gs.length === 0) {
+        el.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-text">暂无统计数据</div></div>';
+        return;
+      }
+      el.innerHTML = gs.map(g => `
+        <div class="grade-section">
+          <div class="grade-title">
+            <span>🎓</span>
+            ${safe(g.full_name || g.fullName || g.name)}
+          </div>
+          <div class="stat-row">
+            <div class="stat-item">
+              <span>🏫</span><span>班级数</span>
+              <strong>${g.class_count || g.classCount || 0}</strong>
+            </div>
+            <div class="stat-item">
+              <span>🎒</span><span>学生数</span>
+              <strong>${g.student_count || g.studentCount || 0}</strong>
+            </div>
+            <div class="stat-item">
+              <span>👨‍🏫</span><span>教师数</span>
+              <strong>${g.teacher_count || g.teacherCount || 0}</strong>
+            </div>
+            <div class="stat-item">
+              <span>📝</span><span>作业数</span>
+              <strong>${g.homework_count || g.homeworkCount || 0}</strong>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ============================================================
+    // 年级班级管理
+    // ============================================================
     async function loadGrades() {
       try {
         const res = await API.get('/api/grades/classes/all');
@@ -635,73 +1709,17 @@
           gradesData = [];
         }
       }
-      
+
       const gradeSelects = ['newClassGrade', 'newUserGrade'];
       gradeSelects.forEach(id => {
         const sel = document.getElementById(id);
         if (sel) {
           sel.innerHTML = '<option value="">选择年级</option>';
           (gradesData || []).forEach(g => {
-            sel.innerHTML += `<option value="${g.id}">${g.fullName || g.name}</option>`;
+            sel.innerHTML += `<option value="${g.id}">${safe(g.fullName || g.name)}</option>`;
           });
         }
       });
-    }
-
-    async function loadOverview() {
-      try {
-        const res = await API.get('/api/stats/overview');
-        const data = res.data || {};
-        const o = data.overview || data.summary || {};
-        const v = data.visits || {};
-        const gs = data.gradeStats || data.grade_stats || [];
-        
-        document.getElementById('ovUsers').textContent = o.totalUsers || o.total_users || o.userCount || 0;
-        document.getElementById('ovTeachers').textContent = o.teacherCount || o.teacher_count || 0;
-        document.getElementById('ovStudents').textContent = o.studentCount || o.student_count || 0;
-        document.getElementById('ovClasses').textContent = o.classCount || o.class_count || 0;
-        document.getElementById('ovHomework').textContent = o.homeworkCount || o.homework_count || 0;
-        document.getElementById('ovVisits').textContent = v.todayVisits || 0;
-
-        const gradeStatsEl = document.getElementById('gradeStats');
-        if (!gs || gs.length === 0) {
-          gradeStatsEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-text">暂无统计数据</div></div>';
-        } else {
-          gradeStatsEl.innerHTML = gs.map(g => `
-            <div class="grade-section">
-              <div class="grade-title">
-                <span>🎓</span>
-                ${g.full_name || g.fullName || g.name}
-              </div>
-              <div class="stat-row">
-                <div class="stat-item">
-                  <span>🏫</span>
-                  <span>班级数</span>
-                  <strong>${g.class_count || g.classCount || 0}</strong>
-                </div>
-                <div class="stat-item">
-                  <span>🎒</span>
-                  <span>学生数</span>
-                  <strong>${g.student_count || g.studentCount || 0}</strong>
-                </div>
-                <div class="stat-item">
-                  <span>👨‍🏫</span>
-                  <span>教师数</span>
-                  <strong>${g.teacher_count || g.teacherCount || 0}</strong>
-                </div>
-                <div class="stat-item">
-                  <span>📝</span>
-                  <span>作业数</span>
-                  <strong>${g.homework_count || g.homeworkCount || 0}</strong>
-                </div>
-              </div>
-            </div>
-          `).join('');
-        }
-      } catch (e) {
-        console.error(e);
-        document.getElementById('gradeStats').innerHTML = '<div class="text-danger">加载统计失败</div>';
-      }
     }
 
     async function loadGradesPanel() {
@@ -710,7 +1728,7 @@
         container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏫</div><div class="empty-text">暂无年级数据</div></div>';
         return;
       }
-      
+
       container.innerHTML = gradesData.map(grade => {
         const classes = grade.classes || [];
         return `
@@ -718,15 +1736,21 @@
             <div class="card-header">
               <span class="card-title">
                 <span>🎓</span>
-                ${grade.fullName || grade.name}
+                ${safe(grade.fullName || grade.name)}
               </span>
               <span style="font-size:13px;color:var(--text-muted)">${classes.length} 个班级</span>
             </div>
             <div class="card-body">
               <div class="class-grid">
                 ${classes.length === 0 ? '<div class="text-muted">暂无班级</div>' : classes.map(c => `
-                  <div class="class-item">
-                    <span class="class-name">${c.class_name || c.name}</span>
+                  <div class="class-item" onclick="viewClassDetail('${grade.id}', '${c.id}')">
+                    <div>
+                      <div class="class-name">${safe(c.class_name || c.name)}</div>
+                      <div class="class-actions">
+                        <button class="btn-icon" onclick="event.stopPropagation();editClassName('${grade.id}','${c.id}','${safe(c.class_name || c.name)}')" title="编辑名称">✏️</button>
+                        <button class="btn-icon danger" onclick="event.stopPropagation();deleteClass('${grade.id}','${c.id}')" title="删除班级">🗑️</button>
+                      </div>
+                    </div>
                     <span class="class-count">${c.actual_student_count || 0}人</span>
                   </div>
                 `).join('')}
@@ -753,6 +1777,7 @@
           className: className
         });
         showToast('班级添加成功', 'success');
+        addLog('create', `添加班级: ${className || classNumber + '班'}`);
         document.getElementById('newClassNumber').value = '';
         document.getElementById('newClassName').value = '';
         await loadGrades();
@@ -763,19 +1788,119 @@
       }
     }
 
-    function onRoleChange() {}
+    async function editClassName(gradeId, classId, oldName) {
+      const result = await showModal({
+        title: '编辑班级名称',
+        content: `<div class="form-group"><label>班级名称</label><input type="text" class="form-control" id="editClassNameInput" value="${safe(oldName)}"></div>`
+      });
+      if (!result) return;
+      const newName = document.getElementById('editClassNameInput').value.trim();
+      if (!newName) { showToast('名称不能为空', 'error'); return; }
+      try {
+        await API.put(`/api/grades/${gradeId}/classes/${classId}`, { className: newName });
+        showToast('班级名称已更新', 'success');
+        addLog('update', `修改班级名称: ${oldName} → ${newName}`);
+        await loadGrades();
+        await loadGradesPanel();
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    async function deleteClass(gradeId, classId) {
+      if (!await showModal({ title: '确认删除', content: '确定要删除这个班级吗？删除后不可恢复。' })) return;
+      try {
+        await API.delete(`/api/grades/${gradeId}/classes/${classId}`);
+        showToast('班级已删除', 'success');
+        addLog('delete', `删除班级 (gradeId=${gradeId}, classId=${classId})`);
+        await loadGrades();
+        await loadGradesPanel();
+        await loadOverview();
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    async function viewClassDetail(gradeId, classId) {
+      try {
+        const res = await API.get(`/api/grades/${gradeId}/classes/${classId}/students`);
+        const students = res.data || res.data?.list || [];
+        if (!students || students.length === 0) {
+          showModal({ title: '班级详情', content: '<div class="empty-state" style="padding:20px"><div class="empty-text">该班级暂无学生</div></div>' });
+          return;
+        }
+        let tableHtml = `<table class="data-table" style="margin:-10px"><thead><tr><th>用户名</th><th>姓名</th><th>状态</th></tr></thead><tbody>`;
+        students.forEach(s => {
+          tableHtml += `<tr><td style="font-family:monospace;font-size:13px">${safe(s.username)}</td><td>${safe(s.real_name || s.realName)}</td><td><span class="badge ${s.status ? 'badge-success' : 'badge-danger'}">${s.status ? '正常' : '禁用'}</span></td></tr>`;
+        });
+        tableHtml += '</tbody></table>';
+        showModal({ title: `班级详情 (${students.length}人)`, content: `<div style="max-height:400px;overflow-y:auto">${tableHtml}</div>`, showFooter: false });
+      } catch (e) {
+        showToast('加载班级详情失败: ' + e.message, 'error');
+      }
+    }
+
+    // ============================================================
+    // onRoleChange - 角色切换时显示/隐藏年级班级选择
+    // ============================================================
+    function onRoleChange() {
+      const role = document.getElementById('newRole').value;
+      const gradeGroup = document.getElementById('gradeFieldGroup');
+      const classGroup = document.getElementById('classFieldGroup');
+      if (role === 'student') {
+        gradeGroup.style.display = '';
+        classGroup.style.display = '';
+      } else {
+        gradeGroup.style.display = 'none';
+        classGroup.style.display = 'none';
+        document.getElementById('newUserGrade').value = '';
+        document.getElementById('newUserClass').innerHTML = '<option value="">选择班级</option>';
+      }
+    }
 
     async function loadNewUserClasses() {
       const gradeId = document.getElementById('newUserGrade').value;
       const sel = document.getElementById('newUserClass');
       sel.innerHTML = '<option value="">选择班级</option>';
       if (!gradeId) return;
-      
+
       const grade = gradesData.find(g => g.id === gradeId || g.id === parseInt(gradeId));
       (grade?.classes || []).forEach(c => {
-        sel.innerHTML += `<option value="${c.id}">${c.class_name || c.name}</option>`;
+        sel.innerHTML += `<option value="${c.id}">${safe(c.class_name || c.name)}</option>`;
       });
     }
+
+    // ============================================================
+    // 表单验证
+    // ============================================================
+    function validateField(id, value, rules) {
+      const errEl = document.getElementById('err-' + id);
+      const inputEl = document.getElementById(id);
+      let msg = '';
+
+      if (rules.required && !value.trim()) {
+        msg = rules.requiredMsg || '此项为必填';
+      } else if (rules.minLength && value.length < rules.minLength) {
+        msg = `至少${rules.minLength}个字符`;
+      } else if (rules.pattern && !rules.pattern.test(value)) {
+        msg = rules.patternMsg || '格式不正确';
+      }
+
+      if (errEl) {
+        errEl.textContent = msg;
+        errEl.classList.toggle('show', !!msg);
+      }
+      if (inputEl) {
+        inputEl.classList.toggle('invalid', !!msg);
+        inputEl.classList.toggle('valid', !msg && value.trim().length > 0);
+      }
+      return !msg;
+    }
+
+    // ============================================================
+    // 用户管理
+    // ============================================================
+    const debouncedLoadUsers = debounce(loadUsers, 300);
 
     async function addUser() {
       const username = document.getElementById('newUsername').value;
@@ -785,10 +1910,13 @@
       const gradeId = document.getElementById('newUserGrade').value;
       const classId = document.getElementById('newUserClass').value;
 
-      if (!username || !password || !realName) {
-        showToast('请填写必填信息', 'error');
-        return;
-      }
+      // 表单验证
+      let valid = true;
+      valid = validateField('newUsername', username, { required: true, minLength: 2, patternMsg: '用户名至少2个字符' }) && valid;
+      valid = validateField('newPassword', password, { required: true, minLength: 6, minLength: 6 }) && valid;
+      valid = validateField('newRealName', realName, { required: true }) && valid;
+
+      if (!valid) return;
 
       try {
         await API.post('/api/users', {
@@ -797,9 +1925,17 @@
           classId: classId || null
         });
         showToast('用户添加成功', 'success');
+        addLog('create', `创建用户: ${safe(realName)} (${safe(username)}, ${ROLE_NAMES[role] || role})`);
         document.getElementById('newUsername').value = '';
         document.getElementById('newPassword').value = '';
         document.getElementById('newRealName').value = '';
+        // 清除验证状态
+        ['newUsername', 'newPassword', 'newRealName'].forEach(id => {
+          const el = document.getElementById(id);
+          el.classList.remove('valid', 'invalid');
+          const err = document.getElementById('err-' + id);
+          if (err) { err.textContent = ''; err.classList.remove('show'); }
+        });
         loadUsers();
         loadOverview();
       } catch (e) {
@@ -809,78 +1945,610 @@
 
     async function loadUsers() {
       const role = document.getElementById('userRoleFilter').value;
+      const status = document.getElementById('userStatusFilter').value;
+      const gradeId = document.getElementById('userGradeFilter').value;
+      const search = (document.getElementById('userSearch').value || '').trim();
+
       try {
-        let url = '/api/users?pageSize=100';
+        let url = '/api/users?pageSize=500';
         if (role) url += `&role=${role}`;
+        if (status !== '') url += `&status=${status}`;
+        if (gradeId) url += `&gradeId=${gradeId}`;
+
         const res = await API.get(url);
-        const tbody = document.getElementById('userTableBody');
         const data = res.data || {};
-        const users = data.list || data.users || [];
-        
-        const roleNames = { super_admin: '超管', admin: '管理员', teacher: '教师', student: '学生', parent: '家长' };
-        
-        if (!users || users.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">👥</div><div class="empty-text">暂无用户</div></div></td></tr>';
-          return;
+        let users = data.list || data.users || data || [];
+        if (!Array.isArray(users)) users = [];
+
+        // 客户端搜索过滤
+        if (search) {
+          const s = search.toLowerCase();
+          users = users.filter(u =>
+            (u.username || '').toLowerCase().includes(s) ||
+            (u.real_name || u.realName || '').toLowerCase().includes(s)
+          );
         }
-        
-        tbody.innerHTML = users.map(u => `
-          <tr>
-            <td style="font-family:monospace;font-size:13px">${u.username}</td>
-            <td>${u.real_name || u.realName}</td>
-            <td><span class="badge badge-primary">${roleNames[u.role] || u.role}</span></td>
-            <td style="color:var(--text-secondary);font-size:13px">${u.grade_name || u.gradeName || ''} ${u.class_name || u.className || ''}</td>
-            <td><span class="badge ${u.status ? 'badge-success' : 'badge-danger'}">${u.status ? '正常' : '禁用'}</span></td>
-            <td>
-              <button class="btn-icon ${u.status ? 'danger' : 'success'}" onclick="toggleUserStatus('${u.id}', ${!u.status})" title="${u.status ? '禁用' : '启用'}">
-                ${u.status ? '🚫' : '✅'}
-              </button>
-            </td>
-          </tr>
-        `).join('');
+
+        // 客户端排序
+        if (userSort.field) {
+          users.sort((a, b) => {
+            let va = a[userSort.field] || '';
+            let vb = b[userSort.field] || '';
+            if (typeof va === 'string') va = va.toLowerCase();
+            if (typeof vb === 'string') vb = vb.toLowerCase();
+            if (va < vb) return userSort.dir === 'asc' ? -1 : 1;
+            if (va > vb) return userSort.dir === 'asc' ? 1 : -1;
+            return 0;
+          });
+        }
+
+        allUsers = users;
+        userPage.total = users.length;
+        renderUserTable();
+        renderUserPagination();
       } catch (e) {
         showToast(e.message, 'error');
-        document.getElementById('userTableBody').innerHTML = `<tr><td colspan="6" class="text-center text-danger">加载失败</td></tr>`;
+        document.getElementById('userTableBody').innerHTML = `<tr><td colspan="7" class="text-center text-danger">加载失败</td></tr>`;
       }
     }
 
-    async function toggleUserStatus(userId, status) {
+    function renderUserTable() {
+      const tbody = document.getElementById('userTableBody');
+      const mobileList = document.getElementById('userMobileList');
+      const start = (userPage.current - 1) * userPage.pageSize;
+      const pageUsers = allUsers.slice(start, start + userPage.pageSize);
+
+      if (!pageUsers || pageUsers.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">👥</div><div class="empty-text">暂无用户</div></div></td></tr>';
+        mobileList.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div><div class="empty-text">暂无用户</div></div>';
+        return;
+      }
+
+      tbody.innerHTML = pageUsers.map(u => {
+        const uid = String(u.id);
+        const checked = selectedUserIds.has(uid) ? 'checked' : '';
+        return `
+          <tr>
+            <td class="checkbox-cell"><input type="checkbox" ${checked} onchange="toggleUserSelect('${uid}', this.checked)"></td>
+            <td style="font-family:monospace;font-size:13px">${safe(u.username)}</td>
+            <td>${safe(u.real_name || u.realName)}</td>
+            <td><span class="badge badge-primary">${safe(ROLE_NAMES[u.role] || u.role)}</span></td>
+            <td style="color:var(--text-secondary);font-size:13px">${safe(u.grade_name || u.gradeName || '')} ${safe(u.class_name || u.className || '')}</td>
+            <td><span class="badge ${u.status ? 'badge-success' : 'badge-danger'}">${u.status ? '正常' : '禁用'}</span></td>
+            <td>
+              <button class="btn-icon" onclick="editUser('${uid}')" title="编辑">✏️</button>
+              <button class="btn-icon ${u.status ? 'danger' : 'success'}" onclick="toggleUserStatus('${uid}', ${!u.status})" title="${u.status ? '禁用' : '启用'}">
+                ${u.status ? '🚫' : '✅'}
+              </button>
+              <button class="btn-icon danger" onclick="deleteUser('${uid}')" title="删除">🗑️</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // 移动端卡片
+      mobileList.innerHTML = pageUsers.map(u => `
+        <div class="mobile-card-item">
+          <div class="mc-header">
+            <span style="font-weight:600">${safe(u.real_name || u.realName)}</span>
+            <span class="badge ${u.status ? 'badge-success' : 'badge-danger'}">${u.status ? '正常' : '禁用'}</span>
+          </div>
+          <div class="mc-row"><span class="mc-label">用户名</span><span class="mc-value">${safe(u.username)}</span></div>
+          <div class="mc-row"><span class="mc-label">角色</span><span class="mc-value"><span class="badge badge-primary">${safe(ROLE_NAMES[u.role] || u.role)}</span></span></div>
+          <div class="mc-row"><span class="mc-label">年级班级</span><span class="mc-value">${safe((u.grade_name || u.gradeName || '') + ' ' + (u.class_name || u.className || ''))}</span></div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn btn-sm btn-outline" onclick="editUser('${u.id}')">✏️ 编辑</button>
+            <button class="btn btn-sm ${u.status ? 'btn-warning' : 'btn-success'}" onclick="toggleUserStatus('${u.id}', ${!u.status})">${u.status ? '禁用' : '启用'}</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderUserPagination() {
+      const container = document.getElementById('userPagination');
+      const total = userPage.total;
+      const totalPages = Math.ceil(total / userPage.pageSize) || 1;
+      if (totalPages <= 1) { container.innerHTML = `<span class="page-info">共 ${total} 条</span>`; return; }
+
+      let html = `<button ${userPage.current <= 1 ? 'disabled' : ''} onclick="goUserPage(${userPage.current - 1})">‹</button>`;
+      const range = getPageRange(userPage.current, totalPages);
+      range.forEach(p => {
+        if (p === '...') {
+          html += `<span class="page-info">…</span>`;
+        } else {
+          html += `<button class="${p === userPage.current ? 'active' : ''}" onclick="goUserPage(${p})">${p}</button>`;
+        }
+      });
+      html += `<button ${userPage.current >= totalPages ? 'disabled' : ''} onclick="goUserPage(${userPage.current + 1})">›</button>`;
+      html += `<span class="page-info">共 ${total} 条</span>`;
+      container.innerHTML = html;
+    }
+
+    function goUserPage(p) {
+      userPage.current = p;
+      renderUserTable();
+      renderUserPagination();
+    }
+
+    function getPageRange(current, total) {
+      if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+      const pages = [];
+      if (current <= 4) {
+        for (let i = 1; i <= 5; i++) pages.push(i);
+        pages.push('...', total);
+      } else if (current >= total - 3) {
+        pages.push(1, '...');
+        for (let i = total - 4; i <= total; i++) pages.push(i);
+      } else {
+        pages.push(1, '...', current - 1, current, current + 1, '...', total);
+      }
+      return pages;
+    }
+
+    function sortUsers(field) {
+      if (userSort.field === field) {
+        userSort.dir = userSort.dir === 'asc' ? 'desc' : 'asc';
+      } else {
+        userSort.field = field;
+        userSort.dir = 'asc';
+      }
+      // 更新表头样式
+      document.querySelectorAll('#userTable th.sortable').forEach(th => {
+        th.classList.remove('asc', 'desc');
+        if (th.dataset.sort === field) th.classList.add(userSort.dir);
+      });
+      loadUsers();
+    }
+
+    // 用户选择
+    function toggleUserSelect(id, checked) {
+      if (checked) selectedUserIds.add(id);
+      else selectedUserIds.delete(id);
+      updateBatchBar();
+    }
+
+    function toggleAllUsers(checkbox) {
+      const start = (userPage.current - 1) * userPage.pageSize;
+      const pageUsers = allUsers.slice(start, start + userPage.pageSize);
+      pageUsers.forEach(u => {
+        const uid = String(u.id);
+        if (checkbox.checked) selectedUserIds.add(uid);
+        else selectedUserIds.delete(uid);
+      });
+      renderUserTable();
+      updateBatchBar();
+    }
+
+    function clearUserSelection() {
+      selectedUserIds.clear();
+      document.getElementById('userSelectAll').checked = false;
+      renderUserTable();
+      updateBatchBar();
+    }
+
+    function updateBatchBar() {
+      const bar = document.getElementById('userBatchBar');
+      const count = selectedUserIds.size;
+      document.getElementById('userSelectedCount').textContent = count;
+      bar.classList.toggle('show', count > 0);
+    }
+
+    async function editUser(userId) {
+      const user = allUsers.find(u => String(u.id) === String(userId));
+      if (!user) return;
+
+      const content = `
+        <div class="form-group">
+          <label>姓名</label>
+          <input type="text" class="form-control" id="editRealName" value="${safe(user.real_name || user.realName || '')}">
+        </div>
+        <div class="form-group">
+          <label>角色</label>
+          <select class="form-control" id="editRole">
+            <option value="teacher" ${user.role === 'teacher' ? 'selected' : ''}>教师</option>
+            <option value="student" ${user.role === 'student' ? 'selected' : ''}>学生</option>
+            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>管理员</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>年级</label>
+          <select class="form-control" id="editGrade" onchange="loadEditClasses()">
+            <option value="">选择年级</option>
+            ${gradesData.map(g => `<option value="${g.id}" ${g.id === user.grade_id || g.id === user.gradeId ? 'selected' : ''}>${safe(g.fullName || g.name)}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>班级</label>
+          <select class="form-control" id="editClass">
+            <option value="">选择班级</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>重置密码（留空则不修改）</label>
+          <input type="password" class="form-control" id="editPassword" placeholder="输入新密码">
+        </div>
+      `;
+
+      const confirmed = await showModal({ title: `编辑用户: ${safe(user.username)}`, content });
+      if (!confirmed) return;
+
+      const updates = {
+        realName: document.getElementById('editRealName').value.trim(),
+        role: document.getElementById('editRole').value,
+        gradeId: document.getElementById('editGrade').value || null,
+        classId: document.getElementById('editClass').value || null
+      };
+
+      const newPw = document.getElementById('editPassword').value;
+      if (newPw) {
+        if (newPw.length < 6) { showToast('密码至少6位', 'error'); return; }
+        updates.password = newPw;
+      }
+
+      if (!updates.realName) { showToast('姓名不能为空', 'error'); return; }
+
       try {
-        await API.put(`/api/users/${userId}`, { status });
-        showToast(status ? '用户已启用' : '用户已禁用', 'success');
+        await API.put(`/api/users/${userId}`, updates);
+        showToast('用户信息已更新', 'success');
+        addLog('update', `修改用户: ${safe(user.username)} (姓名/角色/班级${newPw ? '/密码' : ''})`);
         loadUsers();
       } catch (e) {
         showToast(e.message, 'error');
       }
     }
 
-    async function loadAdminHomework() {
+    function loadEditClasses() {
+      const gradeId = document.getElementById('editGrade').value;
+      const sel = document.getElementById('editClass');
+      sel.innerHTML = '<option value="">选择班级</option>';
+      if (!gradeId) return;
+      const grade = gradesData.find(g => g.id === gradeId || g.id === parseInt(gradeId));
+      (grade?.classes || []).forEach(c => {
+        sel.innerHTML += `<option value="${c.id}">${safe(c.class_name || c.name)}</option>`;
+      });
+    }
+
+    async function toggleUserStatus(userId, status) {
       try {
-        const res = await API.get('/api/homework?pageSize=100');
-        const tbody = document.getElementById('adminHomeworkBody');
-        const data = res.data || {};
-        const list = data.list || data.homework || [];
-        
-        if (!list || list.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📝</div><div class="empty-text">暂无作业</div></div></td></tr>';
-          return;
+        await API.put(`/api/users/${userId}`, { status });
+        showToast(status ? '用户已启用' : '用户已禁用', 'success');
+        addLog('update', `${status ? '启用' : '禁用'}用户 (id=${userId})`);
+        loadUsers();
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    async function deleteUser(userId) {
+      if (!await showModal({ title: '确认删除', content: '确定要删除这个用户吗？此操作不可恢复。' })) return;
+      try {
+        await API.delete(`/api/users/${userId}`);
+        showToast('用户已删除', 'success');
+        addLog('delete', `删除用户 (id=${userId})`);
+        selectedUserIds.delete(String(userId));
+        loadUsers();
+        loadOverview();
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    async function batchToggleUsers(status) {
+      if (selectedUserIds.size === 0) return;
+      if (!await showModal({ title: '批量操作', content: `确定要${status ? '启用' : '禁用'}选中的 ${selectedUserIds.size} 个用户吗？` })) return;
+
+      let success = 0, fail = 0;
+      for (const id of selectedUserIds) {
+        try {
+          await API.put(`/api/users/${id}`, { status });
+          success++;
+        } catch (e) { fail++; }
+      }
+      showToast(`${status ? '启用' : '禁用'}完成：成功${success}个${fail ? '，失败' + fail + '个' : ''}`, success > 0 ? 'success' : 'error');
+      addLog('update', `批量${status ? '启用' : '禁用'}用户 ${success}个`);
+      clearUserSelection();
+      loadUsers();
+    }
+
+    async function batchDeleteUsers() {
+      if (selectedUserIds.size === 0) return;
+      if (!await showModal({ title: '批量删除', content: `确定要删除选中的 ${selectedUserIds.size} 个用户吗？此操作不可恢复！` })) return;
+
+      let success = 0, fail = 0;
+      for (const id of selectedUserIds) {
+        try {
+          await API.delete(`/api/users/${id}`);
+          success++;
+        } catch (e) { fail++; }
+      }
+      showToast(`删除完成：成功${success}个${fail ? '，失败' + fail + '个' : ''}`, success > 0 ? 'success' : 'error');
+      addLog('delete', `批量删除用户 ${success}个`);
+      clearUserSelection();
+      loadUsers();
+      loadOverview();
+    }
+
+    // CSV导出
+    function exportUsersCSV() {
+      if (!allUsers || allUsers.length === 0) { showToast('暂无用户数据', 'error'); return; }
+      const headers = ['用户名', '姓名', '角色', '年级', '班级', '状态'];
+      const rows = allUsers.map(u => [
+        u.username, u.real_name || u.realName, ROLE_NAMES[u.role] || u.role,
+        u.grade_name || u.gradeName || '', u.class_name || u.className || '',
+        u.status ? '正常' : '禁用'
+      ]);
+      downloadCSV(headers, rows, '用户列表');
+      addLog('setting', '导出用户列表CSV');
+    }
+
+    // CSV导入
+    async function importUsersCSV(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      event.target.value = '';
+
+      try {
+        const text = await file.text();
+        const lines = text.split('\n').filter(l => l.trim());
+        if (lines.length < 2) { showToast('CSV文件为空', 'error'); return; }
+
+        const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+        let success = 0, fail = 0;
+
+        for (let i = 1; i < lines.length; i++) {
+          const cols = parseCSVLine(lines[i]);
+          if (cols.length < 3) continue;
+          try {
+            const roleMap = { '教师': 'teacher', '学生': 'student', '管理员': 'admin' };
+            await API.post('/api/users', {
+              username: cols[0]?.trim(),
+              password: '123456',
+              realName: cols[1]?.trim(),
+              role: roleMap[cols[2]?.trim()] || 'student'
+            });
+            success++;
+          } catch (e) { fail++; }
         }
-        
-        tbody.innerHTML = list.map(h => `
-          <tr>
-            <td><span class="badge" style="background:${getSubjectColor(h.subject_name || h.subjectName)}20;color:${getSubjectColor(h.subject_name || h.subjectName)}">${h.subject_name || h.subjectName || '其他'}</span></td>
-            <td style="font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.title}</td>
-            <td style="font-size:13px;color:var(--text-secondary)">${h.grade_name || h.gradeName || ''} ${h.class_name || h.className || ''}</td>
-            <td style="font-size:13px">${h.teacher_name || h.teacherName}</td>
-            <td style="font-size:13px;color:var(--text-secondary)">${formatDateTime(h.created_at)}</td>
-            <td style="font-size:13px">👁 ${h.view_count || h.viewCount || 0}</td>
-            <td><button class="btn-icon danger" onclick="deleteHomework('${h.id}')" title="删除">🗑️</button></td>
-          </tr>
-        `).join('');
+
+        showToast(`导入完成：成功${success}个${fail ? '，失败' + fail + '个' : ''}`, success > 0 ? 'success' : 'error');
+        addLog('create', `CSV导入用户 ${success}个`);
+        loadUsers();
+        loadOverview();
+      } catch (e) {
+        showToast('导入失败: ' + e.message, 'error');
+      }
+    }
+
+    function parseCSVLine(line) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') { inQuotes = !inQuotes; }
+        else if (ch === ',' && !inQuotes) { result.push(current); current = ''; }
+        else { current += ch; }
+      }
+      result.push(current);
+      return result;
+    }
+
+    function downloadCSV(headers, rows, filename) {
+      const BOM = '\uFEFF';
+      const csvContent = BOM + [headers.join(','), ...rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(','))].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${filename}_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ============================================================
+    // 作业管理
+    // ============================================================
+    const debouncedLoadHomework = debounce(loadAdminHomework, 300);
+
+    async function loadAdminHomework() {
+      const search = (document.getElementById('hwSearch').value || '').trim();
+      const dateFrom = document.getElementById('hwDateFrom').value;
+      const dateTo = document.getElementById('hwDateTo').value;
+      const subject = document.getElementById('hwSubjectFilter').value;
+      const gradeId = document.getElementById('hwGradeFilter').value;
+
+      try {
+        let url = '/api/homework?pageSize=500';
+        if (subject) url += `&subject=${encodeURIComponent(subject)}`;
+        if (gradeId) url += `&gradeId=${gradeId}`;
+
+        const res = await API.get(url);
+        const data = res.data || {};
+        let list = data.list || data.homework || data || [];
+        if (!Array.isArray(list)) list = [];
+
+        // 客户端过滤
+        if (search) {
+          const s = search.toLowerCase();
+          list = list.filter(h => (h.title || '').toLowerCase().includes(s));
+        }
+        if (dateFrom) {
+          list = list.filter(h => new Date(h.created_at) >= new Date(dateFrom));
+        }
+        if (dateTo) {
+          const to = new Date(dateTo);
+          to.setHours(23, 59, 59, 999);
+          list = list.filter(h => new Date(h.created_at) <= to);
+        }
+
+        // 排序
+        if (hwSort.field) {
+          list.sort((a, b) => {
+            let va = a[hwSort.field] || '';
+            let vb = b[hwSort.field] || '';
+            if (typeof va === 'string') va = va.toLowerCase();
+            if (typeof vb === 'string') vb = vb.toLowerCase();
+            if (va < vb) return hwSort.dir === 'asc' ? -1 : 1;
+            if (va > vb) return hwSort.dir === 'asc' ? 1 : -1;
+            return 0;
+          });
+        }
+
+        allHomework = list;
+        hwPage.total = list.length;
+        renderHomeworkTable();
+        renderHwPagination();
       } catch (e) {
         console.error(e);
-        document.getElementById('adminHomeworkBody').innerHTML = `<tr><td colspan="7" class="text-center text-danger">加载失败</td></tr>`;
+        document.getElementById('adminHomeworkBody').innerHTML = `<tr><td colspan="8" class="text-center text-danger">加载失败</td></tr>`;
       }
+    }
+
+    function renderHomeworkTable() {
+      const tbody = document.getElementById('adminHomeworkBody');
+      const mobileList = document.getElementById('hwMobileList');
+      const start = (hwPage.current - 1) * hwPage.pageSize;
+      const pageHw = allHomework.slice(start, start + hwPage.pageSize);
+
+      if (!pageHw || pageHw.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📝</div><div class="empty-text">暂无作业</div></div></td></tr>';
+        mobileList.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-text">暂无作业</div></div>';
+        return;
+      }
+
+      tbody.innerHTML = pageHw.map(h => {
+        const hid = String(h.id);
+        const checked = selectedHwIds.has(hid) ? 'checked' : '';
+        const subjectName = h.subject_name || h.subjectName || '其他';
+        return `
+          <tr>
+            <td class="checkbox-cell"><input type="checkbox" ${checked} onchange="toggleHwSelect('${hid}', this.checked)"></td>
+            <td><span class="badge" style="background:${getSubjectColor(subjectName)}20;color:${getSubjectColor(subjectName)}">${safe(subjectName)}</span></td>
+            <td style="font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${safe(h.title)}</td>
+            <td style="font-size:13px;color:var(--text-secondary)">${safe(h.grade_name || h.gradeName || '')} ${safe(h.class_name || h.className || '')}</td>
+            <td style="font-size:13px">${safe(h.teacher_name || h.teacherName || '')}</td>
+            <td style="font-size:13px;color:var(--text-secondary)">${formatDateTime(h.created_at)}</td>
+            <td style="font-size:13px">👁 ${h.view_count || h.viewCount || 0}</td>
+            <td>
+              <button class="btn-icon" onclick="viewHomeworkDetail('${hid}')" title="查看详情">👁️</button>
+              <button class="btn-icon danger" onclick="deleteHomework('${hid}')" title="删除">🗑️</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // 移动端卡片
+      mobileList.innerHTML = pageHw.map(h => {
+        const subjectName = h.subject_name || h.subjectName || '其他';
+        return `
+          <div class="mobile-card-item">
+            <div class="mc-header">
+              <span style="font-weight:600">${safe(h.title)}</span>
+              <span class="badge" style="background:${getSubjectColor(subjectName)}20;color:${getSubjectColor(subjectName)}">${safe(subjectName)}</span>
+            </div>
+            <div class="mc-row"><span class="mc-label">班级</span><span class="mc-value">${safe((h.grade_name || h.gradeName || '') + ' ' + (h.class_name || h.className || ''))}</span></div>
+            <div class="mc-row"><span class="mc-label">教师</span><span class="mc-value">${safe(h.teacher_name || h.teacherName || '')}</span></div>
+            <div class="mc-row"><span class="mc-label">时间</span><span class="mc-value">${formatDateTime(h.created_at)}</span></div>
+            <div class="mc-row"><span class="mc-label">查看</span><span class="mc-value">👁 ${h.view_count || h.viewCount || 0}</span></div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button class="btn btn-sm btn-outline" onclick="viewHomeworkDetail('${h.id}')">查看详情</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteHomework('${h.id}')">删除</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderHwPagination() {
+      const container = document.getElementById('hwPagination');
+      const total = hwPage.total;
+      const totalPages = Math.ceil(total / hwPage.pageSize) || 1;
+      if (totalPages <= 1) { container.innerHTML = `<span class="page-info">共 ${total} 条</span>`; return; }
+
+      let html = `<button ${hwPage.current <= 1 ? 'disabled' : ''} onclick="goHwPage(${hwPage.current - 1})">‹</button>`;
+      const range = getPageRange(hwPage.current, totalPages);
+      range.forEach(p => {
+        if (p === '...') {
+          html += `<span class="page-info">…</span>`;
+        } else {
+          html += `<button class="${p === hwPage.current ? 'active' : ''}" onclick="goHwPage(${p})">${p}</button>`;
+        }
+      });
+      html += `<button ${hwPage.current >= totalPages ? 'disabled' : ''} onclick="goHwPage(${hwPage.current + 1})">›</button>`;
+      html += `<span class="page-info">共 ${total} 条</span>`;
+      container.innerHTML = html;
+    }
+
+    function goHwPage(p) {
+      hwPage.current = p;
+      renderHomeworkTable();
+      renderHwPagination();
+    }
+
+    function sortHomework(field) {
+      if (hwSort.field === field) {
+        hwSort.dir = hwSort.dir === 'asc' ? 'desc' : 'asc';
+      } else {
+        hwSort.field = field;
+        hwSort.dir = 'asc';
+      }
+      document.querySelectorAll('#hwTable th.sortable').forEach(th => {
+        th.classList.remove('asc', 'desc');
+        if (th.dataset.sort === field) th.classList.add(hwSort.dir);
+      });
+      loadAdminHomework();
+    }
+
+    function toggleHwSelect(id, checked) {
+      if (checked) selectedHwIds.add(id);
+      else selectedHwIds.delete(id);
+      updateHwBatchBar();
+    }
+
+    function toggleAllHomework(checkbox) {
+      const start = (hwPage.current - 1) * hwPage.pageSize;
+      const pageHw = allHomework.slice(start, start + hwPage.pageSize);
+      pageHw.forEach(h => {
+        const hid = String(h.id);
+        if (checkbox.checked) selectedHwIds.add(hid);
+        else selectedHwIds.delete(hid);
+      });
+      renderHomeworkTable();
+      updateHwBatchBar();
+    }
+
+    function clearHwSelection() {
+      selectedHwIds.clear();
+      document.getElementById('hwSelectAll').checked = false;
+      renderHomeworkTable();
+      updateHwBatchBar();
+    }
+
+    function updateHwBatchBar() {
+      const bar = document.getElementById('hwBatchBar');
+      const count = selectedHwIds.size;
+      document.getElementById('hwSelectedCount').textContent = count;
+      bar.classList.toggle('show', count > 0);
+    }
+
+    async function viewHomeworkDetail(id) {
+      const hw = allHomework.find(h => String(h.id) === String(id));
+      if (!hw) return;
+      const subjectName = hw.subject_name || hw.subjectName || '其他';
+      const content = `
+        <div style="display:grid;gap:12px">
+          <div class="stat-row" style="flex-direction:column;gap:8px">
+            <div class="stat-item"><span>📝</span><span>标题：</span><strong>${safe(hw.title)}</strong></div>
+            <div class="stat-item"><span>📚</span><span>科目：</span><strong style="color:${getSubjectColor(subjectName)}">${safe(subjectName)}</strong></div>
+            <div class="stat-item"><span>🏫</span><span>班级：</span><strong>${safe((hw.grade_name || hw.gradeName || '') + ' ' + (hw.class_name || hw.className || ''))}</strong></div>
+            <div class="stat-item"><span>👨‍🏫</span><span>教师：</span><strong>${safe(hw.teacher_name || hw.teacherName || '')}</strong></div>
+            <div class="stat-item"><span>⏰</span><span>时间：</span><strong>${formatDateTime(hw.created_at)}</strong></div>
+            <div class="stat-item"><span>👁️</span><span>查看：</span><strong>${hw.view_count || hw.viewCount || 0}次</strong></div>
+          </div>
+          ${hw.content ? `<div style="padding:12px;background:var(--bg-hover);border-radius:var(--radius);font-size:14px;line-height:1.8">${safe(hw.content)}</div>` : ''}
+        </div>
+      `;
+      showModal({ title: '作业详情', content, showFooter: false });
     }
 
     async function deleteHomework(id) {
@@ -888,6 +2556,8 @@
       try {
         await API.delete(`/api/homework/${id}`);
         showToast('删除成功', 'success');
+        addLog('delete', `删除作业 (id=${id})`);
+        selectedHwIds.delete(String(id));
         loadAdminHomework();
         loadOverview();
       } catch (e) {
@@ -895,27 +2565,346 @@
       }
     }
 
+    async function batchDeleteHomework() {
+      if (selectedHwIds.size === 0) return;
+      if (!await showModal({ title: '批量删除', content: `确定要删除选中的 ${selectedHwIds.size} 份作业吗？此操作不可恢复！` })) return;
+
+      let success = 0, fail = 0;
+      for (const id of selectedHwIds) {
+        try {
+          await API.delete(`/api/homework/${id}`);
+          success++;
+        } catch (e) { fail++; }
+      }
+      showToast(`删除完成：成功${success}个${fail ? '，失败' + fail + '个' : ''}`, success > 0 ? 'success' : 'error');
+      addLog('delete', `批量删除作业 ${success}个`);
+      clearHwSelection();
+      loadAdminHomework();
+      loadOverview();
+    }
+
+    function exportHomeworkCSV() {
+      if (!allHomework || allHomework.length === 0) { showToast('暂无作业数据', 'error'); return; }
+      const headers = ['科目', '标题', '班级', '教师', '发布时间', '查看数'];
+      const rows = allHomework.map(h => [
+        h.subject_name || h.subjectName || '', h.title,
+        (h.grade_name || h.gradeName || '') + ' ' + (h.class_name || h.className || ''),
+        h.teacher_name || h.teacherName || '',
+        h.created_at ? new Date(h.created_at).toLocaleString() : '',
+        h.view_count || h.viewCount || 0
+      ]);
+      downloadCSV(headers, rows, '作业列表');
+      addLog('setting', '导出作业列表CSV');
+    }
+
+    // ============================================================
+    // 操作日志
+    // ============================================================
+    const debouncedLoadLogs = debounce(loadLogs, 300);
+
+    function addLog(type, content) {
+      const logs = Storage.get('admin_logs', []);
+      logs.unshift({
+        id: Date.now(),
+        type,
+        content,
+        operator: API.user?.realName || API.user?.username || '管理员',
+        time: new Date().toISOString(),
+        ip: '-'
+      });
+      // 只保留最近500条
+      if (logs.length > 500) logs.length = 500;
+      Storage.set('admin_logs', logs);
+    }
+
+    function loadLogs() {
+      const search = (document.getElementById('logSearch').value || '').trim().toLowerCase();
+      const typeFilter = document.getElementById('logTypeFilter').value;
+      const dateFrom = document.getElementById('logDateFrom').value;
+      const dateTo = document.getElementById('logDateTo').value;
+
+      let logs = Storage.get('admin_logs', []);
+
+      if (typeFilter) {
+        logs = logs.filter(l => l.type === typeFilter);
+      }
+      if (search) {
+        logs = logs.filter(l => (l.content || '').toLowerCase().includes(search) || (l.operator || '').toLowerCase().includes(search));
+      }
+      if (dateFrom) {
+        logs = logs.filter(l => new Date(l.time) >= new Date(dateFrom));
+      }
+      if (dateTo) {
+        const to = new Date(dateTo);
+        to.setHours(23, 59, 59, 999);
+        logs = logs.filter(l => new Date(l.time) <= to);
+      }
+
+      const container = document.getElementById('logsContainer');
+
+      if (!logs || logs.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state" style="padding:40px">
+            <div class="empty-icon" style="font-size:48px">📋</div>
+            <div class="empty-text">暂无操作日志</div>
+            <div class="text-muted" style="font-size:13px;margin-top:8px">管理员的操作记录将显示在这里</div>
+          </div>
+        `;
+        return;
+      }
+
+      const typeLabels = { create: '创建', update: '修改', delete: '删除', login: '登录', setting: '设置' };
+
+      container.innerHTML = `
+        <div class="timeline">
+          ${logs.slice(0, 100).map((log, i) => `
+            <div class="timeline-item" style="animation-delay:${Math.min(i * 0.05, 0.5)}s">
+              <div class="timeline-item-content">
+                <div class="timeline-item-time">${formatDateTime(log.time)} · ${safe(log.ip || '-')}</div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <span class="log-type-tag log-type-${log.type}">${typeLabels[log.type] || log.type}</span>
+                  <span style="font-weight:600;color:var(--text-primary)">${safe(log.content)}</span>
+                </div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px">操作人: ${safe(log.operator || '-')}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function exportLogs() {
+      const logs = Storage.get('admin_logs', []);
+      if (!logs.length) { showToast('暂无日志数据', 'error'); return; }
+      const headers = ['时间', '类型', '操作内容', '操作人', 'IP'];
+      const typeLabels = { create: '创建', update: '修改', delete: '删除', login: '登录', setting: '设置' };
+      const rows = logs.map(l => [
+        new Date(l.time).toLocaleString(), typeLabels[l.type] || l.type,
+        l.content, l.operator || '-', l.ip || '-'
+      ]);
+      downloadCSV(headers, rows, '操作日志');
+    }
+
+    // ============================================================
+    // 系统设置
+    // ============================================================
+    function loadSystemSettings() {
+      const settings = Storage.get('system_settings', {});
+      document.getElementById('cfgSchoolName').value = settings.schoolName || '南通市崇川初级中学';
+      document.getElementById('cfgSemester').value = settings.semester || '2025-2026-1';
+      document.getElementById('cfgStartDate').value = settings.startDate || '';
+      document.getElementById('cfgPageSize').value = settings.pageSize || '20';
+      document.getElementById('cfgMaxAttachments').value = settings.maxAttachments || '5';
+      document.getElementById('cfgAllowRegister').value = settings.allowRegister || 'false';
+      document.getElementById('cfgMaintenance').value = settings.maintenance || 'false';
+
+      renderAnnouncements(settings.announcements || []);
+    }
+
+    function saveSemesterSettings() {
+      const settings = Storage.get('system_settings', {});
+      settings.semester = document.getElementById('cfgSemester').value;
+      settings.startDate = document.getElementById('cfgStartDate').value;
+      Storage.set('system_settings', settings);
+      showToast('学期设置已保存', 'success');
+      addLog('setting', '修改学期设置');
+    }
+
+    function saveSystemParams() {
+      const settings = Storage.get('system_settings', {});
+      settings.schoolName = document.getElementById('cfgSchoolName').value.trim();
+      settings.pageSize = document.getElementById('cfgPageSize').value;
+      settings.maxAttachments = document.getElementById('cfgMaxAttachments').value;
+      settings.allowRegister = document.getElementById('cfgAllowRegister').value;
+      settings.maintenance = document.getElementById('cfgMaintenance').value;
+      Storage.set('system_settings', settings);
+      showToast('系统参数已保存', 'success');
+      addLog('setting', '修改系统参数');
+    }
+
+    function renderAnnouncements(announcements) {
+      const container = document.getElementById('announcementList');
+      if (!announcements || announcements.length === 0) {
+        container.innerHTML = '<div class="empty-state" style="padding:30px"><div class="empty-icon" style="font-size:40px">📢</div><div class="empty-text">暂无公告模板</div></div>';
+        return;
+      }
+
+      container.innerHTML = announcements.map((a, i) => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:8px;background:var(--bg-hover)">
+          <div>
+            <div style="font-weight:600;font-size:14px">${safe(a.title)}</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:2px">${safe(a.content?.substring(0, 60))}${(a.content || '').length > 60 ? '...' : ''}</div>
+          </div>
+          <div style="display:flex;gap:4px">
+            <button class="btn-icon" onclick="editAnnouncement(${i})" title="编辑">✏️</button>
+            <button class="btn-icon danger" onclick="deleteAnnouncement(${i})" title="删除">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function addAnnouncement() {
+      const confirmed = await showModal({
+        title: '添加公告模板',
+        content: `
+          <div class="form-group">
+            <label>公告标题</label>
+            <input type="text" class="form-control" id="annTitle" placeholder="请输入公告标题">
+          </div>
+          <div class="form-group">
+            <label>公告内容</label>
+            <textarea class="form-control" id="annContent" rows="4" placeholder="请输入公告内容"></textarea>
+          </div>
+        `
+      });
+      if (!confirmed) return;
+      const title = document.getElementById('annTitle').value.trim();
+      const content = document.getElementById('annContent').value.trim();
+      if (!title) { showToast('标题不能为空', 'error'); return; }
+
+      const settings = Storage.get('system_settings', {});
+      if (!settings.announcements) settings.announcements = [];
+      settings.announcements.push({ title, content, createdAt: new Date().toISOString() });
+      Storage.set('system_settings', settings);
+      renderAnnouncements(settings.announcements);
+      showToast('公告模板已添加', 'success');
+      addLog('create', `添加公告模板: ${title}`);
+    }
+
+    async function editAnnouncement(index) {
+      const settings = Storage.get('system_settings', {});
+      const a = (settings.announcements || [])[index];
+      if (!a) return;
+
+      const confirmed = await showModal({
+        title: '编辑公告模板',
+        content: `
+          <div class="form-group">
+            <label>公告标题</label>
+            <input type="text" class="form-control" id="annTitle" value="${safe(a.title)}">
+          </div>
+          <div class="form-group">
+            <label>公告内容</label>
+            <textarea class="form-control" id="annContent" rows="4">${safe(a.content)}</textarea>
+          </div>
+        `
+      });
+      if (!confirmed) return;
+      settings.announcements[index].title = document.getElementById('annTitle').value.trim();
+      settings.announcements[index].content = document.getElementById('annContent').value.trim();
+      Storage.set('system_settings', settings);
+      renderAnnouncements(settings.announcements);
+      showToast('公告模板已更新', 'success');
+      addLog('update', '修改公告模板');
+    }
+
+    async function deleteAnnouncement(index) {
+      if (!await showModal({ title: '确认删除', content: '确定要删除这个公告模板吗？' })) return;
+      const settings = Storage.get('system_settings', {});
+      const removed = settings.announcements.splice(index, 1);
+      Storage.set('system_settings', settings);
+      renderAnnouncements(settings.announcements);
+      showToast('公告模板已删除', 'success');
+      addLog('delete', `删除公告模板: ${removed[0]?.title || ''}`);
+    }
+
+    // 数据备份恢复
+    async function exportBackup() {
+      try {
+        const backup = {
+          version: '2.0.0',
+          exportedAt: new Date().toISOString(),
+          settings: Storage.get('system_settings', {}),
+          logs: Storage.get('admin_logs', [])
+        };
+
+        // 尝试从API导出
+        try {
+          const usersRes = await API.get('/api/users?pageSize=9999');
+          backup.users = (usersRes.data?.list || usersRes.data?.users || []).map(u => ({
+            username: u.username, realName: u.real_name || u.realName, role: u.role,
+            gradeName: u.grade_name || u.gradeName, className: u.class_name || u.className
+          }));
+        } catch (e) { backup.users = []; }
+
+        try {
+          const hwRes = await API.get('/api/homework?pageSize=9999');
+          backup.homework = hwRes.data?.list || hwRes.data?.homework || [];
+        } catch (e) { backup.homework = []; }
+
+        try {
+          const gradeRes = await API.get('/api/grades/classes/all');
+          backup.grades = gradeRes.data || [];
+        } catch (e) { backup.grades = []; }
+
+        const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `backup_${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('备份导出成功', 'success');
+        addLog('setting', '导出系统备份');
+      } catch (e) {
+        showToast('备份导出失败: ' + e.message, 'error');
+      }
+    }
+
+    async function importBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      event.target.value = '';
+
+      if (!await showModal({ title: '恢复备份', content: '确定要从备份文件恢复数据吗？当前本地设置将被覆盖。' })) return;
+
+      try {
+        const text = await file.text();
+        const backup = JSON.parse(text);
+
+        if (backup.settings) Storage.set('system_settings', backup.settings);
+        if (backup.logs) Storage.set('admin_logs', backup.logs);
+
+        loadSystemSettings();
+        loadLogs();
+        showToast('本地设置和日志已恢复。用户/作业/年级数据需通过API重新导入。', 'success');
+        addLog('setting', '从备份恢复数据');
+      } catch (e) {
+        showToast('备份文件格式错误: ' + e.message, 'error');
+      }
+    }
+
+    // ============================================================
+    // 密码修改
+    // ============================================================
     async function changePassword() {
       const oldPassword = document.getElementById('oldPassword').value;
       const newPassword1 = document.getElementById('newPassword1').value;
       const newPassword2 = document.getElementById('newPassword2').value;
 
-      if (!oldPassword || !newPassword1 || !newPassword2) {
-        showToast('请填写完整', 'error');
-        return;
-      }
-      if (newPassword1 !== newPassword2) {
-        showToast('两次密码不一致', 'error');
-        return;
+      // 验证
+      let valid = true;
+      if (!oldPassword) {
+        document.getElementById('err-newPw1').textContent = '请输入原密码';
+        document.getElementById('err-newPw1').classList.add('show');
+        valid = false;
       }
       if (newPassword1.length < 6) {
-        showToast('新密码至少6位', 'error');
-        return;
+        document.getElementById('err-newPw1').textContent = '新密码至少6位';
+        document.getElementById('err-newPw1').classList.add('show');
+        valid = false;
       }
+      if (newPassword1 !== newPassword2) {
+        document.getElementById('err-newPw2').textContent = '两次密码不一致';
+        document.getElementById('err-newPw2').classList.add('show');
+        valid = false;
+      }
+      if (!valid) return;
 
       try {
         await API.post('/api/auth/change-password', { oldPassword, newPassword: newPassword1 });
         showToast('密码修改成功，请重新登录', 'success');
+        addLog('setting', '修改管理员密码');
         setTimeout(() => {
           API.logout();
           window.location.href = '/login';
@@ -925,6 +2914,20 @@
       }
     }
 
+    // ============================================================
+    // 工具函数
+    // ============================================================
+    function debounce(fn, delay) {
+      let timer = null;
+      return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    // ============================================================
+    // 启动
+    // ============================================================
     document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>

@@ -6,424 +6,236 @@
   <title>教师端 - 作业公布站</title>
   <link rel="stylesheet" href="/css/common.css">
   <style>
-    .teacher-layout {
-      padding: 24px 0;
-    }
+    .teacher-layout { padding: 24px 0; }
 
     .page-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
     }
-
     .page-title {
-      font-size: 28px;
-      font-weight: 700;
+      font-size: 28px; font-weight: 700;
       background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
+    .welcome-text { color: var(--text-muted); font-size: 14px; margin-top: 8px; }
 
-    .welcome-text {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-top: 8px;
+    /* ---- 统计卡片 ---- */
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card:nth-child(1) .stat-icon { background: linear-gradient(135deg,#4B3FE3,#8B5CF6); color:#fff; }
+    .stat-card:nth-child(2) .stat-icon { background: linear-gradient(135deg,#22A5F7,#06B6D4); color:#fff; }
+    .stat-card:nth-child(3) .stat-icon { background: linear-gradient(135deg,#1DC981,#27D2BF); color:#fff; }
+    .stat-card:nth-child(4) .stat-icon { background: linear-gradient(135deg,#F87454,#EFAA17); color:#fff; }
+    .stat-card:nth-child(1)::before { background: linear-gradient(90deg,#4B3FE3,#8B5CF6); }
+    .stat-card:nth-child(2)::before { background: linear-gradient(90deg,#22A5F7,#06B6D4); }
+    .stat-card:nth-child(3)::before { background: linear-gradient(90deg,#1DC981,#27D2BF); }
+    .stat-card:nth-child(4)::before { background: linear-gradient(90deg,#F87454,#EFAA17); }
+
+    /* ---- 今日作业面板 ---- */
+    .today-panel {
+      background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-lg);
+      padding: 20px 24px; margin-bottom: 24px; transition: var(--transition);
     }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
+    .today-panel:hover { box-shadow: var(--shadow-sm); }
+    .today-panel-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .today-list { display: flex; flex-wrap: wrap; gap: 10px; }
+    .today-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: var(--radius-full); font-size: 13px; font-weight: 500;
+      background: var(--primary-soft); color: var(--primary); cursor: default; transition: var(--transition);
     }
+    .today-chip:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+    .today-chip .chip-badge { font-size: 11px; }
 
-    .stat-card {
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      border: 1px solid var(--border-light);
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
+    /* ---- Tabs ---- */
+    .tabs-container { margin-bottom: 20px; }
+    .tabs {
+      display: flex; gap: 4px; background: var(--bg-hover); padding: 4px;
+      border-radius: var(--radius-lg); width: fit-content;
     }
-
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      opacity: 0;
-      transition: var(--transition);
+    .tab {
+      padding: 10px 20px; border: none; background: transparent; border-radius: var(--radius);
+      cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text-secondary); transition: var(--transition);
     }
+    .tab:hover { color: var(--text-primary); }
+    .tab.active { background: var(--bg-card); color: var(--primary); box-shadow: var(--shadow-sm); }
 
-    .stat-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .stat-card:hover::before {
-      opacity: 1;
-    }
-
-    .stat-card:nth-child(1)::before { background: linear-gradient(90deg, #4B3FE3, #8B5CF6); }
-    .stat-card:nth-child(2)::before { background: linear-gradient(90deg, #22A5F7, #06B6D4); }
-    .stat-card:nth-child(3)::before { background: linear-gradient(90deg, #1DC981, #27D2BF); }
-    .stat-card:nth-child(4)::before { background: linear-gradient(90deg, #F87454, #EFAA17); }
-
-    .stat-icon {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
-
-    .stat-value {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--text-primary);
-      line-height: 1;
-    }
-
-    .stat-label {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 8px;
-    }
-
+    /* ---- 表格 ---- */
     .content-card {
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-light);
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
+      background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-light);
+      overflow: hidden; box-shadow: var(--shadow-sm); transition: var(--transition);
     }
-
-    .content-card:hover {
-      box-shadow: var(--shadow-md);
-    }
-
+    .content-card:hover { box-shadow: var(--shadow-md); }
     .card-header {
-      padding: 18px 24px;
-      border-bottom: 1px solid var(--border-light);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
+      padding: 18px 24px; border-bottom: 1px solid var(--border-light);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
       background: linear-gradient(135deg, var(--bg-hover) 0%, transparent 100%);
     }
+    .card-title { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .filter-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
-    .card-title {
-      font-size: 16px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .filter-group {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .filter-select {
-      padding: 8px 12px;
-      font-size: 13px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .filter-select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-soft);
-    }
-
-    .homework-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .homework-table th,
-    .homework-table td {
-      padding: 14px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-light);
-      font-size: 14px;
-    }
-
+    .homework-table { width: 100%; border-collapse: collapse; }
+    .homework-table th, .homework-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border-light); font-size: 14px; }
     .homework-table th {
-      background: var(--bg-hover);
-      font-weight: 600;
-      color: var(--text-secondary);
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      background: var(--bg-hover); font-weight: 600; color: var(--text-secondary);
+      font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; user-select: none;
     }
+    .homework-table th.sortable { cursor: pointer; }
+    .homework-table th.sortable:hover { color: var(--text-primary); }
+    .homework-table th.sortable::after { content: "\2195"; margin-left: 4px; opacity: 0.3; font-size: 11px; }
+    .homework-table th.sortable.asc::after { content: "\2191"; opacity: 0.8; color: var(--primary); }
+    .homework-table th.sortable.desc::after { content: "\2193"; opacity: 0.8; color: var(--primary); }
+    .homework-table tbody tr:nth-child(even) { background: rgba(248,249,252,0.5); }
+    .homework-table tbody tr:hover td { background: var(--bg-hover); }
+    .homework-table tr:last-child td { border-bottom: none; }
+    .homework-table .col-actions { position: sticky; right: 0; background: var(--bg-card); z-index: 1; box-shadow: -2px 0 6px rgba(0,0,0,0.04); }
+    .homework-table tbody tr:nth-child(even) .col-actions { background: rgba(248,249,252,0.95); }
+    .homework-table tbody tr:hover .col-actions { background: var(--bg-hover); }
 
-    .homework-table tr:hover td {
-      background: var(--bg-hover);
+    /* ---- 批量操作栏 ---- */
+    .batch-bar {
+      display: none; align-items: center; gap: 12px; padding: 12px 24px;
+      background: var(--primary-soft); border-bottom: 1px solid var(--border-light); font-size: 13px;
     }
+    .batch-bar.show { display: flex; }
+    .batch-bar .count { font-weight: 600; color: var(--primary); }
 
-    .homework-table tr:last-child td {
-      border-bottom: none;
-    }
+    /* ---- 复选框 ---- */
+    .row-check { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
 
-    .action-btns {
-      display: flex;
-      gap: 6px;
-    }
-
+    /* ---- 操作按钮 ---- */
+    .action-btns { display: flex; gap: 4px; }
     .btn-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: var(--radius);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 16px;
-      transition: var(--transition);
-      border: none;
-      cursor: pointer;
+      width: 34px; height: 34px; border-radius: var(--radius); display: inline-flex;
+      align-items: center; justify-content: center; background: transparent; color: var(--text-muted);
+      font-size: 15px; transition: var(--transition); border: none; cursor: pointer;
+    }
+    .btn-icon:hover { background: var(--bg-hover); color: var(--primary); transform: scale(1.1); }
+    .btn-icon.danger:hover { background: rgba(232,70,58,0.1); color: var(--danger); }
+
+    /* ---- 搜索框 ---- */
+    .table-toolbar { display: flex; align-items: center; gap: 10px; padding: 12px 24px; border-bottom: 1px solid var(--border-light); flex-wrap: wrap; }
+    .search-box-sm { position: relative; flex: 1; min-width: 180px; max-width: 280px; }
+    .search-box-sm input {
+      width: 100%; padding: 8px 12px 8px 34px; font-size: 13px;
+      border: 1.5px solid var(--border); border-radius: var(--radius-full);
+      background: var(--bg-card); color: var(--text-primary); transition: var(--transition);
+    }
+    .search-box-sm input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+    .search-box-sm::before {
+      content: "\1F50D"; position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      font-size: 13px; pointer-events: none;
     }
 
-    .btn-icon:hover {
-      background: var(--bg-hover);
-      color: var(--primary);
-      transform: scale(1.1);
-    }
-
-    .btn-icon.danger:hover {
-      background: rgba(232, 70, 58, 0.1);
-      color: var(--danger);
-    }
-
-    .editor-section {
-      display: none;
-      padding: 24px;
-    }
-
-    .editor-section.show {
-      display: block;
-    }
-
-    .links-editor, .attachments-editor {
-      margin-top: 12px;
-    }
-
-    .link-item-edit, .attachment-item-edit {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 8px;
-      align-items: center;
-    }
-
-    .link-item-edit input, .attachment-item-edit input {
-      flex: 1;
-    }
-
-    .file-upload-area {
-      border: 2px dashed var(--border);
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--transition);
-      margin-top: 12px;
-    }
-
-    .file-upload-area:hover {
-      border-color: var(--primary);
-      background: var(--primary-soft);
-    }
-
-    .file-upload-area.dragover {
-      border-color: var(--primary);
-      background: var(--primary-soft);
-    }
-
-    .upload-icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-      opacity: 0.6;
-    }
-
-    .uploaded-files {
-      margin-top: 12px;
-    }
-
-    .uploaded-file {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px;
-      background: var(--bg-hover);
-      border-radius: var(--radius);
-      margin-bottom: 8px;
-      font-size: 13px;
-      transition: var(--transition);
-    }
-
-    .uploaded-file:hover {
-      background: var(--primary-soft);
-    }
-
-    .notice-editor {
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border-light);
-    }
-
-    .form-check {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .form-check input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--primary);
-    }
-
-    .form-check label {
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .tabs-container {
-      margin-bottom: 20px;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 4px;
-      background: var(--bg-hover);
-      padding: 4px;
-      border-radius: var(--radius-lg);
-      width: fit-content;
-    }
-
-    .tab {
-      padding: 10px 20px;
-      border: none;
-      background: transparent;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      transition: var(--transition);
-    }
-
-    .tab:hover {
-      color: var(--text-primary);
-    }
-
-    .tab.active {
-      background: var(--bg-card);
-      color: var(--primary);
-      box-shadow: var(--shadow-sm);
-    }
-
+    /* ---- 公告卡片 ---- */
     .notice-card {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 12px;
-      border-left: 4px solid var(--primary);
+      background: var(--bg-card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
+      border-left: 4px solid var(--primary); transition: var(--transition);
+    }
+    .notice-card:hover { transform: translateX(4px); box-shadow: var(--shadow-sm); }
+    .notice-card.urgent { border-left-color: var(--danger); background: linear-gradient(135deg,rgba(232,70,58,0.05) 0%,transparent 100%); }
+    .notice-card.announcement { border-left-color: #EFAA17; background: linear-gradient(135deg,rgba(239,170,23,0.05) 0%,transparent 100%); }
+    .notice-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+    .notice-title { font-weight: 600; font-size: 15px; }
+    .notice-time { font-size: 12px; color: var(--text-muted); }
+    .notice-content { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+    .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: var(--radius-full); font-size: 12px; font-weight: 500; }
+    .badge-danger { background: rgba(232,70,58,0.1); color: var(--danger); }
+    .badge-warning { background: rgba(239,170,23,0.1); color: #EFAA17; }
+    .badge-info { background: var(--primary-soft); color: var(--primary); }
+
+    /* ---- 编辑器区域 ---- */
+    .editor-section { display: none; padding: 24px; }
+    .editor-section.show { display: block; }
+    .links-editor, .attachments-editor { margin-top: 12px; }
+    .link-item-edit, .attachment-item-edit { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+    .link-item-edit input, .attachment-item-edit input { flex: 1; }
+
+    /* ---- 文件上传 ---- */
+    .file-upload-area {
+      border: 2px dashed var(--border); border-radius: var(--radius-lg); padding: 40px;
+      text-align: center; cursor: pointer; transition: var(--transition); margin-top: 12px;
+      position: relative; overflow: hidden;
+    }
+    .file-upload-area:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .file-upload-area.dragover {
+      border-color: var(--primary); background: var(--primary-soft);
+      animation: dragPulse 1s ease infinite;
+    }
+    @keyframes dragPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(75,63,227,0.2); }
+      50% { box-shadow: 0 0 0 12px rgba(75,63,227,0); }
+    }
+    .upload-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
+
+    .uploaded-files { margin-top: 12px; }
+    .uploaded-file {
+      display: flex; align-items: center; justify-content: space-between; padding: 10px 14px;
+      background: var(--bg-hover); border-radius: var(--radius); margin-bottom: 8px; font-size: 13px;
       transition: var(--transition);
     }
+    .uploaded-file:hover { background: var(--primary-soft); }
+    .file-progress { width: 100%; height: 4px; background: var(--border); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+    .file-progress-fill { height: 100%; background: linear-gradient(90deg,var(--primary),var(--primary-light)); border-radius: 2px; transition: width 0.3s; }
 
-    .notice-card:hover {
-      transform: translateX(4px);
-      box-shadow: var(--shadow-sm);
+    /* ---- 分步表单 ---- */
+    .step-content { display: none; padding: 8px 0; }
+    .step-content.active { display: block; animation: fadeIn 0.3s ease; }
+    .step-nav { display: flex; justify-content: space-between; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-light); }
+
+    /* ---- 预览面板 ---- */
+    .preview-panel {
+      background: var(--bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg);
+      padding: 24px; margin-top: 16px;
     }
+    .preview-panel h4 { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+    .preview-meta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; font-size: 13px; color: var(--text-secondary); }
+    .preview-body { font-size: 14px; line-height: 1.8; color: var(--text-secondary); white-space: pre-wrap; }
+    .preview-links { margin-top: 12px; }
+    .preview-links a { display: inline-flex; align-items: center; gap: 4px; margin-right: 16px; font-size: 13px; }
 
-    .notice-card.urgent {
-      border-left-color: var(--danger);
-      background: linear-gradient(135deg, rgba(232, 70, 58, 0.05) 0%, transparent 100%);
+    /* ---- 模板面板 ---- */
+    .template-panel {
+      position: fixed; top: 0; right: -380px; width: 380px; height: 100vh;
+      background: var(--bg-card); border-left: 1px solid var(--border-light); box-shadow: var(--shadow-lg);
+      z-index: 10001; transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column;
     }
-
-    .notice-card.announcement {
-      border-left-color: #EFAA17;
-      background: linear-gradient(135deg, rgba(239, 170, 23, 0.05) 0%, transparent 100%);
+    .template-panel.open { right: 0; }
+    .template-panel-header { padding: 20px 24px; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; }
+    .template-panel-body { flex: 1; overflow-y: auto; padding: 16px 24px; }
+    .template-item {
+      padding: 14px; border: 1px solid var(--border-light); border-radius: var(--radius); margin-bottom: 10px;
+      cursor: pointer; transition: var(--transition);
     }
+    .template-item:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .template-item-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+    .template-item-meta { font-size: 12px; color: var(--text-muted); }
+    .template-item-actions { display: flex; gap: 4px; margin-top: 8px; }
+    .template-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 10000; display: none; }
+    .template-backdrop.show { display: block; }
 
-    .notice-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
+    /* ---- 骨架屏表格 ---- */
+    .skeleton-row { display: flex; gap: 16px; padding: 14px 16px; border-bottom: 1px solid var(--border-light); }
+    .skeleton-cell { height: 14px; border-radius: 4px; }
 
-    .notice-title {
-      font-weight: 600;
-      font-size: 15px;
-    }
-
-    .notice-time {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .notice-content {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 10px;
-      border-radius: var(--radius-full);
-      font-size: 12px;
-      font-weight: 500;
-    }
-
-    .badge-danger {
-      background: rgba(232, 70, 58, 0.1);
-      color: var(--danger);
-    }
-
-    .badge-warning {
-      background: rgba(239, 170, 23, 0.1);
-      color: #EFAA17;
-    }
-
-    .badge-info {
-      background: var(--primary-soft);
-      color: var(--primary);
-    }
-
+    /* ---- 响应式 ---- */
     @media (max-width: 768px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .homework-table {
-        display: block;
-        overflow-x: auto;
-      }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .homework-table { display: block; overflow-x: auto; }
+      .stat-value { font-size: 24px; }
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .template-panel { width: 100%; right: -100%; }
+      .modal { max-width: 100%; border-radius: var(--radius-lg); }
+      .steps { flex-direction: column; gap: 8px; }
+      .step:not(:last-child)::after { display: none; }
+      .today-list { flex-direction: column; }
+      .filter-group { width: 100%; }
+      .search-box-sm { max-width: 100%; }
+    }
 
-      .stat-value {
-        font-size: 24px;
-      }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -431,40 +243,46 @@
   <header class="header" id="header"></header>
 
   <main class="container teacher-layout">
+    <!-- 页面头部 -->
     <div class="page-header">
       <div>
         <h1 class="page-title">作业管理</h1>
         <p class="welcome-text" id="welcomeText">欢迎使用教师端</p>
       </div>
       <div class="flex gap-8">
+        <button class="btn btn-outline" onclick="openTemplatePanel()">📋 模板</button>
         <button class="btn btn-outline" onclick="switchTab('notice')">📢 发布公告</button>
         <button class="btn btn-primary" onclick="openHomeworkModal()">✏️ 发布新作业</button>
       </div>
     </div>
 
+    <!-- 统计卡片 -->
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-icon">📝</div>
-        <div class="stat-value" id="statTotal">0</div>
-        <div class="stat-label">累计发布作业</div>
+        <div><div class="stat-value" id="statTotal">0</div><div class="stat-label">累计发布作业</div></div>
       </div>
       <div class="stat-card">
         <div class="stat-icon">📅</div>
-        <div class="stat-value" id="statMonth">0</div>
-        <div class="stat-label">本月发布</div>
+        <div><div class="stat-value" id="statMonth">0</div><div class="stat-label">本月发布</div></div>
       </div>
       <div class="stat-card">
         <div class="stat-icon">👁️</div>
-        <div class="stat-value" id="statViews">0</div>
-        <div class="stat-label">总查看次数</div>
+        <div><div class="stat-value" id="statViews">0</div><div class="stat-label">总查看次数</div></div>
       </div>
       <div class="stat-card">
         <div class="stat-icon">🏫</div>
-        <div class="stat-value" id="statClasses">0</div>
-        <div class="stat-label">所教班级</div>
+        <div><div class="stat-value" id="statClasses">0</div><div class="stat-label">所教班级</div></div>
       </div>
     </div>
 
+    <!-- 今日作业快速面板 -->
+    <div class="today-panel" id="todayPanel" style="display:none">
+      <div class="today-panel-title">📌 今日已发布作业</div>
+      <div class="today-list" id="todayList"></div>
+    </div>
+
+    <!-- Tabs -->
     <div class="tabs-container">
       <div class="tabs">
         <button class="tab active" data-tab="homework" onclick="switchTab('homework')">📝 作业管理</button>
@@ -472,6 +290,7 @@
       </div>
     </div>
 
+    <!-- ====== 作业 Tab ====== -->
     <div id="homeworkTab">
       <div class="content-card">
         <div class="card-header">
@@ -485,26 +304,46 @@
             </select>
           </div>
         </div>
+
+        <!-- 搜索栏 -->
+        <div class="table-toolbar">
+          <div class="search-box-sm">
+            <input type="text" id="searchInput" placeholder="搜索作业标题/科目..." oninput="onSearchInput()">
+          </div>
+          <button class="btn btn-outline btn-sm" id="batchToggleBtn" onclick="toggleBatchMode()">☑️ 批量操作</button>
+        </div>
+
+        <!-- 批量操作栏 -->
+        <div class="batch-bar" id="batchBar">
+          <span>已选 <span class="count" id="batchCount">0</span> 项</span>
+          <button class="btn btn-danger btn-sm" onclick="batchDelete()">🗑️ 批量删除</button>
+          <button class="btn btn-outline btn-sm" onclick="batchExport()">📄 导出汇总</button>
+          <button class="btn btn-outline btn-sm" onclick="toggleBatchMode()">取消</button>
+        </div>
+
+        <!-- 表格 -->
         <div style="overflow-x:auto">
-          <table class="homework-table">
+          <table class="homework-table" id="homeworkTable">
             <thead>
               <tr>
-                <th>科目</th>
+                <th id="thCheck" style="width:40px;display:none"><input type="checkbox" class="row-check" onchange="toggleAllChecks(this)"></th>
+                <th class="sortable" data-sort="subject" onclick="sortBy('subject')">科目</th>
                 <th>作业标题</th>
                 <th>班级</th>
-                <th>发布时间</th>
-                <th>查看</th>
-                <th>操作</th>
+                <th class="sortable" data-sort="time" onclick="sortBy('time')">发布时间</th>
+                <th class="sortable" data-sort="views" onclick="sortBy('views')">查看</th>
+                <th class="col-actions">操作</th>
               </tr>
             </thead>
             <tbody id="homeworkTableBody">
-              <tr><td colspan="6" class="loading"><div class="spinner"></div>加载中...</td></tr>
+              <tr><td colspan="7" class="loading"><div class="spinner"></div>加载中...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
+    <!-- ====== 公告 Tab ====== -->
     <div id="noticeTab" style="display:none">
       <div class="content-card">
         <div class="card-header">
@@ -512,7 +351,7 @@
         </div>
         <div style="padding:24px">
           <div id="noticeList" style="margin-bottom:24px"></div>
-          <div class="notice-editor">
+          <div style="margin-top:24px;padding-top:24px;border-top:1px solid var(--border-light)">
             <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px">
               <span>✨</span> 发布新公告
             </h3>
@@ -561,121 +400,274 @@
     </div>
   </main>
 
+  <!-- ====== 作业发布/编辑弹窗（分步） ====== -->
   <div class="modal-overlay" id="homeworkModal" style="display:none">
-    <div class="modal" style="max-width:720px">
+    <div class="modal" style="max-width:780px">
       <div class="modal-header">
         <h3 class="modal-title" id="modalTitle">发布新作业</h3>
         <button class="modal-close" onclick="closeHomeworkModal()">&times;</button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="editingId">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">年级 *</label>
-            <select class="form-control" id="hwGrade" onchange="loadHwClasses()">
-              <option value="">请选择年级</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">班级 *</label>
-            <select class="form-control" id="hwClass">
-              <option value="">请先选择年级</option>
-            </select>
-          </div>
+
+        <!-- 步骤指示器 -->
+        <div class="steps" id="stepsIndicator">
+          <div class="step active" data-step="1"><div class="step-number">1</div><span class="step-label">选择班级</span></div>
+          <div class="step" data-step="2"><div class="step-number">2</div><span class="step-label">填写内容</span></div>
+          <div class="step" data-step="3"><div class="step-number">3</div><span class="step-label">添加附件</span></div>
+          <div class="step" data-step="4"><div class="step-number">4</div><span class="step-label">预览确认</span></div>
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">科目</label>
-            <select class="form-control" id="hwSubject">
-              <option value="">其他</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">截止日期</label>
-            <input type="date" class="form-control" id="hwDeadline">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">作业标题 *</label>
-          <input type="text" class="form-control" id="hwTitle" placeholder="例如：第10页练习题">
-        </div>
-        <div class="form-group">
-          <label class="form-label">作业内容 *</label>
-          <textarea class="form-control" id="hwContent" rows="6" placeholder="请详细描述作业内容..."></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">相关链接</label>
-          <div class="links-editor" id="linksEditor">
-            <div class="link-item-edit">
-              <input type="text" id="linkName" placeholder="链接名称" style="max-width:120px">
-              <input type="url" id="linkUrl" placeholder="https://...">
-              <button type="button" class="btn btn-primary btn-sm" onclick="addLink()">添加</button>
+
+        <!-- 步骤1：选择班级 -->
+        <div class="step-content active" data-step="1">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">年级 *</label>
+              <select class="form-control" id="hwGrade" onchange="loadHwClasses()">
+                <option value="">请选择年级</option>
+              </select>
             </div>
-            <div id="linksList"></div>
+            <div class="form-group">
+              <label class="form-label">班级 *</label>
+              <select class="form-control" id="hwClass">
+                <option value="">请先选择年级</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">科目</label>
+              <select class="form-control" id="hwSubject">
+                <option value="">其他</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">截止日期</label>
+              <input type="date" class="form-control" id="hwDeadline">
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">上传附件</label>
-          <div class="file-upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-            <div class="upload-icon">📁</div>
-            <div>点击或拖拽文件到这里上传</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:4px">支持图片、文档、压缩包等，单个文件最大50MB</div>
+
+        <!-- 步骤2：填写内容 -->
+        <div class="step-content" data-step="2">
+          <div class="form-group">
+            <label class="form-label">作业标题 *</label>
+            <input type="text" class="form-control" id="hwTitle" placeholder="例如：第10页练习题">
           </div>
-          <input type="file" id="fileInput" multiple style="display:none" onchange="handleFileUpload(this.files)">
-          <div class="uploaded-files" id="uploadedFiles"></div>
+          <div class="form-group">
+            <label class="form-label">作业内容 *</label>
+            <textarea class="form-control" id="hwContent" rows="8" placeholder="请详细描述作业内容..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">相关链接</label>
+            <div class="links-editor" id="linksEditor">
+              <div class="link-item-edit">
+                <input type="text" id="linkName" placeholder="链接名称" style="max-width:120px">
+                <input type="url" id="linkUrl" placeholder="https://...">
+                <button type="button" class="btn btn-primary btn-sm" onclick="addLink()">添加</button>
+              </div>
+              <div id="linksList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 步骤3：添加附件 -->
+        <div class="step-content" data-step="3">
+          <div class="form-group">
+            <label class="form-label">上传附件</label>
+            <div class="file-upload-area" id="uploadArea">
+              <div class="upload-icon">📁</div>
+              <div style="font-size:16px;font-weight:500">点击或拖拽文件到这里上传</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:8px">支持图片、文档、压缩包等，单个文件最大50MB</div>
+              <div id="filePreviewArea" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center"></div>
+            </div>
+            <input type="file" id="fileInput" multiple style="display:none" onchange="handleFileUpload(this.files)">
+            <div class="uploaded-files" id="uploadedFiles"></div>
+          </div>
+        </div>
+
+        <!-- 步骤4：预览确认 -->
+        <div class="step-content" data-step="4">
+          <div class="preview-panel" id="previewPanel">
+            <p class="text-muted text-center">请先填写前面步骤的内容</p>
+          </div>
         </div>
       </div>
+
       <div class="modal-footer">
+        <div style="display:flex;gap:8px;margin-right:auto">
+          <button class="btn btn-outline btn-sm" onclick="saveDraft()" id="draftBtn">💾 存为草稿</button>
+          <button class="btn btn-outline btn-sm" onclick="saveAsTemplate()">📋 存为模板</button>
+        </div>
         <button class="btn btn-outline" onclick="closeHomeworkModal()">取消</button>
-        <button class="btn btn-primary" onclick="saveHomework()" id="saveBtn">发布作业</button>
+        <button class="btn btn-outline" id="prevStepBtn" onclick="changeStep(-1)" style="display:none">上一步</button>
+        <button class="btn btn-primary" id="nextStepBtn" onclick="changeStep(1)">下一步</button>
+        <button class="btn btn-primary" onclick="saveHomework()" id="saveBtn" style="display:none">发布作业</button>
       </div>
     </div>
   </div>
 
+  <!-- ====== 公告编辑弹窗 ====== -->
+  <div class="modal-overlay" id="noticeEditModal" style="display:none">
+    <div class="modal" style="max-width:560px">
+      <div class="modal-header">
+        <h3 class="modal-title">✏️ 编辑公告</h3>
+        <button class="modal-close" onclick="closeNoticeEditModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editNoticeId">
+        <div class="form-group">
+          <label class="form-label">公告标题</label>
+          <input type="text" class="form-control" id="editNoticeTitle">
+        </div>
+        <div class="form-group">
+          <label class="form-label">公告类型</label>
+          <select class="form-control" id="editNoticeType">
+            <option value="notice">📋 普通通知</option>
+            <option value="announcement">⚠️ 重要公告</option>
+            <option value="urgent">🚨 紧急通知</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">公告内容</label>
+          <textarea class="form-control" id="editNoticeContent" rows="5"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeNoticeEditModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveNoticeEdit()">保存修改</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 作业复制弹窗 ====== -->
+  <div class="modal-overlay" id="copyModal" style="display:none">
+    <div class="modal" style="max-width:480px">
+      <div class="modal-header">
+        <h3 class="modal-title">📋 复制作业到其他班级</h3>
+        <button class="modal-close" onclick="closeCopyModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="copySourceId">
+        <div class="form-group">
+          <label class="form-label">目标年级</label>
+          <select class="form-control" id="copyGrade" onchange="loadCopyClasses()">
+            <option value="">请选择年级</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">目标班级</label>
+          <select class="form-control" id="copyClass">
+            <option value="">请先选择年级</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeCopyModal()">取消</button>
+        <button class="btn btn-primary" onclick="confirmCopy()">确认复制</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 模板侧边栏 ====== -->
+  <div class="template-backdrop" id="templateBackdrop" onclick="closeTemplatePanel()"></div>
+  <div class="template-panel" id="templatePanel">
+    <div class="template-panel-header">
+      <span style="font-weight:700;font-size:16px">📋 作业模板</span>
+      <button class="btn-icon" onclick="closeTemplatePanel()" style="font-size:20px">&times;</button>
+    </div>
+    <div style="padding:12px 24px">
+      <input type="text" class="form-control" id="templateSearch" placeholder="搜索模板..." oninput="renderTemplates()" style="font-size:13px;padding:8px 12px">
+    </div>
+    <div class="template-panel-body" id="templateList"></div>
+    <div style="padding:16px 24px;border-top:1px solid var(--border-light)">
+      <button class="btn btn-outline w-full" onclick="closeTemplatePanel();openHomeworkModal()">手动创建新模板</button>
+    </div>
+  </div>
+
+  <!-- ====== 草稿提示 ====== -->
+  <div id="draftBanner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:14px 24px;box-shadow:var(--shadow-lg);display:none;align-items:center;gap:12px;font-size:14px">
+    <span>💾</span>
+    <span>检测到未完成的草稿</span>
+    <button class="btn btn-primary btn-sm" onclick="loadDraft()">恢复草稿</button>
+    <button class="btn btn-outline btn-sm" onclick="discardDraft()">丢弃</button>
+    <button class="btn-icon" onclick="hideDraftBanner()" style="font-size:18px">&times;</button>
+  </div>
+
   <script src="/js/common.js"></script>
   <script>
+    // ============================================================
+    // 全局状态
+    // ============================================================
     let gradesData = [];
     let subjects = [];
     let currentLinks = [];
     let currentAttachments = [];
     let editingId = null;
+    let allHomework = [];
+    let currentStep = 1;
+    let batchMode = false;
+    let selectedIds = new Set();
+    let sortField = 'time';
+    let sortDir = 'desc';
+    let searchKeyword = '';
 
+    const TEMPLATE_KEY = 'hw_templates';
+    const DRAFT_KEY = 'hw_draft';
+
+    // ============================================================
+    // XSS 安全的 innerHTML 设置
+    // ============================================================
+    function safeSetHTML(el, html) {
+      el.innerHTML = html;
+    }
+
+    // ============================================================
+    // 初始化
+    // ============================================================
     async function init() {
       if (!API.isLoggedIn() || !API.hasRole('super_admin', 'admin', 'teacher')) {
         window.location.href = '/login';
         return;
       }
-      
+
       initHeader('teacher');
-      document.getElementById('welcomeText').textContent = `欢迎您，${API.user.realName}老师 👋`;
-      
+      document.getElementById('welcomeText').textContent = `欢迎您，${escapeHtml(API.user.realName)}老师 👋`;
+
       await Promise.all([loadGrades(), loadSubjects()]);
       initFilters();
       initUpload();
       loadHomework();
       loadNotices();
+      checkDraft();
       recordVisit('/teacher');
     }
 
+    // ============================================================
+    // 年级/班级/科目加载
+    // ============================================================
     async function loadGrades() {
       try {
         const data = await API.get('/api/grades/classes/all');
         gradesData = data.data || [];
       } catch (e) {
-        const data = await API.get('/api/grades');
-        gradesData = (data.data || []).map(g => ({ ...g, classes: [] }));
+        try {
+          const data = await API.get('/api/grades');
+          gradesData = (data.data || []).map(g => ({ ...g, classes: [] }));
+        } catch (_) { gradesData = []; }
       }
-      
-      const gradeSelects = ['gradeFilter', 'hwGrade', 'noticeGrade'];
-      gradeSelects.forEach(id => {
+
+      ['gradeFilter', 'hwGrade', 'noticeGrade', 'copyGrade'].forEach(id => {
         const sel = document.getElementById(id);
-        if (sel) {
-          const isFilter = id === 'gradeFilter';
-          sel.innerHTML = '<option value="">' + (isFilter ? '全部年级' : '请选择年级') + '</option>';
-          gradesData.forEach(g => {
-            sel.innerHTML += `<option value="${g.id}">${g.fullName || g.name}</option>`;
-          });
-        }
+        if (!sel) return;
+        const isFilter = id === 'gradeFilter';
+        sel.innerHTML = '<option value="">' + (isFilter ? '全部年级' : '请选择年级') + '</option>';
+        gradesData.forEach(g => {
+          const opt = document.createElement('option');
+          opt.value = g.id;
+          opt.textContent = g.fullName || g.name;
+          sel.appendChild(opt);
+        });
       });
     }
 
@@ -683,13 +675,14 @@
       try {
         const data = await API.get('/api/grades/subjects');
         subjects = data.data || [];
-      } catch (e) {
-        subjects = [];
-      }
+      } catch (_) { subjects = []; }
       const sel = document.getElementById('hwSubject');
       sel.innerHTML = '<option value="">其他</option>';
       subjects.forEach(s => {
-        sel.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = s.name;
+        sel.appendChild(opt);
       });
     }
 
@@ -708,103 +701,319 @@
     async function loadClasses(gradeSelId, classSelId, includeAll = true) {
       const gradeId = document.getElementById(gradeSelId).value;
       const classSel = document.getElementById(classSelId);
-      
-      if (!gradeId) {
-        classSel.innerHTML = '<option value="">' + (includeAll ? '全部班级' : '请选择班级') + '</option>';
-        return;
-      }
-      
+      const placeholder = includeAll ? '全部班级' : '请选择班级';
+      classSel.innerHTML = `<option value="">${escapeHtml(placeholder)}</option>`;
+      if (!gradeId) return;
+
       const grade = gradesData.find(g => g.id === gradeId || g.id === parseInt(gradeId));
-      classSel.innerHTML = '<option value="">' + (includeAll ? '全部班级' : '请选择班级') + '</option>';
       (grade?.classes || []).forEach(c => {
-        classSel.innerHTML += `<option value="${c.id}">${c.class_name || c.name}</option>`;
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.class_name || c.name;
+        classSel.appendChild(opt);
       });
     }
 
-    async function loadHwClasses() {
-      await loadClasses('hwGrade', 'hwClass', false);
-    }
+    async function loadHwClasses() { await loadClasses('hwGrade', 'hwClass', false); }
+    async function loadCopyClasses() { await loadClasses('copyGrade', 'copyClass', false); }
 
     async function loadNoticeClasses() {
       const scope = document.getElementById('noticeScope').value;
       document.getElementById('noticeGradeWrap').style.display = (scope === 'grade' || scope === 'class') ? 'block' : 'none';
       document.getElementById('noticeClassWrap').style.display = scope === 'class' ? 'block' : 'none';
-      
       if (scope !== 'grade' && scope !== 'class') return;
-      
       await loadClasses('noticeGrade', 'noticeClass', false);
     }
+    function onNoticeScopeChange() { loadNoticeClasses(); }
 
-    function onNoticeScopeChange() {
-      loadNoticeClasses();
-    }
-
+    // ============================================================
+    // 加载作业
+    // ============================================================
     async function loadHomework() {
+      showTableSkeleton();
       const gradeId = document.getElementById('gradeFilter').value;
       const classId = document.getElementById('classFilter').value;
-      
+
       let url = '/api/homework?pageSize=100';
-      if (gradeId) url += `&gradeId=${gradeId}`;
-      if (classId) url += `&classId=${classId}`;
-      
+      if (gradeId) url += `&gradeId=${encodeURIComponent(gradeId)}`;
+      if (classId) url += `&classId=${encodeURIComponent(classId)}`;
+
       try {
         const data = await API.get(url);
-        const list = data.data.list || data.data.homework || [];
-        renderHomeworkTable(list);
-        updateStats(list);
+        allHomework = data.data.list || data.data.homework || [];
+        applyFiltersAndRender();
+        updateStats(allHomework);
+        renderTodayPanel(allHomework);
       } catch (e) {
-        document.getElementById('homeworkTableBody').innerHTML = `<tr><td colspan="6" class="text-center text-danger">加载失败，请刷新重试</td></tr>`;
+        const tbody = document.getElementById('homeworkTableBody');
+        safeSetHTML(tbody, `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">加载失败，请刷新重试</div></div></td></tr>`);
       }
+    }
+
+    function showTableSkeleton() {
+      const tbody = document.getElementById('homeworkTableBody');
+      let html = '';
+      for (let i = 0; i < 5; i++) {
+        html += `<tr><td colspan="7" style="padding:14px 16px"><div style="display:flex;gap:16px">
+          <div class="skeleton" style="width:60px;height:14px;border-radius:4px"></div>
+          <div class="skeleton" style="width:140px;height:14px;border-radius:4px"></div>
+          <div class="skeleton" style="width:100px;height:14px;border-radius:4px"></div>
+          <div class="skeleton" style="width:80px;height:14px;border-radius:4px"></div>
+        </div></td></tr>`;
+      }
+      safeSetHTML(tbody, html);
+    }
+
+    // ============================================================
+    // 搜索 + 排序 + 渲染
+    // ============================================================
+    function onSearchInput() {
+      searchKeyword = document.getElementById('searchInput').value.trim();
+      applyFiltersAndRender();
+    }
+
+    function applyFiltersAndRender() {
+      let list = [...allHomework];
+
+      if (searchKeyword) {
+        const kw = searchKeyword.toLowerCase();
+        list = list.filter(h =>
+          (h.title || '').toLowerCase().includes(kw) ||
+          (h.subject_name || h.subjectName || '').toLowerCase().includes(kw)
+        );
+      }
+
+      list.sort((a, b) => {
+        let va, vb;
+        if (sortField === 'time') {
+          va = new Date(a.created_at).getTime();
+          vb = new Date(b.created_at).getTime();
+        } else if (sortField === 'subject') {
+          va = (a.subject_name || a.subjectName || '').toLowerCase();
+          vb = (b.subject_name || b.subjectName || '').toLowerCase();
+          return sortDir === 'asc' ? va.localeCompare(vb) : vb.localeCompare(va);
+        } else if (sortField === 'views') {
+          va = a.view_count || a.viewCount || 0;
+          vb = b.view_count || b.viewCount || 0;
+        } else {
+          va = new Date(a.created_at).getTime();
+          vb = new Date(b.created_at).getTime();
+        }
+        return sortDir === 'asc' ? va - vb : vb - va;
+      });
+
+      renderHomeworkTable(list);
+    }
+
+    function sortBy(field) {
+      if (sortField === field) {
+        sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortField = field;
+        sortDir = 'desc';
+      }
+      document.querySelectorAll('.homework-table th.sortable').forEach(th => {
+        th.classList.remove('asc', 'desc');
+        if (th.dataset.sort === sortField) th.classList.add(sortDir);
+      });
+      applyFiltersAndRender();
     }
 
     function renderHomeworkTable(list) {
       const tbody = document.getElementById('homeworkTableBody');
       if (!list || list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">暂无作业，点击右上角发布</div></div></td></tr>';
+        const emptyIcon = searchKeyword ? '🔍' : '📭';
+        const emptyText = searchKeyword ? `没有找到包含「${escapeHtml(searchKeyword)}」的作业` : '暂无作业，点击右上角发布';
+        safeSetHTML(tbody, `<tr><td colspan="7"><div class="empty-state fade-in"><div class="empty-icon">${emptyIcon}</div><div class="empty-text">${emptyText}</div></div></td></tr>`);
         return;
       }
-      
-      tbody.innerHTML = list.map(h => `
-        <tr>
-          <td><span class="badge badge-info" style="background:${getSubjectColor(h.subject_name || h.subjectName)}20;color:${getSubjectColor(h.subject_name || h.subjectName)}">${h.subject_name || h.subjectName || '其他'}</span></td>
-          <td style="font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.title}</td>
-          <td style="font-size:13px;color:var(--text-secondary)">${h.grade_name || h.gradeName || ''} ${h.class_name || h.className || ''}</td>
+
+      const checkCol = batchMode ? '' : 'display:none';
+      const rows = list.map(h => {
+        const subj = h.subject_name || h.subjectName || '其他';
+        const color = getSubjectColor(subj);
+        const gradeClass = escapeHtml(`${h.grade_name || h.gradeName || ''} ${h.class_name || h.className || ''}`.trim());
+        const views = h.view_count || h.viewCount || 0;
+        const checked = selectedIds.has(String(h.id)) ? 'checked' : '';
+        const deadline = h.deadline ? formatDate(h.deadline) : '';
+
+        return `<tr data-id="${escapeHtml(String(h.id))}">
+          <td style="${checkCol}"><input type="checkbox" class="row-check" ${checked} onchange="toggleRowCheck('${escapeHtml(String(h.id))}',this.checked)"></td>
+          <td><span class="badge" style="background:${escapeHtml(color)}20;color:${escapeHtml(color)}">${escapeHtml(subj)}</span></td>
+          <td style="font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escapeHtml(h.title)}">${escapeHtml(h.title)}</td>
+          <td style="font-size:13px;color:var(--text-secondary)">${gradeClass}</td>
           <td style="font-size:13px;color:var(--text-secondary)">${formatDateTime(h.created_at)}</td>
-          <td style="font-size:13px">👁 ${h.view_count || h.viewCount || 0}</td>
-          <td>
+          <td style="font-size:13px">👁 ${views}</td>
+          <td class="col-actions">
             <div class="action-btns">
-              <button class="btn-icon" onclick="viewHomework('${h.id}')" title="查看">👁</button>
-              <button class="btn-icon" onclick="editHomework('${h.id}')" title="编辑">✏️</button>
-              <button class="btn-icon danger" onclick="deleteHomework('${h.id}')" title="删除">🗑️</button>
+              <button class="btn-icon" onclick="viewHomework('${escapeHtml(String(h.id))}')" title="查看">👁</button>
+              <button class="btn-icon" onclick="editHomework('${escapeHtml(String(h.id))}')" title="编辑">✏️</button>
+              <button class="btn-icon" onclick="openCopyModal('${escapeHtml(String(h.id))}')" title="复制">📋</button>
+              <button class="btn-icon danger" onclick="deleteHomework('${escapeHtml(String(h.id))}')" title="删除">🗑️</button>
             </div>
           </td>
-        </tr>
-      `).join('');
+        </tr>`;
+      }).join('');
+
+      safeSetHTML(tbody, rows);
     }
 
+    // ============================================================
+    // 统计
+    // ============================================================
     function updateStats(list) {
       const now = new Date();
       const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-      
       document.getElementById('statTotal').textContent = list.length;
       document.getElementById('statMonth').textContent = list.filter(h => new Date(h.created_at) >= monthStart).length;
-      document.getElementById('statViews').textContent = list.reduce((sum, h) => sum + (h.view_count || h.viewCount || 0), 0);
+      document.getElementById('statViews').textContent = list.reduce((s, h) => s + (h.view_count || h.viewCount || 0), 0);
       document.getElementById('statClasses').textContent = new Set(list.map(h => h.class_id || h.classId)).size;
     }
 
+    // ============================================================
+    // 今日作业面板
+    // ============================================================
+    function renderTodayPanel(list) {
+      const today = new Date().toDateString();
+      const todayHw = list.filter(h => new Date(h.created_at).toDateString() === today);
+      const panel = document.getElementById('todayPanel');
+      const container = document.getElementById('todayList');
+
+      if (todayHw.length === 0) {
+        panel.style.display = 'none';
+        return;
+      }
+      panel.style.display = 'block';
+      safeSetHTML(container, todayHw.map(h => {
+        const subj = h.subject_name || h.subjectName || '其他';
+        const color = getSubjectColor(subj);
+        return `<span class="today-chip" style="background:${escapeHtml(color)}15;color:${escapeHtml(color)}">
+          <span class="chip-badge" style="background:${escapeHtml(color)}30">${escapeHtml(subj)}</span>
+          ${escapeHtml(h.title)}
+        </span>`;
+      }).join(''));
+    }
+
+    // ============================================================
+    // 分步表单
+    // ============================================================
+    function changeStep(dir) {
+      const nextStep = currentStep + dir;
+      if (nextStep < 1 || nextStep > 4) return;
+
+      if (dir > 0 && !validateStep(currentStep)) return;
+
+      currentStep = nextStep;
+      updateStepUI();
+    }
+
+    function validateStep(step) {
+      if (step === 1) {
+        const grade = document.getElementById('hwGrade').value;
+        const cls = document.getElementById('hwClass').value;
+        if (!grade || !cls) { showToast('请选择年级和班级', 'error'); return false; }
+      }
+      if (step === 2) {
+        const title = document.getElementById('hwTitle').value.trim();
+        const content = document.getElementById('hwContent').value.trim();
+        if (!title) { showToast('请输入作业标题', 'error'); return false; }
+        if (!content) { showToast('请输入作业内容', 'error'); return false; }
+        if (title.length > 200) { showToast('标题不能超过200字', 'error'); return false; }
+      }
+      return true;
+    }
+
+    function updateStepUI() {
+      document.querySelectorAll('#stepsIndicator .step').forEach(el => {
+        const s = parseInt(el.dataset.step);
+        el.classList.remove('active', 'completed');
+        if (s < currentStep) el.classList.add('completed');
+        if (s === currentStep) el.classList.add('active');
+      });
+
+      document.querySelectorAll('.step-content').forEach(el => {
+        el.classList.toggle('active', parseInt(el.dataset.step) === currentStep);
+      });
+
+      document.getElementById('prevStepBtn').style.display = currentStep > 1 ? '' : 'none';
+      document.getElementById('nextStepBtn').style.display = currentStep < 4 ? '' : 'none';
+      document.getElementById('saveBtn').style.display = currentStep === 4 ? '' : 'none';
+      document.getElementById('draftBtn').style.display = currentStep < 4 ? '' : 'none';
+
+      if (currentStep === 4) renderPreview();
+    }
+
+    function resetSteps() {
+      currentStep = 1;
+      updateStepUI();
+    }
+
+    // ============================================================
+    // 作业预览
+    // ============================================================
+    function renderPreview() {
+      const title = document.getElementById('hwTitle').value.trim();
+      const content = document.getElementById('hwContent').value.trim();
+      const subjSel = document.getElementById('hwSubject');
+      const subjName = subjSel.selectedOptions[0]?.textContent || '其他';
+      const gradeSel = document.getElementById('hwGrade');
+      const gradeName = gradeSel.selectedOptions[0]?.textContent || '';
+      const classSel = document.getElementById('hwClass');
+      const className = classSel.selectedOptions[0]?.textContent || '';
+      const deadline = document.getElementById('hwDeadline').value;
+
+      if (!title && !content) {
+        safeSetHTML(document.getElementById('previewPanel'), '<p class="text-muted text-center">请先填写前面步骤的内容</p>');
+        return;
+      }
+
+      const color = getSubjectColor(subjName);
+      let html = `
+        <h4>${escapeHtml(title)}</h4>
+        <div class="preview-meta">
+          <span class="badge" style="background:${escapeHtml(color)}20;color:${escapeHtml(color)}">${escapeHtml(subjName)}</span>
+          <span>🏫 ${escapeHtml(gradeName)} ${escapeHtml(className)}</span>
+          ${deadline ? `<span>📅 截止：${escapeHtml(deadline)}</span>` : ''}
+        </div>
+        <div class="preview-body">${escapeHtml(content)}</div>`;
+
+      if (currentLinks.length > 0) {
+        html += '<div class="preview-links">';
+        currentLinks.forEach(l => {
+          html += `<a href="${escapeHtml(l.url)}" target="_blank" rel="noopener">🔗 ${escapeHtml(l.name)}</a>`;
+        });
+        html += '</div>';
+      }
+
+      if (currentAttachments.length > 0) {
+        html += '<div style="margin-top:12px;font-size:13px;color:var(--text-secondary)">';
+        currentAttachments.forEach(a => {
+          html += `<div>📎 ${escapeHtml(a.name)}</div>`;
+        });
+        html += '</div>';
+      }
+
+      safeSetHTML(document.getElementById('previewPanel'), html);
+    }
+
+    // ============================================================
+    // 打开/关闭作业弹窗
+    // ============================================================
     function openHomeworkModal(id = null) {
       editingId = id;
       currentLinks = [];
       currentAttachments = [];
       renderLinks();
       renderAttachments();
-      
+      document.getElementById('filePreviewArea').innerHTML = '';
+
       if (id) {
         document.getElementById('modalTitle').textContent = '✏️ 编辑作业';
         document.getElementById('saveBtn').textContent = '保存修改';
+        document.getElementById('draftBtn').style.display = 'none';
         loadHomeworkForEdit(id);
       } else {
-        document.getElementById('modalTitle').textContent = '✏️ 发布新作业';
+        document.getElementById('modalTitle').textContent = '发布新作业';
         document.getElementById('saveBtn').textContent = '发布作业';
         document.getElementById('editingId').value = '';
         document.getElementById('hwTitle').value = '';
@@ -815,13 +1024,12 @@
           document.getElementById('hwGrade').value = API.user.gradeId;
           loadHwClasses();
           if (API.user.classId) {
-            setTimeout(() => {
-              document.getElementById('hwClass').value = API.user.classId;
-            }, 100);
+            setTimeout(() => { document.getElementById('hwClass').value = API.user.classId; }, 100);
           }
         }
       }
-      
+
+      resetSteps();
       document.getElementById('homeworkModal').style.display = 'flex';
     }
 
@@ -846,44 +1054,96 @@
         renderLinks();
         renderAttachments();
       } catch (e) {
-        showToast(e.message, 'error');
+        showToast(e.message || '加载失败', 'error');
       }
     }
 
+    // ============================================================
+    // 保存作业
+    // ============================================================
+    async function saveHomework() {
+      const gradeId = document.getElementById('hwGrade').value;
+      const classId = document.getElementById('hwClass').value;
+      const subjectId = document.getElementById('hwSubject').value;
+      const subjectName = document.getElementById('hwSubject').selectedOptions[0]?.textContent || '其他';
+      const title = document.getElementById('hwTitle').value.trim();
+      const content = document.getElementById('hwContent').value.trim();
+      const deadline = document.getElementById('hwDeadline').value;
+
+      if (!gradeId || !classId) { showToast('请选择年级和班级', 'error'); currentStep = 1; updateStepUI(); return; }
+      if (!title) { showToast('请输入作业标题', 'error'); currentStep = 2; updateStepUI(); return; }
+      if (!content) { showToast('请输入作业内容', 'error'); currentStep = 2; updateStepUI(); return; }
+      if (title.length > 200) { showToast('标题不能超过200字', 'error'); currentStep = 2; updateStepUI(); return; }
+
+      const payload = {
+        gradeId, classId,
+        subjectId: subjectId || null,
+        subjectName: subjectId ? subjectName : '其他',
+        title, content,
+        deadline: deadline || null,
+        links: currentLinks,
+        attachments: currentAttachments
+      };
+
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      btn.textContent = '提交中...';
+
+      try {
+        if (editingId) {
+          await API.put(`/api/homework/${editingId}`, payload);
+          showToast('作业更新成功 ✅', 'success');
+        } else {
+          await API.post('/api/homework', payload);
+          showToast('作业发布成功 ✅', 'success');
+        }
+        clearDraft();
+        closeHomeworkModal();
+        loadHomework();
+      } catch (e) {
+        showToast(e.message || '操作失败', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = editingId ? '保存修改' : '发布作业';
+      }
+    }
+
+    // ============================================================
+    // 链接管理
+    // ============================================================
     function addLink() {
       const name = document.getElementById('linkName').value.trim();
       const url = document.getElementById('linkUrl').value.trim();
-      if (!url) {
-        showToast('请输入链接地址', 'error');
-        return;
-      }
+      if (!url) { showToast('请输入链接地址', 'error'); return; }
+      try { new URL(url); } catch (_) { showToast('请输入有效的URL', 'error'); return; }
       currentLinks.push({ name: name || url, url });
       document.getElementById('linkName').value = '';
       document.getElementById('linkUrl').value = '';
       renderLinks();
     }
 
-    function removeLink(index) {
-      currentLinks.splice(index, 1);
-      renderLinks();
-    }
+    function removeLink(index) { currentLinks.splice(index, 1); renderLinks(); }
 
     function renderLinks() {
       const container = document.getElementById('linksList');
-      if (!currentLinks || currentLinks.length === 0) {
-        container.innerHTML = '';
-        return;
-      }
-      container.innerHTML = currentLinks.map((l, i) => `
+      if (!currentLinks.length) { safeSetHTML(container, ''); return; }
+      safeSetHTML(container, currentLinks.map((l, i) => `
         <div class="link-item-edit">
-          <span style="flex:1">🔗 ${l.name}</span>
+          <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🔗 ${escapeHtml(l.name)}</span>
           <button type="button" class="btn btn-outline btn-sm" onclick="removeLink(${i})">删除</button>
         </div>
-      `).join('');
+      `).join(''));
     }
 
+    // ============================================================
+    // 文件上传（带进度条）
+    // ============================================================
     function initUpload() {
       const area = document.getElementById('uploadArea');
+      area.addEventListener('click', (e) => {
+        if (e.target.closest('.btn') || e.target.closest('button')) return;
+        document.getElementById('fileInput').click();
+      });
       area.addEventListener('dragover', (e) => { e.preventDefault(); area.classList.add('dragover'); });
       area.addEventListener('dragleave', () => area.classList.remove('dragover'));
       area.addEventListener('drop', (e) => {
@@ -895,81 +1155,123 @@
 
     async function handleFileUpload(files) {
       for (const file of files) {
+        if (file.size > 50 * 1024 * 1024) {
+          showToast(`${escapeHtml(file.name)} 超过50MB限制`, 'error');
+          continue;
+        }
+        const tempId = 'upload_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+        addUploadProgressUI(tempId, file.name, file.size);
+
         try {
-          const data = await API.uploadFile(file);
-          if (data.success) {
+          const data = await uploadWithProgress(file, tempId);
+          if (data && data.success) {
             currentAttachments.push(data.data);
+            markUploadDone(tempId);
+          } else {
+            markUploadError(tempId);
+            showToast(`上传 ${escapeHtml(file.name)} 失败`, 'error');
           }
         } catch (e) {
-          showToast(`上传 ${file.name} 失败`, 'error');
+          markUploadError(tempId);
+          showToast(`上传 ${escapeHtml(file.name)} 失败: ${escapeHtml(e.message)}`, 'error');
         }
       }
       renderAttachments();
+      document.getElementById('filePreviewArea').innerHTML = '';
+      document.getElementById('fileInput').value = '';
     }
 
-    function removeAttachment(index) {
-      currentAttachments.splice(index, 1);
-      renderAttachments();
+    function uploadWithProgress(file, tempId) {
+      return new Promise((resolve, reject) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/upload');
+        if (API.token) xhr.setRequestHeader('Authorization', `Bearer ${API.token}`);
+
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const pct = Math.round((e.loaded / e.total) * 100);
+            updateUploadProgress(tempId, pct);
+          }
+        };
+
+        xhr.onload = () => {
+          try { resolve(JSON.parse(xhr.responseText)); }
+          catch (_) { reject(new Error('响应解析失败')); }
+        };
+        xhr.onerror = () => reject(new Error('网络错误'));
+        xhr.send(formData);
+      });
     }
+
+    function addUploadProgressUI(tempId, name, size) {
+      const container = document.getElementById('uploadedFiles');
+      const div = document.createElement('div');
+      div.id = tempId;
+      div.className = 'uploaded-file';
+      div.innerHTML = `
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;justify-content:space-between;gap:8px">
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">📎 ${escapeHtml(name)}</span>
+            <span class="upload-pct" style="font-size:12px;color:var(--text-muted);flex-shrink:0">0%</span>
+          </div>
+          <div class="file-progress"><div class="file-progress-fill" style="width:0%"></div></div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${formatFileSize(size)}</div>
+        </div>`;
+      container.appendChild(div);
+    }
+
+    function updateUploadProgress(tempId, pct) {
+      const el = document.getElementById(tempId);
+      if (!el) return;
+      const fill = el.querySelector('.file-progress-fill');
+      const label = el.querySelector('.upload-pct');
+      if (fill) fill.style.width = pct + '%';
+      if (label) label.textContent = pct + '%';
+    }
+
+    function markUploadDone(tempId) {
+      const el = document.getElementById(tempId);
+      if (!el) return;
+      const fill = el.querySelector('.file-progress-fill');
+      if (fill) { fill.style.width = '100%'; fill.classList.add('success'); }
+      const label = el.querySelector('.upload-pct');
+      if (label) label.textContent = '✅';
+    }
+
+    function markUploadError(tempId) {
+      const el = document.getElementById(tempId);
+      if (!el) return;
+      const fill = el.querySelector('.file-progress-fill');
+      if (fill) fill.classList.add('danger');
+      const label = el.querySelector('.upload-pct');
+      if (label) label.textContent = '❌';
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    function removeAttachment(index) { currentAttachments.splice(index, 1); renderAttachments(); }
 
     function renderAttachments() {
       const container = document.getElementById('uploadedFiles');
-      if (!currentAttachments || currentAttachments.length === 0) {
-        container.innerHTML = '';
-        return;
-      }
-      container.innerHTML = currentAttachments.map((a, i) => `
+      if (!currentAttachments.length) { safeSetHTML(container, ''); return; }
+      safeSetHTML(container, currentAttachments.map((a, i) => `
         <div class="uploaded-file">
-          <span>📎 ${a.name}</span>
+          <span>📎 ${escapeHtml(a.name || a.filename || '文件')}</span>
           <button type="button" class="btn btn-outline btn-sm" onclick="removeAttachment(${i})">移除</button>
         </div>
-      `).join('');
+      `).join(''));
     }
 
-    async function saveHomework() {
-      const gradeId = document.getElementById('hwGrade').value;
-      const classId = document.getElementById('hwClass').value;
-      const subjectId = document.getElementById('hwSubject').value;
-      const subjectName = document.getElementById('hwSubject').selectedOptions[0]?.textContent;
-      const title = document.getElementById('hwTitle').value.trim();
-      const content = document.getElementById('hwContent').value.trim();
-      const deadline = document.getElementById('hwDeadline').value;
-
-      if (!gradeId || !classId || !title || !content) {
-        showToast('请填写必填项（带*的字段）', 'error');
-        return;
-      }
-
-      const payload = {
-        gradeId: gradeId,
-        classId: classId,
-        subjectId: subjectId || null,
-        subjectName: subjectId ? subjectName : '其他',
-        title,
-        content,
-        deadline: deadline || null,
-        links: currentLinks,
-        attachments: currentAttachments
-      };
-
-      try {
-        if (editingId) {
-          await API.put(`/api/homework/${editingId}`, payload);
-          showToast('作业更新成功 ✅', 'success');
-        } else {
-          await API.post('/api/homework', payload);
-          showToast('作业发布成功 ✅', 'success');
-        }
-        closeHomeworkModal();
-        loadHomework();
-      } catch (e) {
-        showToast(e.message, 'error');
-      }
-    }
-
-    function editHomework(id) {
-      openHomeworkModal(id);
-    }
+    // ============================================================
+    // 编辑/查看/删除 作业
+    // ============================================================
+    function editHomework(id) { openHomeworkModal(id); }
 
     async function deleteHomework(id) {
       if (!await showModal({ title: '确认删除', content: '确定要删除这份作业吗？此操作不可恢复。' })) return;
@@ -977,52 +1279,327 @@
         await API.delete(`/api/homework/${id}`);
         showToast('删除成功', 'success');
         loadHomework();
-      } catch (e) {
-        showToast(e.message, 'error');
-      }
+      } catch (e) { showToast(e.message || '删除失败', 'error'); }
     }
 
     function viewHomework(id) {
       const gradeId = document.getElementById('gradeFilter').value || '';
       const classId = document.getElementById('classFilter').value || '';
-      window.open(`/student?gradeId=${gradeId}&classId=${classId}#${id}`, '_blank');
+      window.open(`/student?gradeId=${encodeURIComponent(gradeId)}&classId=${encodeURIComponent(classId)}#${id}`, '_blank');
     }
 
+    // ============================================================
+    // 作业复制
+    // ============================================================
+    function openCopyModal(id) {
+      document.getElementById('copySourceId').value = id;
+      document.getElementById('copyGrade').value = '';
+      document.getElementById('copyClass').innerHTML = '<option value="">请先选择年级</option>';
+      document.getElementById('copyModal').style.display = 'flex';
+    }
+
+    function closeCopyModal() { document.getElementById('copyModal').style.display = 'none'; }
+
+    async function confirmCopy() {
+      const sourceId = document.getElementById('copySourceId').value;
+      const targetClassId = document.getElementById('copyClass').value;
+      if (!targetClassId) { showToast('请选择目标班级', 'error'); return; }
+
+      try {
+        const data = await API.get(`/api/homework/${sourceId}`);
+        const h = data.data;
+        const targetGradeId = document.getElementById('copyGrade').value;
+        const targetClassName = document.getElementById('copyClass').selectedOptions[0]?.textContent || '';
+
+        await API.post('/api/homework', {
+          gradeId: targetGradeId,
+          classId: targetClassId,
+          subjectId: h.subject_id || h.subjectId || null,
+          subjectName: h.subject_name || h.subjectName || '其他',
+          title: h.title,
+          content: h.content,
+          deadline: h.deadline || null,
+          links: h.links || [],
+          attachments: h.attachments || []
+        });
+        showToast(`已复制到 ${escapeHtml(targetClassName)} ✅`, 'success');
+        closeCopyModal();
+        loadHomework();
+      } catch (e) { showToast(e.message || '复制失败', 'error'); }
+    }
+
+    // ============================================================
+    // 批量操作
+    // ============================================================
+    function toggleBatchMode() {
+      batchMode = !batchMode;
+      selectedIds.clear();
+      document.getElementById('thCheck').style.display = batchMode ? '' : 'none';
+      document.getElementById('batchBar').classList.toggle('show', batchMode);
+      document.getElementById('batchToggleBtn').textContent = batchMode ? '✖️ 取消批量' : '☑️ 批量操作';
+      updateBatchCount();
+      applyFiltersAndRender();
+    }
+
+    function toggleAllChecks(el) {
+      const checkboxes = document.querySelectorAll('#homeworkTableBody .row-check');
+      checkboxes.forEach(cb => {
+        const row = cb.closest('tr');
+        const id = row?.dataset.id;
+        if (id) { cb.checked = el.checked; if (el.checked) selectedIds.add(id); else selectedIds.delete(id); }
+      });
+      updateBatchCount();
+    }
+
+    function toggleRowCheck(id, checked) {
+      if (checked) selectedIds.add(id); else selectedIds.delete(id);
+      updateBatchCount();
+    }
+
+    function updateBatchCount() {
+      document.getElementById('batchCount').textContent = selectedIds.size;
+    }
+
+    async function batchDelete() {
+      if (selectedIds.size === 0) { showToast('请先选择作业', 'error'); return; }
+      if (!await showModal({ title: '批量删除', content: `确定要删除选中的 ${selectedIds.size} 份作业吗？此操作不可恢复。` })) return;
+
+      let success = 0, fail = 0;
+      for (const id of selectedIds) {
+        try { await API.delete(`/api/homework/${id}`); success++; } catch (_) { fail++; }
+      }
+      showToast(`删除完成：成功 ${success}，失败 ${fail}`, fail > 0 ? 'error' : 'success');
+      toggleBatchMode();
+      loadHomework();
+    }
+
+    function batchExport() {
+      if (selectedIds.size === 0) { showToast('请先选择作业', 'error'); return; }
+      const selected = allHomework.filter(h => selectedIds.has(String(h.id)));
+      let text = '===== 作业汇总 =====\n\n';
+      selected.forEach((h, i) => {
+        text += `${i + 1}. [${h.subject_name || h.subjectName || '其他'}] ${h.title}\n`;
+        text += `   班级：${h.grade_name || h.gradeName || ''} ${h.class_name || h.className || ''}\n`;
+        text += `   时间：${formatDate(h.created_at)}\n`;
+        text += `   内容：${h.content || ''}\n`;
+        if (h.deadline) text += `   截止：${formatDate(h.deadline)}\n`;
+        text += '\n';
+      });
+
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `作业汇总_${formatDate(new Date().toISOString())}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast(`已导出 ${selected.length} 条作业`, 'success');
+    }
+
+    // ============================================================
+    // 模板系统
+    // ============================================================
+    function getTemplates() { return Storage.get(TEMPLATE_KEY, []); }
+
+    function saveTemplates(tpls) { Storage.set(TEMPLATE_KEY, tpls); }
+
+    function openTemplatePanel() {
+      document.getElementById('templatePanel').classList.add('open');
+      document.getElementById('templateBackdrop').classList.add('show');
+      renderTemplates();
+    }
+
+    function closeTemplatePanel() {
+      document.getElementById('templatePanel').classList.remove('open');
+      document.getElementById('templateBackdrop').classList.remove('show');
+    }
+
+    function renderTemplates() {
+      const tpls = getTemplates();
+      const kw = (document.getElementById('templateSearch')?.value || '').toLowerCase();
+      const filtered = kw ? tpls.filter(t => t.name.toLowerCase().includes(kw)) : tpls;
+      const container = document.getElementById('templateList');
+
+      if (!filtered.length) {
+        safeSetHTML(container, `<div class="empty-state" style="padding:40px 10px"><div class="empty-icon">📋</div><div class="empty-text">${kw ? '没有匹配的模板' : '暂无模板，发布作业时可保存为模板'}</div></div>`);
+        return;
+      }
+
+      safeSetHTML(container, filtered.map((t, i) => `
+        <div class="template-item" onclick="loadTemplate(${i})">
+          <div class="template-item-name">${escapeHtml(t.name)}</div>
+          <div class="template-item-meta">${escapeHtml(t.subjectName || '其他')} · ${escapeHtml(t.className || '')}</div>
+          <div class="template-item-actions">
+            <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();renameTemplate(${i})">重命名</button>
+            <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();deleteTemplate(${i})" style="color:var(--danger)">删除</button>
+          </div>
+        </div>
+      `).join(''));
+    }
+
+    function saveAsTemplate() {
+      const title = document.getElementById('hwTitle').value.trim();
+      const content = document.getElementById('hwContent').value.trim();
+      if (!title) { showToast('请先填写作业标题', 'error'); return; }
+
+      const tplName = prompt('请输入模板名称：', title);
+      if (!tplName) return;
+
+      const tpls = getTemplates();
+      tpls.push({
+        name: tplName.trim(),
+        subjectId: document.getElementById('hwSubject').value,
+        subjectName: document.getElementById('hwSubject').selectedOptions[0]?.textContent || '其他',
+        className: document.getElementById('hwClass').selectedOptions[0]?.textContent || '',
+        title, content,
+        deadline: document.getElementById('hwDeadline').value,
+        links: [...currentLinks],
+        attachments: [...currentAttachments]
+      });
+      saveTemplates(tpls);
+      showToast('模板已保存 ✅', 'success');
+    }
+
+    function loadTemplate(index) {
+      const tpls = getTemplates();
+      const t = tpls[index];
+      if (!t) return;
+
+      document.getElementById('hwTitle').value = t.title || '';
+      document.getElementById('hwContent').value = t.content || '';
+      document.getElementById('hwDeadline').value = t.deadline || '';
+      if (t.subjectId) document.getElementById('hwSubject').value = t.subjectId;
+      currentLinks = t.links ? [...t.links] : [];
+      currentAttachments = t.attachments ? [...t.attachments] : [];
+      renderLinks();
+      renderAttachments();
+      closeTemplatePanel();
+      showToast('模板已加载', 'success');
+    }
+
+    function renameTemplate(index) {
+      const tpls = getTemplates();
+      const newName = prompt('请输入新名称：', tpls[index]?.name);
+      if (!newName || !newName.trim()) return;
+      tpls[index].name = newName.trim();
+      saveTemplates(tpls);
+      renderTemplates();
+      showToast('已重命名', 'success');
+    }
+
+    function deleteTemplate(index) {
+      const tpls = getTemplates();
+      tpls.splice(index, 1);
+      saveTemplates(tpls);
+      renderTemplates();
+      showToast('模板已删除', 'success');
+    }
+
+    // ============================================================
+    // 草稿系统
+    // ============================================================
+    function saveDraft() {
+      const draft = {
+        gradeId: document.getElementById('hwGrade').value,
+        classId: document.getElementById('hwClass').value,
+        subjectId: document.getElementById('hwSubject').value,
+        title: document.getElementById('hwTitle').value,
+        content: document.getElementById('hwContent').value,
+        deadline: document.getElementById('hwDeadline').value,
+        links: currentLinks,
+        attachments: currentAttachments,
+        savedAt: new Date().toISOString()
+      };
+      Storage.set(DRAFT_KEY, draft);
+      showToast('草稿已保存 💾', 'success');
+    }
+
+    function checkDraft() {
+      const draft = Storage.get(DRAFT_KEY, null);
+      if (!draft || !draft.title) return;
+      const banner = document.getElementById('draftBanner');
+      banner.style.display = 'flex';
+      banner.style.alignItems = 'center';
+    }
+
+    function hideDraftBanner() {
+      document.getElementById('draftBanner').style.display = 'none';
+    }
+
+    function loadDraft() {
+      const draft = Storage.get(DRAFT_KEY, null);
+      if (!draft) return;
+
+      openHomeworkModal();
+      setTimeout(() => {
+        if (draft.gradeId) {
+          document.getElementById('hwGrade').value = draft.gradeId;
+          loadHwClasses().then(() => {
+            if (draft.classId) document.getElementById('hwClass').value = draft.classId;
+          });
+        }
+        if (draft.subjectId) document.getElementById('hwSubject').value = draft.subjectId;
+        document.getElementById('hwTitle').value = draft.title || '';
+        document.getElementById('hwContent').value = draft.content || '';
+        document.getElementById('hwDeadline').value = draft.deadline || '';
+        currentLinks = draft.links || [];
+        currentAttachments = draft.attachments || [];
+        renderLinks();
+        renderAttachments();
+      }, 100);
+
+      hideDraftBanner();
+      showToast('草稿已恢复', 'success');
+    }
+
+    function discardDraft() {
+      clearDraft();
+      hideDraftBanner();
+      showToast('草稿已丢弃', 'info');
+    }
+
+    function clearDraft() { Storage.remove(DRAFT_KEY); }
+
+    // ============================================================
+    // 公告管理（含编辑）
+    // ============================================================
     async function loadNotices() {
       try {
         const data = await API.get('/api/notices?pageSize=100');
         const list = data.data.list || data.data.notices || [];
         renderNotices(list);
       } catch (e) {
-        console.error(e);
-        document.getElementById('noticeList').innerHTML = '<div class="text-danger">加载公告失败</div>';
+        safeSetHTML(document.getElementById('noticeList'), '<div class="text-danger">加载公告失败</div>');
       }
     }
 
     function renderNotices(list) {
       const container = document.getElementById('noticeList');
-      if (!list || list.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📢</div><div class="empty-text">暂无公告</div></div>';
+      if (!list || !list.length) {
+        safeSetHTML(container, '<div class="empty-state fade-in"><div class="empty-icon">📢</div><div class="empty-text">暂无公告</div></div>');
         return;
       }
-      
-      container.innerHTML = list.map(n => `
-        <div class="notice-card ${n.type === 'urgent' ? 'urgent' : n.type === 'announcement' ? 'announcement' : ''}">
+
+      safeSetHTML(container, list.map(n => {
+        const typeClass = n.type === 'urgent' ? 'urgent' : n.type === 'announcement' ? 'announcement' : '';
+        const badgeClass = n.type === 'urgent' ? 'badge-danger' : n.type === 'announcement' ? 'badge-warning' : 'badge-info';
+        const typeLabel = n.type === 'urgent' ? '紧急' : n.type === 'announcement' ? '重要' : '通知';
+
+        return `<div class="notice-card ${typeClass}">
           <div class="notice-header">
             <div style="display:flex;align-items:center;gap:8px">
-              <span class="badge ${n.type === 'urgent' ? 'badge-danger' : n.type === 'announcement' ? 'badge-warning' : 'badge-info'}">
-                ${n.type === 'urgent' ? '紧急' : n.type === 'announcement' ? '重要' : '通知'}
-              </span>
-              <span class="notice-title">${n.title}</span>
+              <span class="badge ${badgeClass}">${typeLabel}</span>
+              <span class="notice-title">${escapeHtml(n.title)}</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px">
               <span class="notice-time">${formatDateTime(n.created_at)}</span>
-              <button class="btn-icon danger" onclick="deleteNotice('${n.id}')" title="删除">🗑️</button>
+              <button class="btn-icon" onclick="editNotice('${escapeHtml(String(n.id))}')" title="编辑">✏️</button>
+              <button class="btn-icon danger" onclick="deleteNotice('${escapeHtml(String(n.id))}')" title="删除">🗑️</button>
             </div>
           </div>
-          <div class="notice-content">${n.content}</div>
-        </div>
-      `).join('');
+          <div class="notice-content">${escapeHtml(n.content)}</div>
+        </div>`;
+      }).join(''));
     }
 
     async function publishNotice() {
@@ -1033,17 +1610,12 @@
       const gradeId = document.getElementById('noticeGrade').value;
       const classId = document.getElementById('noticeClass').value;
 
-      if (!title || !content) {
-        showToast('请填写标题和内容', 'error');
-        return;
-      }
+      if (!title || !content) { showToast('请填写标题和内容', 'error'); return; }
+      if (title.length > 100) { showToast('标题不能超过100字', 'error'); return; }
 
       try {
         await API.post('/api/notices', {
-          title,
-          content,
-          type,
-          scope,
+          title, content, type, scope,
           gradeId: scope === 'all' ? null : (gradeId || null),
           classId: scope === 'class' ? classId : null,
           isAllGrades: scope === 'all',
@@ -1053,9 +1625,7 @@
         document.getElementById('noticeTitle').value = '';
         document.getElementById('noticeContent').value = '';
         loadNotices();
-      } catch (e) {
-        showToast(e.message, 'error');
-      }
+      } catch (e) { showToast(e.message || '发布失败', 'error'); }
     }
 
     async function deleteNotice(id) {
@@ -1064,20 +1634,65 @@
         await API.delete(`/api/notices/${id}`);
         showToast('删除成功', 'success');
         loadNotices();
-      } catch (e) {
-        showToast(e.message, 'error');
-      }
+      } catch (e) { showToast(e.message || '删除失败', 'error'); }
     }
 
+    function editNotice(id) {
+      const notices = document.querySelectorAll('.notice-card');
+      let target = null;
+      const data = allHomework; // not used here, we search from DOM or re-fetch
+
+      // Fetch notice data by re-loading
+      API.get(`/api/notices?pageSize=100`).then(resp => {
+        const list = resp.data.list || resp.data.notices || [];
+        const n = list.find(x => String(x.id) === String(id));
+        if (!n) { showToast('未找到该公告', 'error'); return; }
+
+        document.getElementById('editNoticeId').value = id;
+        document.getElementById('editNoticeTitle').value = n.title;
+        document.getElementById('editNoticeType').value = n.type;
+        document.getElementById('editNoticeContent').value = n.content;
+        document.getElementById('noticeEditModal').style.display = 'flex';
+      }).catch(e => showToast(e.message || '加载失败', 'error'));
+    }
+
+    function closeNoticeEditModal() {
+      document.getElementById('noticeEditModal').style.display = 'none';
+    }
+
+    async function saveNoticeEdit() {
+      const id = document.getElementById('editNoticeId').value;
+      const title = document.getElementById('editNoticeTitle').value.trim();
+      const type = document.getElementById('editNoticeType').value;
+      const content = document.getElementById('editNoticeContent').value.trim();
+
+      if (!title || !content) { showToast('标题和内容不能为空', 'error'); return; }
+
+      try {
+        await API.put(`/api/notices/${id}`, { title, type, content });
+        showToast('公告已更新 ✅', 'success');
+        closeNoticeEditModal();
+        loadNotices();
+      } catch (e) { showToast(e.message || '更新失败', 'error'); }
+    }
+
+    // ============================================================
+    // Tab 切换
+    // ============================================================
     function switchTab(tab) {
       document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
       document.getElementById('homeworkTab').style.display = tab === 'homework' ? 'block' : 'none';
       document.getElementById('noticeTab').style.display = tab === 'notice' ? 'block' : 'none';
     }
 
+    // ============================================================
+    // 弹窗关闭
+    // ============================================================
     document.addEventListener('click', (e) => {
       if (e.target.classList.contains('modal-overlay')) {
-        closeHomeworkModal();
+        if (e.target.id === 'homeworkModal') closeHomeworkModal();
+        if (e.target.id === 'noticeEditModal') closeNoticeEditModal();
+        if (e.target.id === 'copyModal') closeCopyModal();
       }
     });
 

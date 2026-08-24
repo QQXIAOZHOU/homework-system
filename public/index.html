@@ -6,28 +6,83 @@
   <title>南通市崇川初级中学作业公布站</title>
   <link rel="stylesheet" href="/css/common.css">
   <style>
+    /* ============================================================
+       Hero 区域
+       ============================================================ */
     .hero {
       padding: 48px 0 32px;
       text-align: center;
       position: relative;
+      overflow: hidden;
     }
 
     .hero::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 400px;
-      background: linear-gradient(180deg, var(--primary-soft) 0%, transparent 100%);
+      top: -60px;
+      left: -60px;
+      right: -60px;
+      bottom: -60px;
+      background: linear-gradient(135deg, var(--primary-soft) 0%, rgba(139,92,246,0.06) 50%, transparent 100%);
+      z-index: -2;
+    }
+
+    /* 粒子光斑背景动画 - 纯CSS */
+    .hero-particles {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
       z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      animation: particleFloat linear infinite;
+    }
+
+    .particle:nth-child(1) { width: 6px; height: 6px; background: rgba(75,63,227,0.25); left: 10%; animation-duration: 8s; animation-delay: 0s; }
+    .particle:nth-child(2) { width: 4px; height: 4px; background: rgba(139,92,246,0.3); left: 25%; animation-duration: 12s; animation-delay: 2s; }
+    .particle:nth-child(3) { width: 8px; height: 8px; background: rgba(75,63,227,0.15); left: 40%; animation-duration: 10s; animation-delay: 1s; }
+    .particle:nth-child(4) { width: 5px; height: 5px; background: rgba(111,111,255,0.2); left: 55%; animation-duration: 14s; animation-delay: 3s; }
+    .particle:nth-child(5) { width: 7px; height: 7px; background: rgba(139,92,246,0.18); left: 70%; animation-duration: 9s; animation-delay: 0.5s; }
+    .particle:nth-child(6) { width: 4px; height: 4px; background: rgba(75,63,227,0.22); left: 85%; animation-duration: 11s; animation-delay: 4s; }
+    .particle:nth-child(7) { width: 10px; height: 10px; background: rgba(111,111,255,0.1); left: 15%; animation-duration: 16s; animation-delay: 5s; }
+    .particle:nth-child(8) { width: 6px; height: 6px; background: rgba(139,92,246,0.2); left: 60%; animation-duration: 13s; animation-delay: 2.5s; }
+    .particle:nth-child(9) { width: 3px; height: 3px; background: rgba(75,63,227,0.3); left: 90%; animation-duration: 7s; animation-delay: 1.5s; }
+    .particle:nth-child(10) { width: 5px; height: 5px; background: rgba(111,111,255,0.15); left: 35%; animation-duration: 15s; animation-delay: 6s; }
+
+    @keyframes particleFloat {
+      0% { transform: translateY(400px) scale(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-80px) scale(1); opacity: 0; }
+    }
+
+    /* 光斑 */
+    .hero-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: -1;
+    }
+    .hero-glow-1 { width: 300px; height: 300px; background: rgba(75,63,227,0.08); top: -100px; left: -50px; animation: glowPulse 6s ease-in-out infinite; }
+    .hero-glow-2 { width: 250px; height: 250px; background: rgba(139,92,246,0.06); bottom: -80px; right: -40px; animation: glowPulse 8s ease-in-out infinite 2s; }
+    .hero-glow-3 { width: 200px; height: 200px; background: rgba(34,165,247,0.05); top: 50%; left: 60%; animation: glowPulse 7s ease-in-out infinite 1s; }
+
+    @keyframes glowPulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.3); opacity: 1; }
     }
 
     .school-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 20px;
+      padding: 8px 24px;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-full);
@@ -38,14 +93,21 @@
     }
 
     .hero h1 {
-      font-size: 42px;
+      font-size: 52px;
       font-weight: 800;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--primary) 0%, #8B5CF6 50%, var(--primary-light) 100%);
+      background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: -0.5px;
+      animation: gradientShift 4s ease-in-out infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 100% center; }
     }
 
     .hero .subtitle {
@@ -56,6 +118,209 @@
       line-height: 1.6;
     }
 
+    /* ============================================================
+       公告轮播
+       ============================================================ */
+    .notice-carousel {
+      background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
+      border: 1px solid #FED7AA;
+      border-radius: var(--radius-lg);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      min-height: 52px;
+    }
+
+    [data-theme="dark"] .notice-carousel {
+      background: linear-gradient(135deg, #2D1B0E, #1F150A);
+      border-color: #5C3D1E;
+    }
+
+    .notice-icon-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .notice-icon-wrap .icon-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid rgba(234,88,12,0.3);
+      animation: noticeRingPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes noticeRingPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0; }
+    }
+
+    .notice-ticker-label {
+      background: var(--warning);
+      color: white;
+      padding: 4px 12px;
+      border-radius: var(--radius);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .notice-carousel-inner {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      height: 22px;
+    }
+
+    .notice-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: #92400E;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 0;
+      transform: translateY(100%);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] .notice-slide {
+      color: #FDE68A;
+    }
+
+    .notice-slide.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .notice-slide.exit {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+
+    .notice-pager {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .notice-pager-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(234,88,12,0.25);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .notice-pager-dot.active {
+      background: var(--warning);
+      width: 16px;
+      border-radius: 3px;
+    }
+
+    /* ============================================================
+       今日作业概览
+       ============================================================ */
+    .homework-overview {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .homework-overview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .homework-overview-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .homework-overview-date {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .homework-subjects {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .homework-subjects::-webkit-scrollbar { height: 4px; }
+    .homework-subjects::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .homework-subject-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-light);
+      background: var(--bg-hover);
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .homework-subject-chip:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+      color: inherit;
+    }
+
+    .homework-subject-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .homework-subject-name {
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .homework-subject-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       快捷入口
+       ============================================================ */
     .hero-actions {
       display: flex;
       justify-content: center;
@@ -82,14 +347,36 @@
       text-decoration: none;
       color: inherit;
       display: block;
+      position: relative;
+      overflow: hidden;
     }
 
+    .quick-nav-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+      border-radius: var(--radius-lg);
+    }
+
+    .quick-nav-card:nth-child(1)::before { background: linear-gradient(135deg, rgba(102,126,234,0.06), rgba(118,75,162,0.06)); }
+    .quick-nav-card:nth-child(2)::before { background: linear-gradient(135deg, rgba(240,147,251,0.06), rgba(245,87,108,0.06)); }
+    .quick-nav-card:nth-child(3)::before { background: linear-gradient(135deg, rgba(79,172,254,0.06), rgba(0,242,254,0.06)); }
+    .quick-nav-card:nth-child(4)::before { background: linear-gradient(135deg, rgba(67,233,123,0.06), rgba(56,249,215,0.06)); }
+
+    .quick-nav-card:hover::before { opacity: 1; }
+
     .quick-nav-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
       box-shadow: var(--shadow-lg);
       border-color: var(--primary);
       color: inherit;
     }
+
+    .quick-nav-card > * { position: relative; z-index: 1; }
 
     .quick-nav-icon {
       width: 56px;
@@ -100,12 +387,15 @@
       align-items: center;
       justify-content: center;
       font-size: 28px;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .quick-nav-card:nth-child(1) .quick-nav-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
-    .quick-nav-card:nth-child(2) .quick-nav-icon { background: linear-gradient(135deg, #f093fb, #f5576c); }
-    .quick-nav-card:nth-child(3) .quick-nav-icon { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-    .quick-nav-card:nth-child(4) .quick-nav-icon { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+    .quick-nav-card:hover .quick-nav-icon { transform: scale(1.15); }
+
+    .quick-nav-card:nth-child(1) .quick-nav-icon { background: linear-gradient(135deg, #667eea, #764ba2); box-shadow: 0 4px 16px rgba(102,126,234,0.3); }
+    .quick-nav-card:nth-child(2) .quick-nav-icon { background: linear-gradient(135deg, #f093fb, #f5576c); box-shadow: 0 4px 16px rgba(245,87,108,0.3); }
+    .quick-nav-card:nth-child(3) .quick-nav-icon { background: linear-gradient(135deg, #4facfe, #00f2fe); box-shadow: 0 4px 16px rgba(79,172,254,0.3); }
+    .quick-nav-card:nth-child(4) .quick-nav-icon { background: linear-gradient(135deg, #43e97b, #38f9d7); box-shadow: 0 4px 16px rgba(67,233,123,0.3); }
 
     .quick-nav-title {
       font-size: 16px;
@@ -118,6 +408,44 @@
       color: var(--text-muted);
     }
 
+    /* ============================================================
+       快速统计
+       ============================================================ */
+    .site-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+      padding: 24px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .site-stat-item {
+      text-align: center;
+      padding: 16px;
+    }
+
+    .site-stat-value {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .site-stat-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       年级选择
+       ============================================================ */
     .section {
       margin-bottom: 40px;
     }
@@ -178,6 +506,16 @@
       box-shadow: 0 0 0 3px var(--primary-soft), var(--shadow-lg);
     }
 
+    .grade-deco-icons {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      gap: 4px;
+      opacity: 0.15;
+      font-size: 16px;
+    }
+
     .grade-header {
       display: flex;
       align-items: center;
@@ -236,9 +574,53 @@
       background: var(--primary-soft);
       color: var(--primary);
       border-color: var(--primary);
-      transform: scale(1.02);
+      transform: scale(1.08);
+      box-shadow: var(--shadow-sm);
     }
 
+    /* ============================================================
+       骨架屏 - 年级卡片
+       ============================================================ */
+    .grade-skeleton {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      border: 1px solid var(--border-light);
+    }
+
+    .grade-skeleton-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .grade-skeleton-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-lg);
+    }
+
+    .grade-skeleton-text {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .grade-skeleton-classes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .grade-skeleton-class {
+      height: 44px;
+      border-radius: var(--radius);
+    }
+
+    /* ============================================================
+       特性展示
+       ============================================================ */
     .features {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -249,12 +631,35 @@
 
     .feature-item {
       text-align: center;
-      padding: 20px;
+      padding: 24px 16px;
+      border-radius: var(--radius-lg);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+    }
+
+    .feature-item:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
     }
 
     .feature-icon {
       font-size: 40px;
       margin-bottom: 12px;
+      display: inline-block;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .feature-item:hover .feature-icon {
+      animation: featureBounce 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes featureBounce {
+      0% { transform: scale(1) rotate(0); }
+      30% { transform: scale(1.2) rotate(-5deg); }
+      60% { transform: scale(0.95) rotate(3deg); }
+      100% { transform: scale(1) rotate(0); }
     }
 
     .feature-title {
@@ -269,57 +674,59 @@
       line-height: 1.5;
     }
 
-    .notice-ticker {
-      background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
-      border: 1px solid #FED7AA;
-      border-radius: var(--radius-lg);
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 32px;
-      overflow: hidden;
+    /* ============================================================
+       最近更新时间线
+       ============================================================ */
+    .recent-section {
+      margin-bottom: 40px;
     }
 
-    .notice-ticker-label {
-      background: var(--warning);
-      color: white;
-      padding: 4px 12px;
-      border-radius: var(--radius);
-      font-size: 12px;
+    .recent-timeline-wrap {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-light);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ============================================================
+       页脚
+       ============================================================ */
+    .site-footer {
+      border-top: 1px solid var(--border-light);
+      padding: 32px 0;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .footer-school {
+      font-size: 16px;
       font-weight: 600;
-      white-space: nowrap;
-      flex-shrink: 0;
+      margin-bottom: 8px;
+      color: var(--text-primary);
     }
 
-    .notice-ticker-content {
-      flex: 1;
-      overflow: hidden;
-      white-space: nowrap;
+    .footer-info {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.8;
     }
 
-    .notice-ticker-text {
-      display: inline-block;
-      animation: marquee 20s linear infinite;
-      font-size: 14px;
-      color: #92400E;
+    /* ============================================================
+       数字滚动动画
+       ============================================================ */
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes marquee {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
+    .count-animated {
+      animation: countUp 0.4s ease forwards;
     }
 
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 28px; }
-      .hero .subtitle { font-size: 15px; }
-      .quick-nav { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .grade-selector { grid-template-columns: 1fr; gap: 16px; }
-      .features { grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 24px 0; }
-      .class-grid { grid-template-columns: repeat(3, 1fr); }
-      .quick-nav-card { padding: 20px 16px; }
-    }
-
+    /* ============================================================
+       通用动画
+       ============================================================ */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -328,58 +735,163 @@
     .animate-in {
       animation: fadeIn 0.4s ease forwards;
     }
+
+    /* ============================================================
+       响应式
+       ============================================================ */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 32px; }
+      .hero .subtitle { font-size: 15px; }
+      .quick-nav { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .grade-selector { grid-template-columns: 1fr; gap: 16px; }
+      .features { grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 24px 0; }
+      .class-grid { grid-template-columns: repeat(3, 1fr); }
+      .quick-nav-card { padding: 20px 16px; }
+      .site-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .site-stat-value { font-size: 26px; }
+      .homework-subjects { gap: 8px; }
+      .homework-subject-chip { padding: 8px 12px; }
+      .notice-pager { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 26px; }
+      .site-stats { grid-template-columns: repeat(3, 1fr); }
+      .site-stat-value { font-size: 22px; }
+      .site-stat-label { font-size: 12px; }
+      .features { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
   <header class="header" id="header"></header>
 
   <main class="container">
+    <!-- Hero 区域 -->
     <section class="hero">
+      <!-- 粒子光斑 -->
+      <div class="hero-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+      <div class="hero-glow hero-glow-1"></div>
+      <div class="hero-glow hero-glow-2"></div>
+      <div class="hero-glow hero-glow-3"></div>
+
       <div class="school-badge">🎓 南通市崇川初级中学</div>
       <h1>作业公布站</h1>
       <p class="subtitle">便捷查看每日作业与课程表，支持实时更新推送，让家校沟通更高效、学习更有序</p>
-      
-      <div class="notice-ticker" id="noticeTicker" style="display:none">
-        <span class="notice-ticker-label">📢 公告</span>
-        <div class="notice-ticker-content">
-          <span class="notice-ticker-text" id="noticeText"></span>
+
+      <!-- 公告轮播 -->
+      <div class="notice-carousel" id="noticeCarousel" style="display:none">
+        <div class="notice-icon-wrap">
+          <span class="notice-ticker-label">📢 公告</span>
+          <span class="icon-ring"></span>
         </div>
+        <div class="notice-carousel-inner" id="noticeCarouselInner"></div>
+        <div class="notice-pager" id="noticePager"></div>
       </div>
 
-      <div class="quick-nav">
-        <a href="javascript:void(0)" onclick="scrollToGrades()" class="quick-nav-card">
-          <div class="quick-nav-icon">📚</div>
-          <div class="quick-nav-title">查看作业</div>
-          <div class="quick-nav-desc">选择班级查看作业</div>
-        </a>
-        <a href="/timetable" class="quick-nav-card">
-          <div class="quick-nav-icon">📅</div>
-          <div class="quick-nav-title">课程表</div>
-          <div class="quick-nav-desc">查看班级课程安排</div>
-        </a>
-        <a href="/login" class="quick-nav-card">
-          <div class="quick-nav-icon">🔐</div>
-          <div class="quick-nav-title">教师登录</div>
-          <div class="quick-nav-desc">发布作业和公告</div>
-        </a>
-        <a href="/stats" class="quick-nav-card">
-          <div class="quick-nav-icon">📊</div>
-          <div class="quick-nav-title">数据统计</div>
-          <div class="quick-nav-desc">访问量与使用数据</div>
-        </a>
-      </div>
+      <!-- 快捷入口（未登录：学生/家长入口；已登录：角色入口） -->
+      <div class="quick-nav" id="quickNav"></div>
     </section>
 
+    <!-- 今日作业概览 -->
+    <section class="homework-overview" id="homeworkOverview" style="display:none">
+      <div class="homework-overview-header">
+        <div class="homework-overview-title">📋 今日作业概览</div>
+        <div class="homework-overview-date" id="homeworkDate"></div>
+      </div>
+      <div class="homework-subjects" id="homeworkSubjects"></div>
+    </section>
+
+    <!-- 年级班级选择 -->
     <section class="section" id="gradeSection">
       <div class="section-header">
         <h2 class="section-title">🏫 选择年级和班级</h2>
       </div>
 
       <div class="grade-selector" id="gradeGrid">
-        <div class="loading" style="grid-column:1/-1"><div class="spinner"></div>加载中...</div>
+        <!-- 骨架屏 -->
+        <div class="grade-skeleton" id="skeleton1">
+          <div class="grade-skeleton-header">
+            <div class="skeleton grade-skeleton-icon"></div>
+            <div class="grade-skeleton-text">
+              <div class="skeleton-line" style="width:100px;height:22px"></div>
+              <div class="skeleton-line" style="width:60px;height:14px"></div>
+            </div>
+          </div>
+          <div class="grade-skeleton-classes">
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+          </div>
+        </div>
+        <div class="grade-skeleton" id="skeleton2">
+          <div class="grade-skeleton-header">
+            <div class="skeleton grade-skeleton-icon"></div>
+            <div class="grade-skeleton-text">
+              <div class="skeleton-line" style="width:100px;height:22px"></div>
+              <div class="skeleton-line" style="width:60px;height:14px"></div>
+            </div>
+          </div>
+          <div class="grade-skeleton-classes">
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+          </div>
+        </div>
+        <div class="grade-skeleton" id="skeleton3">
+          <div class="grade-skeleton-header">
+            <div class="skeleton grade-skeleton-icon"></div>
+            <div class="grade-skeleton-text">
+              <div class="skeleton-line" style="width:100px;height:22px"></div>
+              <div class="skeleton-line" style="width:60px;height:14px"></div>
+            </div>
+          </div>
+          <div class="grade-skeleton-classes">
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+            <div class="skeleton grade-skeleton-class"></div>
+          </div>
+        </div>
       </div>
     </section>
 
+    <!-- 快速统计 -->
+    <section class="site-stats" id="siteStats">
+      <div class="site-stat-item">
+        <div class="site-stat-value" data-target="0" id="statTotal">0</div>
+        <div class="site-stat-label">总作业数</div>
+      </div>
+      <div class="site-stat-item">
+        <div class="site-stat-value" data-target="0" id="statToday">0</div>
+        <div class="site-stat-label">今日发布</div>
+      </div>
+      <div class="site-stat-item">
+        <div class="site-stat-value" data-target="0" id="statClasses">0</div>
+        <div class="site-stat-label">活跃班级</div>
+      </div>
+    </section>
+
+    <!-- 特性展示 -->
     <section class="features">
       <div class="feature-item">
         <div class="feature-icon">📱</div>
@@ -402,62 +914,391 @@
         <div class="feature-desc">支持图片文档上传<br>作业资料随时下载</div>
       </div>
     </section>
+
+    <!-- 最近更新时间线 -->
+    <section class="recent-section" id="recentSection" style="display:none">
+      <div class="section-header">
+        <h2 class="section-title">🕐 最近更新</h2>
+      </div>
+      <div class="recent-timeline-wrap">
+        <div class="timeline" id="recentTimeline"></div>
+      </div>
+    </section>
   </main>
+
+  <!-- 页脚 -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-school">南通市崇川初级中学</div>
+      <div class="footer-info">
+        <span id="footerYear"></span> &copy; 南通市崇川初级中学 · 作业公布站<br>
+        <span style="font-size:12px;opacity:0.7">技术支持：校内信息化团队</span>
+      </div>
+    </div>
+  </footer>
 
   <script src="/js/common.js"></script>
   <script>
     let gradesData = [];
+    let siteStats = { total: 0, today: 0, classes: 0 };
+    let noticeIndex = 0;
+    let noticeTimer = null;
+    let notices = [];
 
+    // ============================================================
+    // 初始化
+    // ============================================================
     async function init() {
+      document.getElementById('footerYear').textContent = new Date().getFullYear();
       initHeader('home');
       recordVisit('/');
-      await loadData();
-      loadLatestNotice();
+      renderQuickNav();
+
+      // 并行加载数据
+      await Promise.all([
+        loadData(),
+        loadNotices(),
+        loadHomeworkOverview(),
+        loadRecentUpdates(),
+        loadSiteStats()
+      ]);
     }
 
+    // ============================================================
+    // XSS 防护
+    // ============================================================
+    function esc(str) {
+      return escapeHtml(str);
+    }
+
+    function stripHtml(html) {
+      if (!html) return '';
+      return esc(html.replace(/<[^>]+>/g, ''));
+    }
+
+    // ============================================================
+    // 快捷入口 - 未登录显示学生/家长，已登录显示角色入口
+    // ============================================================
+    function renderQuickNav() {
+      const nav = document.getElementById('quickNav');
+      const user = API.user;
+
+      let entries;
+      if (!user) {
+        entries = [
+          { icon: '📚', title: '查看作业', desc: '选择班级查看作业', action: 'scrollToGrades()' },
+          { icon: '📅', title: '课程表', desc: '查看班级课程安排', href: '/timetable' },
+          { icon: '🎒', title: '学生入口', desc: '学生查看作业', href: '/login' },
+          { icon: '👨‍👩‍👧', title: '家长入口', desc: '家长查看作业', href: '/login' }
+        ];
+      } else if (user.role === 'teacher') {
+        entries = [
+          { icon: '📝', title: '作业管理', desc: '发布和管理作业', href: '/teacher' },
+          { icon: '📅', title: '课程表', desc: '查看课程安排', href: '/timetable' },
+          { icon: '📊', title: '数据统计', desc: '查看使用数据', href: '/stats' },
+          { icon: '📚', title: '查看作业', desc: '浏览各班作业', action: 'scrollToGrades()' }
+        ];
+      } else if (user.role === 'super_admin' || user.role === 'admin') {
+        entries = [
+          { icon: '⚙️', title: '管理后台', desc: '系统管理', href: '/admin' },
+          { icon: '📅', title: '课程表', desc: '查看课程安排', href: '/timetable' },
+          { icon: '📊', title: '数据统计', desc: '查看使用数据', href: '/stats' },
+          { icon: '📚', title: '查看作业', desc: '浏览各班作业', action: 'scrollToGrades()' }
+        ];
+      } else {
+        entries = [
+          { icon: '📚', title: '查看作业', desc: '选择班级查看作业', action: 'scrollToGrades()' },
+          { icon: '📅', title: '课程表', desc: '查看班级课程安排', href: '/timetable' },
+          { icon: '🎒', title: '学生入口', desc: '学生查看作业', href: '/student' },
+          { icon: '👨‍👩‍👧', title: '家长入口', desc: '家长查看作业', href: '/student' }
+        ];
+      }
+
+      nav.innerHTML = entries.map(e => {
+        const hrefAttr = e.href ? `href="${esc(e.href)}"` : `href="javascript:void(0)"`;
+        const clickAttr = e.action ? `onclick="${e.action}"` : '';
+        return `<a ${hrefAttr} ${clickAttr} class="quick-nav-card">
+          <div class="quick-nav-icon">${e.icon}</div>
+          <div class="quick-nav-title">${esc(e.title)}</div>
+          <div class="quick-nav-desc">${esc(e.desc)}</div>
+        </a>`;
+      }).join('');
+    }
+
+    // ============================================================
+    // 加载年级班级数据
+    // ============================================================
     async function loadData() {
       try {
         const data = await API.get('/api/grades/classes/all');
         gradesData = data.data || [];
         renderGrades();
       } catch (e) {
-        document.getElementById('gradeGrid').innerHTML = 
-          '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">😢</div><div class="empty-text">加载数据失败，请刷新重试</div></div>';
+        const grid = document.getElementById('gradeGrid');
+        grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">😢</div><div class="empty-text">加载数据失败，请刷新重试</div></div>';
+        showToast('加载年级数据失败，请检查网络后刷新', 'error');
       }
     }
 
-    async function loadLatestNotice() {
+    // ============================================================
+    // 公告轮播
+    // ============================================================
+    async function loadNotices() {
       try {
-        const data = await API.get('/api/notices?important=true&pageSize=1');
-        if (data.data?.notices?.length > 0) {
-          const notice = data.data.notices[0];
-          document.getElementById('noticeTicker').style.display = 'flex';
-          document.getElementById('noticeText').textContent = `【${notice.title}】${notice.content.replace(/<[^>]+>/g, '').substring(0, 100)}`;
+        const data = await API.get('/api/notices?important=true&pageSize=5');
+        notices = (data.data && data.data.notices) || [];
+        if (notices.length > 0) {
+          initNoticeCarousel();
         }
-      } catch (e) {}
+      } catch (e) {
+        // 公告加载失败静默处理
+      }
     }
 
+    function initNoticeCarousel() {
+      const carousel = document.getElementById('noticeCarousel');
+      const inner = document.getElementById('noticeCarouselInner');
+      const pager = document.getElementById('noticePager');
+
+      carousel.style.display = 'flex';
+
+      // 渲染公告条目
+      inner.innerHTML = notices.map((n, i) => {
+        const text = `【${stripHtml(n.title)}】${stripHtml(n.content).substring(0, 120)}`;
+        return `<div class="notice-slide${i === 0 ? ' active' : ''}" data-index="${i}">${text}</div>`;
+      }).join('');
+
+      // 渲染页码指示器
+      pager.innerHTML = notices.map((_, i) => {
+        return `<span class="notice-pager-dot${i === 0 ? ' active' : ''}" data-index="${i}"></span>`;
+      }).join('');
+
+      // 点击切换
+      pager.querySelectorAll('.notice-pager-dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+          goToNotice(parseInt(dot.dataset.index));
+          resetNoticeTimer();
+        });
+      });
+
+      // 鼠标悬停暂停
+      carousel.addEventListener('mouseenter', () => clearInterval(noticeTimer));
+      carousel.addEventListener('mouseleave', () => startNoticeTimer());
+
+      startNoticeTimer();
+    }
+
+    function startNoticeTimer() {
+      if (notices.length <= 1) return;
+      clearInterval(noticeTimer);
+      noticeTimer = setInterval(() => {
+        noticeIndex = (noticeIndex + 1) % notices.length;
+        goToNotice(noticeIndex);
+      }, 4000);
+    }
+
+    function resetNoticeTimer() {
+      clearInterval(noticeTimer);
+      startNoticeTimer();
+    }
+
+    function goToNotice(idx) {
+      const slides = document.querySelectorAll('.notice-slide');
+      const dots = document.querySelectorAll('.notice-pager-dot');
+
+      slides.forEach((s, i) => {
+        s.classList.remove('active', 'exit');
+        if (i === noticeIndex && i !== idx) {
+          s.classList.add('exit');
+        }
+      });
+
+      noticeIndex = idx;
+      setTimeout(() => {
+        slides[idx].classList.add('active');
+      }, 50);
+
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+
+    // ============================================================
+    // 今日作业概览
+    // ============================================================
+    async function loadHomeworkOverview() {
+      try {
+        const data = await API.get('/api/homework/today');
+        const items = (data.data && data.data.items) || [];
+        if (items.length === 0) {
+          // 尝试备选接口
+          try {
+            const altData = await API.get('/api/homework?pageSize=50&date=' + new Date().toISOString().split('T')[0]);
+            const altItems = (altData.data && altData.data.homework) || altData.data || [];
+            if (altItems.length > 0) {
+              renderHomeworkOverview(altItems);
+            }
+          } catch (e2) {
+            // 备选也失败，静默
+          }
+          return;
+        }
+        renderHomeworkOverview(items);
+      } catch (e) {
+        // 静默处理
+      }
+    }
+
+    function renderHomeworkOverview(items) {
+      const container = document.getElementById('homeworkOverview');
+      const dateEl = document.getElementById('homeworkDate');
+      const subjectsEl = document.getElementById('homeworkSubjects');
+
+      if (!items || items.length === 0) return;
+
+      // 按科目分组统计
+      const subjectMap = {};
+      items.forEach(item => {
+        const name = item.subject_name || item.subjectName || item.subject || '其他';
+        if (!subjectMap[name]) {
+          subjectMap[name] = { count: 0, color: getSubjectColor(name) };
+        }
+        subjectMap[name].count++;
+      });
+
+      const today = new Date();
+      dateEl.textContent = `${today.getMonth() + 1}月${today.getDate()}日`;
+
+      subjectsEl.innerHTML = Object.entries(subjectMap).map(([name, info]) => {
+        return `<div class="homework-subject-chip" onclick="scrollToGrades()">
+          <span class="homework-subject-dot" style="background:${esc(info.color)}"></span>
+          <span class="homework-subject-name">${esc(name)}</span>
+          <span class="homework-subject-count">${info.count}项</span>
+        </div>`;
+      }).join('');
+
+      container.style.display = 'block';
+    }
+
+    // ============================================================
+    // 快速统计 - 数字滚动动画
+    // ============================================================
+    async function loadSiteStats() {
+      try {
+        const data = await API.get('/api/stats/overview');
+        const stats = data.data || {};
+        siteStats.total = stats.totalHomework || stats.total || 0;
+        siteStats.today = stats.todayHomework || stats.today || 0;
+        siteStats.classes = stats.activeClasses || stats.classes || 0;
+      } catch (e) {
+        // 统计加载失败，使用从年级数据推算
+        if (gradesData.length > 0) {
+          siteStats.classes = gradesData.reduce((sum, g) => sum + (g.classes ? g.classes.length : 0), 0);
+        }
+      }
+      animateStats();
+    }
+
+    function animateStats() {
+      animateNumber('statTotal', siteStats.total);
+      animateNumber('statToday', siteStats.today);
+      animateNumber('statClasses', siteStats.classes);
+    }
+
+    function animateNumber(elementId, target) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+
+      const duration = 1200;
+      const startTime = performance.now();
+      const start = 0;
+
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // easeOutExpo
+        const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const value = Math.round(start + (target - start) * eased);
+        el.textContent = value;
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    // ============================================================
+    // 最近更新时间线
+    // ============================================================
+    async function loadRecentUpdates() {
+      try {
+        const data = await API.get('/api/homework?pageSize=5');
+        const items = (data.data && data.data.homework) || data.data || [];
+        if (items.length === 0) return;
+        renderRecentUpdates(items.slice(0, 5));
+      } catch (e) {
+        // 静默处理
+      }
+    }
+
+    function renderRecentUpdates(items) {
+      const section = document.getElementById('recentSection');
+      const timeline = document.getElementById('recentTimeline');
+
+      timeline.innerHTML = items.map((item, i) => {
+        const subject = item.subject_name || item.subjectName || item.subject || '作业';
+        const title = item.title || subject;
+        const className = item.class_name || item.className || '';
+        const time = formatRelativeTime(item.created_at || item.createdAt || item.date);
+        const color = getSubjectColor(subject);
+
+        return `<div class="timeline-item" style="animation-delay:${i * 0.1}s">
+          <div class="timeline-item-content">
+            <div class="timeline-item-time">${esc(time)}</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="subject-tag" style="background:${esc(color)}20;color:${esc(color)}">${esc(subject)}</span>
+              <span style="font-size:14px;font-weight:600;color:var(--text-primary)">${esc(title)}</span>
+            </div>
+            ${className ? `<div style="font-size:13px;color:var(--text-muted);margin-top:4px">${esc(className)}</div>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+
+      section.style.display = 'block';
+    }
+
+    // ============================================================
+    // 渲染年级卡片
+    // ============================================================
     function renderGrades() {
       const grid = document.getElementById('gradeGrid');
       const icons = ['🌱', '🌿', '🌳'];
       const levels = ['初一', '初二', '初三'];
-      
+      const decoIcons = [
+        ['📐', '📏', '✏️'],
+        ['🔬', '🧪', '📊'],
+        ['📖', '🎯', '💡']
+      ];
+
       grid.innerHTML = gradesData.map((grade, index) => {
         const classes = grade.classes || [];
         classes.sort((a, b) => a.class_num - b.class_num);
-        
+
         return `
           <div class="grade-card animate-in" style="animation-delay:${index * 0.1}s" onclick="event.stopPropagation()">
+            <div class="grade-deco-icons">
+              ${(decoIcons[index] || decoIcons[0]).map(d => `<span>${d}</span>`).join('')}
+            </div>
             <div class="grade-header">
-              <div class="grade-icon">${icons[index]}</div>
+              <div class="grade-icon">${icons[index] || '📗'}</div>
               <div>
-                <div class="grade-name">${grade.name}</div>
+                <div class="grade-name">${esc(grade.name)}</div>
                 <div class="grade-count">${classes.length}个班级</div>
               </div>
             </div>
             <div class="class-grid">
               ${classes.map(cls => `
-                <button class="class-btn" data-grade-id="${grade.id}" data-class-id="${cls.id}" data-class-name="${cls.name.replace(/"/g, '&quot;')}">
+                <button class="class-btn" data-grade-id="${grade.id}" data-class-id="${cls.id}" data-class-name="${esc(cls.name)}">
                   ${cls.class_num}班
                 </button>
               `).join('')}
@@ -465,7 +1306,7 @@
           </div>
         `;
       }).join('');
-      
+
       document.querySelectorAll('.class-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const gradeId = btn.dataset.gradeId;
@@ -476,6 +1317,9 @@
       });
     }
 
+    // ============================================================
+    // 辅助函数
+    // ============================================================
     function scrollToGrades() {
       document.getElementById('gradeSection').scrollIntoView({ behavior: 'smooth' });
     }
