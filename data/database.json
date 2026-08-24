@@ -536,6 +536,66 @@
   "homework_submissions": [],
   "visit_stats": [
     {
+      "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
+      "path": "/admin",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "9922e7e0-ac18-4096-b4e4-02b73c55f5bb",
+      "created_at": "2026-08-24T03:50:40.530Z"
+    },
+    {
+      "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "f8875dab-9ebd-40bd-a738-a8673c2eda79",
+      "created_at": "2026-08-24T03:50:07.786Z"
+    },
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "ba7522f5-8642-4da0-984b-307706b9b0a0",
+      "created_at": "2026-08-24T03:49:23.977Z"
+    },
+    {
+      "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "ff7c2e9f-ae6e-4b6d-8378-ba5155ff7060",
+      "created_at": "2026-08-24T03:44:24.119Z"
+    },
+    {
+      "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
+      "path": "/timetable",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "bab800ad-ac28-4fb2-b09a-2089ba206632",
+      "created_at": "2026-08-24T03:44:11.202Z"
+    },
+    {
+      "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
+      "path": "/admin",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "a6110d54-8455-43a7-821e-9d9f0b39bd87",
+      "created_at": "2026-08-24T03:44:00.037Z"
+    },
+    {
       "user_id": "3168aa10-6be3-4f6b-a9e9-10f21523c0e2",
       "path": "/teacher",
       "ip": "::1",
@@ -672,28 +732,18 @@
       "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
       "device_type": "desktop",
       "referer": "http://localhost:5000/",
-      "id": "a6110d54-8455-43a7-821e-9d9f0b39bd87",
-      "created_at": "2026-08-24T03:44:00.037Z"
+      "id": "6f75d6ff-75fb-4eaf-9281-6263af5651aa",
+      "created_at": "2026-08-24T03:51:32.334Z"
     },
     {
-      "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
-      "path": "/timetable",
-      "ip": "::1",
-      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
-      "device_type": "desktop",
-      "referer": "http://localhost:5000/",
-      "id": "bab800ad-ac28-4fb2-b09a-2089ba206632",
-      "created_at": "2026-08-24T03:44:11.202Z"
-    },
-    {
-      "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
+      "user_id": null,
       "path": "/",
       "ip": "::1",
       "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
       "device_type": "desktop",
       "referer": "http://localhost:5000/",
-      "id": "ff7c2e9f-ae6e-4b6d-8378-ba5155ff7060",
-      "created_at": "2026-08-24T03:44:24.119Z"
+      "id": "09465cef-9b39-4a56-a38f-65b4356b6bca",
+      "created_at": "2026-08-24T03:51:37.324Z"
     },
     {
       "user_id": null,
@@ -702,19 +752,11 @@
       "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
       "device_type": "desktop",
       "referer": "http://localhost:5000/",
-      "id": "ba7522f5-8642-4da0-984b-307706b9b0a0",
-      "created_at": "2026-08-24T03:49:23.977Z"
+      "id": "415581d3-4b91-4b34-8d23-1e28d8cbca8c",
+      "created_at": "2026-08-24T03:55:57.969Z"
     }
   ],
   "time_slots": [
-    {
-      "id": "slot-1",
-      "name": "第1节",
-      "start_time": "08:00",
-      "end_time": "08:45",
-      "period_type": "class",
-      "order_num": 1
-    },
     {
       "id": "slot-2",
       "name": "第2节",
@@ -722,14 +764,6 @@
       "end_time": "09:40",
       "period_type": "class",
       "order_num": 2
-    },
-    {
-      "id": "slot-3",
-      "name": "课间操",
-      "start_time": "09:40",
-      "end_time": "10:05",
-      "period_type": "break",
-      "order_num": 3
     },
     {
       "id": "slot-4",
@@ -740,28 +774,12 @@
       "order_num": 4
     },
     {
-      "id": "slot-5",
-      "name": "第4节",
-      "start_time": "11:00",
-      "end_time": "11:45",
-      "period_type": "class",
-      "order_num": 5
-    },
-    {
       "id": "slot-6",
       "name": "午休",
       "start_time": "11:45",
       "end_time": "14:00",
       "period_type": "lunch",
       "order_num": 6
-    },
-    {
-      "id": "slot-7",
-      "name": "第5节",
-      "start_time": "14:00",
-      "end_time": "14:45",
-      "period_type": "class",
-      "order_num": 7
     },
     {
       "id": "slot-8",
@@ -772,14 +790,6 @@
       "order_num": 8
     },
     {
-      "id": "slot-9",
-      "name": "眼保健操",
-      "start_time": "15:40",
-      "end_time": "15:55",
-      "period_type": "break",
-      "order_num": 9
-    },
-    {
       "id": "slot-10",
       "name": "第7节",
       "start_time": "15:55",
@@ -788,12 +798,164 @@
       "order_num": 10
     },
     {
-      "id": "slot-11",
-      "name": "第8节",
-      "start_time": "16:50",
-      "end_time": "17:35",
+      "id": "slot-morning-read",
+      "name": "早读",
+      "start_time": "07:30",
+      "end_time": "08:00",
+      "period_type": "morning_read",
+      "order_num": 1,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.413Z"
+    },
+    {
+      "id": "slot-1",
+      "name": "第一节",
+      "start_time": "08:10",
+      "end_time": "08:55",
       "period_type": "class",
-      "order_num": 11
+      "order_num": 2,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.415Z"
+    },
+    {
+      "id": "slot-break-1",
+      "name": "课间休息",
+      "start_time": "08:55",
+      "end_time": "09:05",
+      "period_type": "break",
+      "order_num": 3,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.415Z"
+    },
+    {
+      "id": "slot-2",
+      "name": "第二节",
+      "start_time": "09:05",
+      "end_time": "09:50",
+      "period_type": "class",
+      "order_num": 4,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.416Z"
+    },
+    {
+      "id": "slot-big-break",
+      "name": "大课间",
+      "start_time": "09:50",
+      "end_time": "10:20",
+      "period_type": "break",
+      "order_num": 5,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.416Z"
+    },
+    {
+      "id": "slot-3",
+      "name": "第三节",
+      "start_time": "10:20",
+      "end_time": "11:05",
+      "period_type": "class",
+      "order_num": 6,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.417Z"
+    },
+    {
+      "id": "slot-break-2",
+      "name": "课间休息",
+      "start_time": "11:05",
+      "end_time": "11:15",
+      "period_type": "break",
+      "order_num": 7,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.417Z"
+    },
+    {
+      "id": "slot-4",
+      "name": "第四节",
+      "start_time": "11:15",
+      "end_time": "12:00",
+      "period_type": "class",
+      "order_num": 8,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.417Z"
+    },
+    {
+      "id": "slot-lunch",
+      "name": "午休",
+      "start_time": "12:00",
+      "end_time": "14:00",
+      "period_type": "lunch",
+      "order_num": 9,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.418Z"
+    },
+    {
+      "id": "slot-5",
+      "name": "第五节",
+      "start_time": "14:00",
+      "end_time": "14:45",
+      "period_type": "class",
+      "order_num": 10,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.418Z"
+    },
+    {
+      "id": "slot-break-3",
+      "name": "课间休息",
+      "start_time": "14:45",
+      "end_time": "14:55",
+      "period_type": "break",
+      "order_num": 11,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.419Z"
+    },
+    {
+      "id": "slot-6",
+      "name": "第六节",
+      "start_time": "14:55",
+      "end_time": "15:40",
+      "period_type": "class",
+      "order_num": 12,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.419Z"
+    },
+    {
+      "id": "slot-break-4",
+      "name": "课间休息",
+      "start_time": "15:40",
+      "end_time": "15:50",
+      "period_type": "break",
+      "order_num": 13,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.420Z"
+    },
+    {
+      "id": "slot-7",
+      "name": "第七节",
+      "start_time": "15:50",
+      "end_time": "16:35",
+      "period_type": "class",
+      "order_num": 14,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.420Z"
+    },
+    {
+      "id": "slot-break-5",
+      "name": "课间休息",
+      "start_time": "16:35",
+      "end_time": "16:45",
+      "period_type": "break",
+      "order_num": 15,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.420Z"
+    },
+    {
+      "id": "slot-8",
+      "name": "第八节",
+      "start_time": "16:45",
+      "end_time": "17:30",
+      "period_type": "class",
+      "order_num": 16,
+      "is_active": true,
+      "created_at": "2026-08-24T03:54:55.421Z"
     }
   ],
   "timetables": [],

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
+const db = require('../database/init');
 
 function generateId() {
   return uuidv4();
@@ -96,7 +97,6 @@ function createTimePoint(startTime, endTime, type = 0, subjectId = null) {
 
 router.get('/slots', (req, res) => {
   try {
-    const db = req.app.get('db');
     const slots = db.query('time_slots', { is_active: true }).sort((a, b) => a.order_num - b.order_num);
     res.json({
       success: true,
@@ -116,7 +116,6 @@ router.get('/slots', (req, res) => {
 
 router.post('/slots', (req, res) => {
   try {
-    const db = req.app.get('db');
     const { name, startTime, endTime, periodType = 'class', orderNum } = req.body;
     if (!name || !startTime || !endTime) {
       return res.status(400).json({ success: false, message: '请填写完整信息' });
@@ -140,7 +139,6 @@ router.post('/slots', (req, res) => {
 
 router.put('/slots/:id', (req, res) => {
   try {
-    const db = req.app.get('db');
     const { name, startTime, endTime, periodType, orderNum } = req.body;
     const update = {};
     if (name) update.name = name;
@@ -148,7 +146,7 @@ router.put('/slots/:id', (req, res) => {
     if (endTime) update.end_time = endTime;
     if (periodType) update.period_type = periodType;
     if (orderNum) update.order_num = orderNum;
-    db.update('time_slots', { id: req.params.id }, update);
+    db.update('time_slots', req.params.id, update);
     res.json({ success: true, message: '更新成功' });
   } catch (e) {
     res.status(500).json({ success: false, message: e.message });
@@ -157,9 +155,9 @@ router.put('/slots/:id', (req, res) => {
 
 router.delete('/slots/:id', (req, res) => {
   try {
-    const db = req.app.get('db');
-    db.delete('time_slots', { id: req.params.id });
-    db.delete('timetable_entries', { time_slot_id: req.params.id });
+    db.remove('time_slots', req.params.id);
+    const entriesToDelete = db.query('timetable_entries', { time_slot_id: req.params.id });
+    entriesToDelete.forEach(e => db.remove('timetable_entries', e.id));
     res.json({ success: true, message: '删除成功' });
   } catch (e) {
     res.status(500).json({ success: false, message: e.message });
@@ -168,7 +166,6 @@ router.delete('/slots/:id', (req, res) => {
 
 router.get('/list', (req, res) => {
   try {
-    const db = req.app.get('db');
     const { classId } = req.query;
     let timetables = db.query('timetables');
     if (classId) {
@@ -189,17 +186,24 @@ router.get('/list', (req, res) => {
 
 router.get('/class/:classId', (req, res) => {
   try {
-    const db = req.app.get('db');
     const classId = req.params.classId;
+    const slots = db.query('time_slots', { is_active: true }).sort((a, b) => a.order_num - b.order_num);
+    const formattedSlots = slots.map(s => ({
+      ...s,
+      startTime: s.start_time,
+      endTime: s.end_time,
+      periodType: s.period_type,
+      orderNum: s.order_num
+    }));
+    
     let timetable = db.queryOne('timetables', { class_id: classId, is_active: true });
     if (!timetable) {
       return res.json({
         success: true,
         message: '暂无课表',
-        data: { timetable: null, entries: [], slots: [] }
+        data: { timetable: null, entries: [], slots: formattedSlots }
       });
     }
-    const slots = db.query('time_slots', { is_active: true }).sort((a, b) => a.order_num - b.order_num);
     const entries = db.query('timetable_entries', { timetable_id: timetable.id });
     res.json({
       success: true,
@@ -213,13 +217,7 @@ router.get('/class/:classId', (req, res) => {
           weekDay: e.week_day,
           weekType: e.week_type
         })),
-        slots: slots.map(s => ({
-          ...s,
-          startTime: s.start_time,
-          endTime: s.end_time,
-          periodType: s.period_type,
-          orderNum: s.order_num
-        }))
+        slots: formattedSlots
       }
     });
   } catch (e) {
@@ -229,18 +227,18 @@ router.get('/class/:classId', (req, res) => {
 
 router.post('/save', (req, res) => {
   try {
-    const db = req.app.get('db');
     const { classId, gradeId, name, entries } = req.body;
     if (!classId || !gradeId) {
       return res.status(400).json({ success: false, message: '请选择班级' });
     }
     let timetable = db.queryOne('timetables', { class_id: classId });
     if (timetable) {
-      db.update('timetables', { id: timetable.id }, {
+      db.update('timetables', timetable.id, {
         name: name || '默认课表',
         updated_at: new Date().toISOString()
       });
-      db.delete('timetable_entries', { timetable_id: timetable.id });
+      const entriesToDelete = db.query('timetable_entries', { timetable_id: timetable.id });
+      entriesToDelete.forEach(e => db.remove('timetable_entries', e.id));
     } else {
       timetable = db.insert('timetables', {
         id: generateId(),
@@ -277,7 +275,6 @@ router.post('/save', (req, res) => {
 
 router.get('/export/classisland/:classId', (req, res) => {
   try {
-    const db = req.app.get('db');
     const classId = req.params.classId;
     const cls = db.queryOne('classes', { id: classId });
     const grade = db.queryOne('grades', { id: cls?.grade_id });
@@ -405,7 +402,6 @@ router.get('/export/classisland/:classId', (req, res) => {
 
 router.get('/export/manifest/:classId', (req, res) => {
   try {
-    const db = req.app.get('db');
     const classId = req.params.classId;
     const cls = db.queryOne('classes', { id: classId });
     const grade = db.queryOne('grades', { id: cls?.grade_id });
