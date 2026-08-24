@@ -28,6 +28,16 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
+// 禁用HTML文件缓存，确保用户获取最新版本
+app.use((req, res, next) => {
+  if (req.path.endsWith('.html') || req.path === '/' || !path.extname(req.path)) {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+  next();
+});
+
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(UPLOAD_DIR));
 app.use(express.static(path.join(__dirname, 'public')));

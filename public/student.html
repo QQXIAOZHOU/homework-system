@@ -360,12 +360,14 @@
       const urlParams = new URLSearchParams(window.location.search);
       const gradeId = urlParams.get('gradeId');
       const classId = urlParams.get('classId');
-      const className = urlParams.get('className');
       
       if (gradeId && classId) {
-        selectClass(gradeId, classId, decodeURIComponent(className || ''));
+        // 从gradesData中查找班级名称
+        const grade = gradesData.find(g => String(g.id) === String(gradeId));
+        const cls = grade?.classes?.find(c => String(c.id) === String(classId));
+        await selectClass(gradeId, classId, cls?.name || '');
       } else if (API.user?.classId) {
-        selectClass(String(API.user.gradeId), String(API.user.classId), API.user.className || '');
+        await selectClass(String(API.user.gradeId), String(API.user.classId), API.user.className || '');
       }
     }
 
@@ -417,27 +419,44 @@
     async function selectClass(gradeId, classId, className) {
       currentGradeId = String(gradeId);
       currentClassId = String(classId);
-      currentClassName = className;
+      currentClassName = className || '';
       
       const gradeSelect = document.getElementById('gradeSelect');
-      gradeSelect.value = currentGradeId;
-      onGradeChange();
-      
       const classSelect = document.getElementById('classSelect');
+      
+      // 设置年级选中值
+      gradeSelect.value = currentGradeId;
+      
+      // 手动填充班级列表（不调用onGradeChange以避免覆盖currentGradeId）
+      classSelect.innerHTML = '<option value="">请选择班级</option>';
+      const grade = gradesData.find(g => String(g.id) === String(currentGradeId));
+      if (grade?.classes) {
+        [...grade.classes].sort((a, b) => a.class_num - b.class_num).forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = c.name;
+          classSelect.appendChild(opt);
+        });
+      }
+      
+      // 设置班级选中值
       classSelect.value = currentClassId;
       
-      document.getElementById('pageTitle').textContent = className || '作业列表';
+      // 更新页面标题
+      document.getElementById('pageTitle').textContent = currentClassName || '作业列表';
       document.getElementById('pageSubtitle').textContent = '每日作业与公告';
       document.getElementById('filterBar').style.display = 'flex';
       document.getElementById('liveIndicator').style.display = 'inline-flex';
       
+      // 加载数据
       await loadHomeworkAndNotices();
       connectWS();
       
+      // 更新URL（只保留ID参数，避免中文导致代理问题）
       const newUrl = new URL(window.location);
       newUrl.searchParams.set('gradeId', currentGradeId);
       newUrl.searchParams.set('classId', currentClassId);
-      if (className) newUrl.searchParams.set('className', encodeURIComponent(className));
+      newUrl.searchParams.delete('className');
       window.history.replaceState({}, '', newUrl);
     }
 
