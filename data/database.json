@@ -13,8 +13,8 @@
       "email": "a****@**************",
       "status": "active",
       "created_at": "2026-08-23T15:03:59.521Z",
-      "last_login": "2026-08-24T03:37:27.040Z",
-      "updated_at": "2026-08-24T03:37:27.040Z"
+      "last_login": "2026-08-24T03:43:59.285Z",
+      "updated_at": "2026-08-24T03:43:59.285Z"
     },
     {
       "id": "6402bf75-686f-4b3e-82b2-f98d04665437",
@@ -44,7 +44,8 @@
       "email": "",
       "status": "active",
       "created_at": "2026-08-23T15:03:59.523Z",
-      "last_login": null
+      "last_login": "2026-08-24T03:43:15.065Z",
+      "updated_at": "2026-08-24T03:43:15.065Z"
     },
     {
       "id": "1953936d-d54d-4e57-a721-debb4b11cbac",
@@ -105,7 +106,8 @@
       "email": "",
       "status": "active",
       "created_at": "2026-08-23T15:03:59.523Z",
-      "last_login": null
+      "last_login": "2026-08-24T03:42:41.386Z",
+      "updated_at": "2026-08-24T03:42:41.386Z"
     },
     {
       "id": "1fd8dd3d-503c-493e-813d-6dccc27a0448",
@@ -534,14 +536,114 @@
   "homework_submissions": [],
   "visit_stats": [
     {
+      "user_id": "3168aa10-6be3-4f6b-a9e9-10f21523c0e2",
+      "path": "/teacher",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "3fa66dec-75b9-45f9-955b-5e1c7c7a8ef6",
+      "created_at": "2026-08-24T03:43:15.911Z"
+    },
+    {
+      "user_id": "2a7c22c3-4f50-4f76-a8eb-5ba52b8727c1",
+      "path": "/timetable",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "d4e79813-c5cc-43df-a1c7-fa45b4d81c4c",
+      "created_at": "2026-08-24T03:42:54.314Z"
+    },
+    {
+      "user_id": "2a7c22c3-4f50-4f76-a8eb-5ba52b8727c1",
+      "path": "/student",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "0d7f4f88-4dcf-4116-9e78-f461ea8dfd09",
+      "created_at": "2026-08-24T03:42:53.509Z"
+    },
+    {
+      "user_id": "2a7c22c3-4f50-4f76-a8eb-5ba52b8727c1",
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "64483c4f-7697-49f4-98b7-1dd9be21e807",
+      "created_at": "2026-08-24T03:42:50.943Z"
+    },
+    {
+      "user_id": "2a7c22c3-4f50-4f76-a8eb-5ba52b8727c1",
+      "path": "/student",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "fc873067-773d-4855-83ca-44c132a746dd",
+      "created_at": "2026-08-24T03:42:42.152Z"
+    },
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "b2c56ee5-9113-4ed8-99af-a3ee207f8ddb",
+      "created_at": "2026-08-24T03:42:18.913Z"
+    },
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "cc679ecb-9703-4a1a-bf1d-bae11a2b3ac8",
+      "created_at": "2026-08-24T03:42:14.551Z"
+    },
+    {
+      "user_id": null,
+      "path": "/timetable",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "fb335d83-9405-4fcf-a50f-0505f191fada",
+      "created_at": "2026-08-24T03:42:02.740Z"
+    },
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "ef77ad8b-d220-4770-b30e-bfcb54c079f3",
+      "created_at": "2026-08-24T03:42:01.003Z"
+    },
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "efe455bf-9eac-405b-9463-fa1dcb053647",
+      "created_at": "2026-08-24T03:41:48.672Z"
+    },
+    {
       "user_id": null,
       "path": "/",
       "ip": "::1",
       "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
       "device_type": "desktop",
       "referer": "http://localhost:5000/",
-      "id": "8d4d8b52-a401-4342-a85b-963276827cf4",
-      "created_at": "2026-08-24T03:37:37.004Z"
+      "id": "e825c1b0-9983-4d5d-834d-2df28797c99d",
+      "created_at": "2026-08-24T03:41:03.138Z"
     },
     {
       "user_id": null,
@@ -560,8 +662,38 @@
       "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
       "device_type": "desktop",
       "referer": "http://localhost:5000/",
-      "id": "e825c1b0-9983-4d5d-834d-2df28797c99d",
-      "created_at": "2026-08-24T03:41:03.138Z"
+      "id": "8d4d8b52-a401-4342-a85b-963276827cf4",
+      "created_at": "2026-08-24T03:37:37.004Z"
+    },
+    {
+      "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
+      "path": "/admin",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "a6110d54-8455-43a7-821e-9d9f0b39bd87",
+      "created_at": "2026-08-24T03:44:00.037Z"
+    },
+    {
+      "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
+      "path": "/timetable",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "bab800ad-ac28-4fb2-b09a-2089ba206632",
+      "created_at": "2026-08-24T03:44:11.202Z"
+    },
+    {
+      "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "ff7c2e9f-ae6e-4b6d-8378-ba5155ff7060",
+      "created_at": "2026-08-24T03:44:24.119Z"
     }
   ],
   "time_slots": [
