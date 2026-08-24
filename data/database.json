@@ -13,7 +13,8 @@
       "email": "a****@**************",
       "status": "active",
       "created_at": "2026-08-23T15:03:59.521Z",
-      "last_login": null
+      "last_login": "2026-08-24T03:37:27.040Z",
+      "updated_at": "2026-08-24T03:37:27.040Z"
     },
     {
       "id": "6402bf75-686f-4b3e-82b2-f98d04665437",
@@ -531,7 +532,28 @@
   "homework": [],
   "notices": [],
   "homework_submissions": [],
-  "visit_stats": [],
+  "visit_stats": [
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "8d4d8b52-a401-4342-a85b-963276827cf4",
+      "created_at": "2026-08-24T03:37:37.004Z"
+    },
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "dd4b090c-8ce1-4386-8235-457deec78514",
+      "created_at": "2026-08-24T03:37:41.138Z"
+    }
+  ],
   "time_slots": [
     {
       "id": "slot-1",
