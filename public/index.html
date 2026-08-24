@@ -227,6 +227,9 @@
       transition: var(--transition);
       cursor: pointer;
       border: 1px solid transparent;
+      width: 100%;
+      font-family: inherit;
+      outline: none;
     }
 
     .class-btn:hover {
@@ -454,14 +457,23 @@
             </div>
             <div class="class-grid">
               ${classes.map(cls => `
-                <div class="class-btn" onclick="goToClass('${grade.id}', '${cls.id}', '${encodeURIComponent(cls.name)}')">
+                <button class="class-btn" data-grade-id="${grade.id}" data-class-id="${cls.id}" data-class-name="${cls.name.replace(/"/g, '&quot;')}">
                   ${cls.class_num}班
-                </div>
+                </button>
               `).join('')}
             </div>
           </div>
         `;
       }).join('');
+      
+      document.querySelectorAll('.class-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const gradeId = btn.dataset.gradeId;
+          const classId = btn.dataset.classId;
+          const className = btn.dataset.className;
+          goToClass(gradeId, classId, className);
+        });
+      });
     }
 
     function scrollToGrades() {
@@ -469,7 +481,7 @@
     }
 
     function goToClass(gradeId, classId, className) {
-      window.location.href = `/student?gradeId=${gradeId}&classId=${classId}&className=${className}`;
+      window.location.href = `/student?gradeId=${gradeId}&classId=${classId}&className=${encodeURIComponent(className)}`;
     }
 
     document.addEventListener('DOMContentLoaded', init);

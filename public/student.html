@@ -363,9 +363,9 @@
       const className = urlParams.get('className');
       
       if (gradeId && classId) {
-        setTimeout(() => selectClass(gradeId, classId, decodeURIComponent(className || '')), 100);
+        selectClass(gradeId, classId, decodeURIComponent(className || ''));
       } else if (API.user?.classId) {
-        setTimeout(() => selectClass(API.user.gradeId, API.user.classId, API.user.className || ''), 100);
+        selectClass(String(API.user.gradeId), String(API.user.classId), API.user.className || '');
       }
     }
 
@@ -393,7 +393,7 @@
       currentGradeId = gradeId;
       
       if (gradeId) {
-        const grade = gradesData.find(g => g.id === gradeId);
+        const grade = gradesData.find(g => String(g.id) === String(gradeId));
         if (grade?.classes) {
           [...grade.classes].sort((a,b) => a.class_num - b.class_num).forEach(c => {
             const opt = document.createElement('option');
@@ -408,20 +408,23 @@
     function onClassChange() {
       const classId = document.getElementById('classSelect').value;
       if (classId && currentGradeId) {
-        const grade = gradesData.find(g => g.id === currentGradeId);
-        const cls = grade?.classes?.find(c => c.id === classId);
-        selectClass(currentGradeId, classId, cls?.name || '');
+        const grade = gradesData.find(g => String(g.id) === String(currentGradeId));
+        const cls = grade?.classes?.find(c => String(c.id) === String(classId));
+        selectClass(String(currentGradeId), String(classId), cls?.name || '');
       }
     }
 
     async function selectClass(gradeId, classId, className) {
-      currentGradeId = gradeId;
-      currentClassId = classId;
+      currentGradeId = String(gradeId);
+      currentClassId = String(classId);
       currentClassName = className;
       
-      document.getElementById('gradeSelect').value = gradeId;
+      const gradeSelect = document.getElementById('gradeSelect');
+      gradeSelect.value = currentGradeId;
       onGradeChange();
-      document.getElementById('classSelect').value = classId;
+      
+      const classSelect = document.getElementById('classSelect');
+      classSelect.value = currentClassId;
       
       document.getElementById('pageTitle').textContent = className || '作业列表';
       document.getElementById('pageSubtitle').textContent = '每日作业与公告';
@@ -432,8 +435,8 @@
       connectWS();
       
       const newUrl = new URL(window.location);
-      newUrl.searchParams.set('gradeId', gradeId);
-      newUrl.searchParams.set('classId', classId);
+      newUrl.searchParams.set('gradeId', currentGradeId);
+      newUrl.searchParams.set('classId', currentClassId);
       if (className) newUrl.searchParams.set('className', encodeURIComponent(className));
       window.history.replaceState({}, '', newUrl);
     }
