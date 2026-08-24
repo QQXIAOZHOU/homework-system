@@ -6,82 +6,213 @@
   <title>课程表 - 南通市崇川初级中学作业公布站</title>
   <link rel="stylesheet" href="/css/common.css">
   <style>
-    .timetable-container {
-      padding: 20px 0;
+    :root {
+      --timetable-cell-height: 78px;
+      --timetable-time-col: 120px;
     }
 
-    .page-header-card {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      border-radius: var(--radius-xl);
-      padding: 24px;
+    .timetable-container {
+      padding: 24px 0;
+    }
+
+    .page-hero {
+      position: relative;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      border-radius: 24px;
+      padding: 32px;
       color: white;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: 10%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .page-hero-content {
+      position: relative;
+      z-index: 1;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 20px;
     }
 
-    .page-header-card h1 {
-      font-size: 24px;
-      font-weight: 700;
+    .page-hero h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0 0 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .page-hero p {
+      opacity: 0.92;
       margin: 0;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .page-header-card p {
-      opacity: 0.9;
-      margin: 4px 0 0;
-      font-size: 14px;
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
     }
 
-    .header-actions {
+    .hero-actions {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
     }
 
-    .selectors-bar {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+    .hero-btn {
+      display: inline-flex;
       align-items: center;
-    }
-
-    .selector-group {
-      display: flex;
       gap: 8px;
-      align-items: center;
-    }
-
-    .selector-group label {
+      padding: 12px 22px;
+      border-radius: 14px;
       font-size: 14px;
-      color: var(--text-secondary);
-      font-weight: 500;
-      white-space: nowrap;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      font-family: inherit;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
 
-    .timetable-select {
-      padding: 10px 16px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
+    .hero-btn-white {
+      background: white;
+      color: #667eea;
+    }
+
+    .hero-btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .hero-btn-glass {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .hero-btn-glass:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-2px);
+    }
+
+    .control-panel {
       background: var(--bg-card);
+      border-radius: 20px;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+
+    .selectors-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .selector-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .selector-box label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .custom-select {
+      position: relative;
+    }
+
+    .custom-select select {
+      appearance: none;
+      padding: 10px 40px 10px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
       font-size: 14px;
+      font-weight: 500;
       color: var(--text-primary);
       cursor: pointer;
-      min-width: 140px;
-      transition: var(--transition);
+      min-width: 150px;
+      transition: all 0.2s;
+      font-family: inherit;
     }
 
-    .timetable-select:hover {
+    .custom-select::after {
+      content: '▾';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      pointer-events: none;
+      font-size: 14px;
+    }
+
+    .custom-select select:hover {
       border-color: var(--primary);
     }
 
-    .timetable-select:focus {
+    .custom-select select:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-soft);
+      box-shadow: 0 0 0 4px var(--primary-soft);
+    }
+
+    .selector-divider {
+      width: 1px;
+      height: 36px;
+      background: var(--border);
+    }
+
+    .action-buttons {
+      margin-left: auto;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .btn {
@@ -89,29 +220,30 @@
       align-items: center;
       gap: 6px;
       padding: 10px 18px;
-      border-radius: var(--radius);
+      border-radius: 12px;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       border: none;
-      transition: var(--transition);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
       font-family: inherit;
     }
 
-    .btn-white {
-      background: white;
-      color: var(--primary);
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
 
-    .btn-white:hover {
-      background: rgba(255,255,255,0.9);
-      transform: translateY(-1px);
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
     }
 
     .btn-outline {
-      background: transparent;
-      border: 1px solid var(--border);
+      background: var(--bg);
+      border: 1.5px solid var(--border);
       color: var(--text-secondary);
     }
 
@@ -121,241 +253,711 @@
       background: var(--primary-soft);
     }
 
-    .timetable-wrapper {
-      background: var(--bg-card);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-      overflow-x: auto;
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
 
-    .timetable-table {
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .timetable-card {
+      background: var(--bg-card);
+      border-radius: 24px;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    .timetable-card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-hover) 100%);
+    }
+
+    .timetable-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .timetable-week-indicator {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .timetable-scroll {
+      overflow-x: auto;
+      padding: 0;
+    }
+
+    .timetable-scroll::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .timetable-scroll::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    .timetable-scroll::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .timetable {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      min-width: 900px;
+      min-width: 860px;
     }
 
-    .timetable-table th {
-      background: linear-gradient(135deg, var(--bg-hover) 0%, var(--bg) 100%);
-      padding: 14px 12px;
-      font-weight: 600;
+    .timetable th {
+      padding: 16px 12px;
+      font-weight: 700;
       font-size: 14px;
-      color: var(--text-primary);
-      border-bottom: 2px solid var(--border);
+      color: var(--text-secondary);
       text-align: center;
+      background: var(--bg-hover);
       position: sticky;
       top: 0;
+      z-index: 10;
     }
 
-    .timetable-table th:first-child {
-      width: 130px;
-      border-right: 1px solid var(--border);
+    .timetable th:first-child {
+      width: var(--timetable-time-col);
+      text-align: left;
+      padding-left: 24px;
+      border-right: 1px solid var(--border-light);
     }
 
-    .timetable-table td {
-      padding: 4px;
+    .timetable th .day-name {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .timetable th .day-date {
+      display: block;
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+
+    .timetable th.today {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+    }
+
+    .timetable th.today .day-date {
+      opacity: 0.9;
+    }
+
+    .timetable td {
+      padding: 6px;
       border-bottom: 1px solid var(--border-light);
       border-right: 1px solid var(--border-light);
-      vertical-align: middle;
+      vertical-align: stretch;
       text-align: center;
-      height: 70px;
+      height: var(--timetable-cell-height);
     }
 
-    .timetable-table td:first-child {
-      border-right: 1px solid var(--border);
+    .timetable td:first-child {
+      border-right: 1px solid var(--border-light);
       background: var(--bg-hover);
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-weight: 500;
-      padding: 12px;
-      white-space: nowrap;
+      padding: 8px 24px 8px 24px;
+      vertical-align: middle;
+      text-align: left;
     }
 
-    .time-slot {
+    .time-cell {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
 
-    .time-slot-name {
-      font-weight: 600;
+    .time-cell-name {
+      font-weight: 700;
+      font-size: 13px;
       color: var(--text-primary);
     }
 
-    .time-slot-time {
+    .time-cell-hours {
       font-size: 11px;
-      opacity: 0.8;
+      color: var(--text-secondary);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-weight: 500;
     }
 
-    .subject-cell {
+    .course-cell {
       height: 100%;
-      border-radius: var(--radius);
+      border-radius: 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      cursor: default;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 10px 8px;
+      min-height: 66px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .course-cell.has-course {
       cursor: pointer;
-      transition: var(--transition);
-      padding: 8px;
-      min-height: 62px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    .subject-cell:hover {
-      transform: scale(1.02);
-      box-shadow: var(--shadow);
+    .course-cell.has-course:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      z-index: 5;
     }
 
-    .subject-cell.empty {
+    .course-cell.empty {
       background: var(--bg);
       border: 2px dashed var(--border);
       color: var(--text-muted);
-      font-size: 13px;
+      font-size: 12px;
     }
 
-    .subject-cell.empty:hover {
+    .edit-mode .course-cell.empty {
+      cursor: pointer;
+    }
+
+    .edit-mode .course-cell.empty:hover {
       border-color: var(--primary);
       color: var(--primary);
       background: var(--primary-soft);
+      border-style: solid;
     }
 
-    .subject-name {
+    .course-cell::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--subject-color, var(--primary));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .course-cell.has-course::before {
+      opacity: 1;
+    }
+
+    .course-abbr {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      line-height: 1;
+      letter-spacing: -0.5px;
+    }
+
+    .course-name {
+      font-size: 12px;
       font-weight: 600;
-      font-size: 15px;
+      opacity: 0.9;
       margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
 
-    .subject-teacher {
-      font-size: 11px;
-      opacity: 0.8;
+    .course-teacher {
+      font-size: 10px;
+      opacity: 0.75;
+      font-weight: 500;
+    }
+
+    .break-row td {
+      height: 48px;
+      padding: 0;
+    }
+
+    .break-row td:first-child {
+      background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
     }
 
     .break-cell {
-      background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
-      color: #2E7D32;
-      font-weight: 500;
+      height: 100%;
+      background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 600;
       font-size: 14px;
-      height: 45px !important;
+      color: #166534;
+    }
+
+    .break-icon {
+      font-size: 20px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    .lunch-row td {
+      height: 56px;
+      padding: 0;
+    }
+
+    .lunch-row td:first-child {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     }
 
     .lunch-cell {
-      background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
-      color: #E65100;
-      font-weight: 600;
-      font-size: 15px;
-      height: 60px !important;
+      height: 100%;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      color: #92400e;
     }
 
-    .today-column {
+    .morning-read-row td {
+      height: 44px;
+      padding: 0;
+    }
+
+    .morning-read-row td:first-child {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    }
+
+    .morning-read-cell {
+      height: 100%;
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #1e40af;
+    }
+
+    .today-col .course-cell.has-course {
+      box-shadow: inset 0 0 0 2px var(--primary), 0 2px 8px rgba(102,126,234,0.15);
+    }
+
+    .edit-mode-indicator {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-radius: 12px;
+      color: #92400e;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .edit-mode-indicator.show {
+      display: flex;
+    }
+
+    .edit-mode-indicator .pulse-dot {
+      width: 10px;
+      height: 10px;
+      background: #f59e0b;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.2); }
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .info-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      border: 1px solid var(--border-light);
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      transition: all 0.2s;
+    }
+
+    .info-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .info-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .info-card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .info-card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .info-card-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .info-card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .classisland-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      border-radius: 24px;
+      padding: 28px;
+      color: white;
+      margin-top: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .classisland-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 100%;
+      background: radial-gradient(circle at 70% 50%, rgba(139,92,246,0.3) 0%, transparent 60%);
+    }
+
+    .classisland-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .classisland-banner h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .classisland-banner p {
+      margin: 0;
+      opacity: 0.8;
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 500px;
+    }
+
+    .classisland-btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ci-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      font-family: inherit;
+      text-decoration: none;
+    }
+
+    .ci-btn-primary {
+      background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(139,92,246,0.4);
+    }
+
+    .ci-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(139,92,246,0.5);
+    }
+
+    .ci-btn-secondary {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .ci-btn-secondary:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .slot-manager {
+      background: var(--bg-card);
+      border-radius: 24px;
+      border: 1px solid var(--border-light);
+      padding: 24px;
+      margin-top: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+
+    .slot-manager-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .slot-manager-title {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slot-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .slot-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 18px;
+      background: var(--bg);
+      border-radius: 14px;
+      border: 1px solid var(--border-light);
+      transition: all 0.2s;
+    }
+
+    .slot-item:hover {
+      border-color: var(--primary);
       background: var(--primary-soft);
     }
 
-    .today-column .subject-cell:not(.empty) {
-      box-shadow: inset 0 0 0 2px var(--primary);
+    .slot-item-drag {
+      color: var(--text-muted);
+      cursor: grab;
+      font-size: 18px;
     }
 
-    .edit-mode .subject-cell {
+    .slot-item-time {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-weight: 700;
+      color: var(--primary);
+      min-width: 125px;
+      font-size: 14px;
+    }
+
+    .slot-item-name {
+      flex: 1;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .slot-item-type {
+      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .slot-item-type.class {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .slot-item-type.break {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .slot-item-type.lunch {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .slot-item-type.morning_read {
+      background: #f3e8ff;
+      color: #6b21a8;
+    }
+
+    .slot-item-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
       cursor: pointer;
-      border: 2px solid transparent;
+      transition: all 0.2s;
+      font-size: 16px;
     }
 
-    .edit-mode .subject-cell:hover {
-      border-color: var(--primary);
+    .icon-btn:hover {
+      background: var(--bg-hover);
+    }
+
+    .icon-btn.danger:hover {
+      background: #fee2e2;
+      color: #dc2626;
     }
 
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(15,23,42,0.6);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(8px);
       padding: 20px;
     }
 
     .modal-overlay.show {
       display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .modal {
       background: var(--bg-card);
-      border-radius: var(--radius-xl);
-      padding: 24px;
+      border-radius: 24px;
+      padding: 28px;
       width: 100%;
-      max-width: 450px;
-      box-shadow: var(--shadow-xl);
-      animation: modalIn 0.2s ease;
+      max-width: 480px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      animation: modalSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.95) translateY(10px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
+    @keyframes modalSlideUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .modal-title {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .form-label {
       display: block;
       font-size: 13px;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text-secondary);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .form-input, .form-select {
       width: 100%;
-      padding: 10px 14px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
       background: var(--bg);
       font-size: 14px;
       color: var(--text-primary);
       font-family: inherit;
-      transition: var(--transition);
+      transition: all 0.2s;
       box-sizing: border-box;
     }
 
     .form-input:focus, .form-select:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-soft);
+      box-shadow: 0 0 0 4px var(--primary-soft);
     }
 
     .modal-actions {
       display: flex;
       gap: 10px;
       justify-content: flex-end;
-      margin-top: 24px;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      color: white;
-      box-shadow: 0 2px 8px rgba(75, 63, 227, 0.25);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(75, 63, 227, 0.35);
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-light);
     }
 
     .btn-danger {
-      background: var(--danger);
+      background: #ef4444;
       color: white;
     }
 
     .btn-danger:hover {
-      background: #C53030;
+      background: #dc2626;
+      transform: translateY(-1px);
     }
 
     .btn-secondary {
@@ -367,138 +969,109 @@
       background: var(--border);
     }
 
-    .slot-manager {
-      background: var(--bg-card);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border-light);
-      padding: 20px;
-      margin-top: 20px;
-    }
-
-    .slot-manager-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .subject-quick-pick {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 8px;
       margin-bottom: 16px;
     }
 
-    .slot-manager-title {
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .slot-list {
-      display: grid;
-      gap: 8px;
-    }
-
-    .slot-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
+    .subject-quick-btn {
+      padding: 8px 4px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
       background: var(--bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--border-light);
-    }
-
-    .slot-item-time {
-      font-family: monospace;
-      font-weight: 600;
-      color: var(--primary);
-      min-width: 120px;
-    }
-
-    .slot-item-name {
-      flex: 1;
-      font-weight: 500;
-    }
-
-    .slot-item-type {
       font-size: 12px;
-      padding: 2px 8px;
-      border-radius: var(--radius-full);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      font-family: inherit;
+    }
+
+    .subject-quick-btn:hover {
+      border-color: var(--primary);
       background: var(--primary-soft);
       color: var(--primary);
     }
 
-    .slot-item-type.break {
-      background: #E8F5E9;
-      color: #2E7D32;
-    }
-
-    .slot-item-type.lunch {
-      background: #FFF3E0;
-      color: #E65100;
-    }
-
-    .slot-item-actions {
-      display: flex;
-      gap: 4px;
-    }
-
-    .icon-btn {
-      width: 32px;
-      height: 32px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--radius);
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      transition: var(--transition);
-      font-size: 16px;
-    }
-
-    .icon-btn:hover {
-      background: var(--bg-hover);
-    }
-
-    .icon-btn.danger:hover {
-      background: #FEE2E2;
-      color: var(--danger);
-    }
-
-    .classisland-info {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: var(--radius-xl);
-      padding: 20px;
+    .subject-quick-btn.active {
+      border-color: var(--primary);
+      background: var(--primary);
       color: white;
-      margin-top: 20px;
     }
 
-    .classisland-info h3 {
-      margin: 0 0 8px;
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state-text {
       font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
     }
 
-    .classisland-info p {
-      margin: 0;
-      opacity: 0.9;
+    .empty-state-hint {
       font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .classisland-actions {
-      margin-top: 16px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
     }
 
     @media (max-width: 768px) {
-      .page-header-card {
+      .page-hero {
+        padding: 24px;
+        border-radius: 20px;
+      }
+      .page-hero h1 {
+        font-size: 22px;
+      }
+      .page-hero-content {
         flex-direction: column;
         align-items: flex-start;
       }
-      .selectors-bar {
+      .selectors-row {
         flex-direction: column;
         align-items: stretch;
       }
-      .selector-group {
+      .selector-divider {
+        display: none;
+      }
+      .action-buttons {
+        margin-left: 0;
+        width: 100%;
+      }
+      .action-buttons .btn {
+        flex: 1;
+        justify-content: center;
+      }
+      .control-panel {
+        padding: 16px;
+      }
+      .classisland-content {
         flex-direction: column;
-        align-items: stretch;
+        align-items: flex-start;
+      }
+    }
+
+    @media print {
+      .page-hero, .control-panel, .edit-mode-indicator, .classisland-banner, 
+      .slot-manager, .info-cards, .header {
+        display: none !important;
+      }
+      .timetable-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+      .timetable th, .timetable td {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
       }
     }
   </style>
@@ -508,59 +1081,133 @@
 
   <main class="container">
     <div class="timetable-container">
-      <div class="page-header-card">
-        <div>
-          <h1>📅 课程表管理</h1>
-          <p>查看和编辑各班级课程安排，支持导出 ClassIsland 格式</p>
+      <div class="page-hero">
+        <div class="page-hero-content">
+          <div>
+            <h1>📚 班级课程表</h1>
+            <p>
+              <span class="hero-badge">🏫 南通市崇川初级中学</span>
+              <span class="hero-badge">📅 2024-2025学年</span>
+              <span class="hero-badge" id="currentClassBadge">请选择班级</span>
+            </p>
+          </div>
         </div>
-        <div class="header-actions">
-          <button class="btn btn-white" id="editModeBtn" onclick="toggleEditMode()">✏️ 编辑模式</button>
-          <button class="btn btn-white" onclick="exportClassIsland()">📦 导出ClassIsland</button>
+        <div class="hero-actions">
+          <button class="hero-btn hero-btn-white" id="editModeBtn" onclick="toggleEditMode()">
+            ✏️ 编辑模式
+          </button>
+          <button class="hero-btn hero-btn-glass" onclick="exportClassIsland()">
+            📦 ClassIsland导出
+          </button>
+          <button class="hero-btn hero-btn-glass" onclick="window.print()">
+            🖨️ 打印
+          </button>
         </div>
       </div>
 
-      <div class="selectors-bar">
-        <div class="selector-group">
-          <label>年级：</label>
-          <select class="timetable-select" id="gradeSelect" onchange="onGradeChange()">
-            <option value="">请选择年级</option>
-          </select>
-        </div>
-        <div class="selector-group">
-          <label>班级：</label>
-          <select class="timetable-select" id="classSelect" onchange="onClassChange()">
-            <option value="">请选择班级</option>
-          </select>
-        </div>
-        <div style="flex:1"></div>
-        <button class="btn btn-outline" onclick="showSlotModal()" id="slotBtn" style="display:none">⚙️ 管理时间段</button>
-        <button class="btn btn-primary" onclick="saveTimetable()" id="saveBtn" style="display:none">💾 保存课表</button>
+      <div class="edit-mode-indicator" id="editIndicator">
+        <span class="pulse-dot"></span>
+        编辑模式已开启 — 点击课程单元格可以编辑课程内容
       </div>
 
-      <div class="timetable-wrapper">
-        <table class="timetable-table" id="timetableTable">
-          <thead>
-            <tr>
-              <th>时间</th>
-              <th>周一</th>
-              <th>周二</th>
-              <th>周三</th>
-              <th>周四</th>
-              <th>周五</th>
-            </tr>
-          </thead>
-          <tbody id="timetableBody">
-            <tr><td colspan="7" style="padding:60px;color:var(--text-muted)">请选择班级查看课程表</td></tr>
-          </tbody>
-        </table>
+      <div class="control-panel">
+        <div class="selectors-row">
+          <div class="selector-box">
+            <label>年级</label>
+            <div class="custom-select">
+              <select id="gradeSelect" onchange="onGradeChange()">
+                <option value="">请选择年级</option>
+              </select>
+            </div>
+          </div>
+          <div class="selector-box">
+            <label>班级</label>
+            <div class="custom-select">
+              <select id="classSelect" onchange="onClassChange()">
+                <option value="">请选择班级</option>
+              </select>
+            </div>
+          </div>
+          <div class="selector-divider"></div>
+          <div class="action-buttons">
+            <button class="btn btn-outline" onclick="showSlotModal()" id="slotBtn" style="display:none">
+              ⚙️ 作息管理
+            </button>
+            <button class="btn btn-success" onclick="saveTimetable()" id="saveBtn" style="display:none">
+              💾 保存课表
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div class="classisland-info">
-        <h3>🔗 ClassIsland 集控兼容</h3>
-        <p>本课程表系统支持导出 ClassIsland 格式的档案文件。导出后可直接导入 ClassIsland 课表软件，或部署为静态集控配置供全校教室大屏自动同步。</p>
-        <div class="classisland-actions">
-          <button class="btn btn-white" onclick="exportClassIsland()">📥 下载完整档案包</button>
-          <button class="btn btn-white" onclick="showManifestInfo()">📋 查看集控清单</button>
+      <div class="timetable-card">
+        <div class="timetable-card-header">
+          <div class="timetable-title">
+            <span id="timetableTitle">课程表</span>
+            <span class="timetable-week-indicator" id="weekIndicator">本周</span>
+          </div>
+        </div>
+        <div class="timetable-scroll">
+          <table class="timetable" id="timetableTable">
+            <thead>
+              <tr id="tableHeader"></tr>
+            </thead>
+            <tbody id="timetableBody">
+              <tr>
+                <td colspan="7">
+                  <div class="empty-state">
+                    <div class="empty-state-icon">📅</div>
+                    <div class="empty-state-text">请选择年级和班级查看课程表</div>
+                    <div class="empty-state-hint">选择后即可查看、编辑和导出课程安排</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="info-cards" id="statsCards" style="display:none">
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon" style="background: #dbeafe; color: #1d4ed8;">📖</div>
+            <div class="info-card-title">本周课程总数</div>
+          </div>
+          <div class="info-card-value" id="statCourses">0</div>
+          <div class="info-card-desc">正课节数（不含课间午休）</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon" style="background: #dcfce7; color: #15803d;">🎓</div>
+            <div class="info-card-title">科目数量</div>
+          </div>
+          <div class="info-card-value" id="statSubjects">0</div>
+          <div class="info-card-desc">不同学科种类</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon" style="background: #fef3c7; color: #b45309;">⏰</div>
+            <div class="info-card-title">在校时长</div>
+          </div>
+          <div class="info-card-value" id="statHours">0h</div>
+          <div class="info-card-desc">从早读至放学</div>
+        </div>
+      </div>
+
+      <div class="classisland-banner">
+        <div class="classisland-content">
+          <div>
+            <h3>🔗 ClassIsland 集控兼容</h3>
+            <p>导出的课表文件可直接导入 ClassIsland 软件使用，或部署为静态集控配置，实现全校教室大屏课表自动同步更新。</p>
+          </div>
+          <div class="classisland-btns">
+            <button class="ci-btn ci-btn-primary" onclick="exportClassIsland()">
+              📥 下载档案包
+            </button>
+            <button class="ci-btn ci-btn-secondary" onclick="showManifestInfo()">
+              📋 集控配置
+            </button>
+          </div>
         </div>
       </div>
 
@@ -576,16 +1223,10 @@
 
   <div class="modal-overlay" id="subjectModal">
     <div class="modal">
-      <div class="modal-title" id="subjectModalTitle">设置课程</div>
+      <div class="modal-title" id="subjectModalTitle">📝 设置课程</div>
       <div class="form-group">
-        <label class="form-label">科目</label>
-        <select class="form-select" id="subjectSelect">
-          <option value="">-- 选择科目 --</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">或输入自定义科目</label>
-        <input type="text" class="form-input" id="customSubject" placeholder="如：校本课程">
+        <label class="form-label">快速选择科目</label>
+        <div class="subject-quick-pick" id="quickSubjects"></div>
       </div>
       <div class="form-group">
         <label class="form-label">教师（选填）</label>
@@ -593,6 +1234,7 @@
       </div>
       <div class="modal-actions">
         <button class="btn btn-danger" onclick="clearSubject()" id="clearBtn" style="display:none">🗑️ 清除</button>
+        <div style="flex:1"></div>
         <button class="btn btn-secondary" onclick="closeModal('subjectModal')">取消</button>
         <button class="btn btn-primary" onclick="saveSubject()">确定</button>
       </div>
@@ -601,7 +1243,7 @@
 
   <div class="modal-overlay" id="slotModal">
     <div class="modal">
-      <div class="modal-title" id="slotModalTitle">添加时间段</div>
+      <div class="modal-title" id="slotModalTitle">⏰ 添加时间段</div>
       <div class="form-group">
         <label class="form-label">名称</label>
         <input type="text" class="form-input" id="slotName" placeholder="如：第一节">
@@ -619,9 +1261,10 @@
       <div class="form-group">
         <label class="form-label">类型</label>
         <select class="form-select" id="slotType">
-          <option value="class">上课</option>
-          <option value="break">课间休息</option>
-          <option value="lunch">午休/午饭</option>
+          <option value="class">📚 上课</option>
+          <option value="break">💪 课间休息</option>
+          <option value="lunch">🍱 午休/午饭</option>
+          <option value="morning_read">📖 早读</option>
         </select>
       </div>
       <div class="modal-actions">
@@ -633,12 +1276,12 @@
 
   <div class="modal-overlay" id="manifestModal">
     <div class="modal" style="max-width:600px">
-      <div class="modal-title">📋 ClassIsland 集控清单配置</div>
-      <p style="color:var(--text-secondary);font-size:13px;margin-bottom:16px">将以下文件部署到静态服务器后，在 ClassIsland 集控设置中填入 manifest.json 的 URL 即可。</p>
-      <pre id="manifestContent" style="background:var(--bg);padding:16px;border-radius:var(--radius);font-size:12px;overflow-x:auto;max-height:300px;overflow-y:auto"></pre>
+      <div class="modal-title">📋 ClassIsland 集控配置</div>
+      <p style="color:var(--text-secondary);font-size:13px;margin-bottom:16px;line-height:1.6">将以下 JSON 保存为 <code style="background:var(--bg);padding:2px 8px;border-radius:6px">manifest.json</code> 部署到静态服务器后，在 ClassIsland 集控设置中填入其 URL 即可自动同步。</p>
+      <pre id="manifestContent" style="background:var(--bg);padding:16px;border-radius:12px;font-size:12px;overflow-x:auto;max-height:300px;overflow-y:auto;border:1px solid var(--border-light)"></pre>
       <div class="modal-actions">
         <button class="btn btn-secondary" onclick="closeModal('manifestModal')">关闭</button>
-        <button class="btn btn-primary" onclick="copyManifest()">📋 复制</button>
+        <button class="btn btn-primary" onclick="copyManifest()">📋 复制配置</button>
       </div>
     </div>
   </div>
@@ -654,24 +1297,95 @@
     let currentClassName = '';
     let isEditMode = false;
     let editingCell = null;
+    let selectedSubjectName = '';
 
-    const subjectColors = {};
+    const subjectColors = {
+      '语文': { bg: '#fef2f2', color: '#dc2626', abbr: '语' },
+      '数学': { bg: '#eff6ff', color: '#2563eb', abbr: '数' },
+      '英语': { bg: '#f0fdf4', color: '#16a34a', abbr: '英' },
+      '物理': { bg: '#faf5ff', color: '#9333ea', abbr: '物' },
+      '化学': { bg: '#f0fdfa', color: '#0d9488', abbr: '化' },
+      '生物': { bg: '#ecfdf5', color: '#059669', abbr: '生' },
+      '道德与法治': { bg: '#fefce8', color: '#ca8a04', abbr: '道' },
+      '政治': { bg: '#fefce8', color: '#ca8a04', abbr: '政' },
+      '历史': { bg: '#fff7ed', color: '#ea580c', abbr: '史' },
+      '地理': { bg: '#f0f9ff', color: '#0284c7', abbr: '地' },
+      '体育': { bg: '#fef2f2', color: '#e11d48', abbr: '体' },
+      '音乐': { bg: '#fdf4ff', color: '#c026d3', abbr: '音' },
+      '美术': { bg: '#fff1f2', color: '#e11d48', abbr: '美' },
+      '信息技术': { bg: '#f0f9ff', color: '#0369a1', abbr: '信' },
+      '信息': { bg: '#f0f9ff', color: '#0369a1', abbr: '信' },
+      '自习': { bg: '#f8fafc', color: '#64748b', abbr: '自' },
+      '班会': { bg: '#ecfccb', color: '#65a30d', abbr: '班' },
+      '阅读': { bg: '#fef3c7', color: '#d97706', abbr: '阅' },
+      '书法': { bg: '#f1f5f9', color: '#475569', abbr: '书' }
+    };
+
     const colorPalette = [
-      '#E53935', '#1E88E5', '#43A047', '#8E24AA', '#00897B',
-      '#F4511E', '#6D4C41', '#00ACC1', '#FF7043', '#EC407A',
-      '#AB47BC', '#26A69A', '#5C6BC0', '#78909C', '#EF6C00'
+      { bg: '#fef2f2', color: '#dc2626' },
+      { bg: '#eff6ff', color: '#2563eb' },
+      { bg: '#f0fdf4', color: '#16a34a' },
+      { bg: '#faf5ff', color: '#9333ea' },
+      { bg: '#f0fdfa', color: '#0d9488' },
+      { bg: '#fff7ed', color: '#ea580c' },
+      { bg: '#ecfdf5', color: '#059669' },
+      { bg: '#fefce8', color: '#ca8a04' },
+      { bg: '#f0f9ff', color: '#0284c7' },
+      { bg: '#fdf4ff', color: '#c026d3' },
+      { bg: '#fdf2f8', color: '#db2777' },
+      { bg: '#f5f3ff', color: '#7c3aed' },
+      { bg: '#ecfeff', color: '#0891b2' },
+      { bg: '#fef9c3', color: '#a16207' },
+      { bg: '#f1f5f9', color: '#475569' }
     ];
 
-    function getSubjectColor(name) {
-      if (!name) return '#90A4AE';
+    function getSubjectStyle(name) {
+      if (!name || name === '自习') return subjectColors['自习'] || { bg: '#f8fafc', color: '#64748b', abbr: '自' };
       if (subjectColors[name]) return subjectColors[name];
-      const color = colorPalette[Object.keys(subjectColors).length % colorPalette.length];
-      subjectColors[name] = color;
-      return color;
+      let hash = 0;
+      for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      const idx = Math.abs(hash) % colorPalette.length;
+      const palette = colorPalette[idx];
+      let abbr = name.substring(0, 1);
+      if (name.length >= 2) abbr = name.substring(0, 2);
+      return { ...palette, abbr };
+    }
+
+    function getWeekDates() {
+      const today = new Date();
+      const day = today.getDay();
+      const monday = new Date(today);
+      monday.setDate(today.getDate() - (day === 0 ? 6 : day - 1));
+      const dates = [];
+      for (let i = 0; i < 5; i++) {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        dates.push(`${d.getMonth() + 1}/${d.getDate()}`);
+      }
+      return dates;
+    }
+
+    function renderTableHeader() {
+      const thead = document.getElementById('tableHeader');
+      const weekDays = ['周一', '周二', '周三', '周四', '周五'];
+      const dates = getWeekDates();
+      const today = new Date().getDay();
+      const todayIdx = today === 0 ? -1 : today - 1;
+      
+      let html = '<th><div class="time-cell"><span class="time-cell-name">时间</span></div></th>';
+      weekDays.forEach((day, i) => {
+        const isToday = i === todayIdx;
+        html += `<th class="${isToday ? 'today' : ''}">
+          <span class="day-name">${day}</span>
+          <span class="day-date">${dates[i]}</span>
+        </th>`;
+      });
+      thead.innerHTML = html;
     }
 
     async function init() {
       initHeader('timetable');
+      renderTableHeader();
       await Promise.all([loadGrades(), loadSubjects(), loadDefaultSlots()]);
       
       const urlParams = new URLSearchParams(window.location.search);
@@ -706,17 +1420,32 @@
       try {
         const data = await API.get('/api/grades/subjects');
         subjectsList = data.data || [];
-        const sel = document.getElementById('subjectSelect');
-        sel.innerHTML = '<option value="">-- 空/自习 --</option>';
-        subjectsList.forEach(s => {
-          const opt = document.createElement('option');
-          opt.value = s.id;
-          opt.textContent = s.name;
-          sel.appendChild(opt);
-        });
+        renderQuickSubjects();
       } catch (e) {
-        subjectsList = [];
+        subjectsList = [
+          { id: '1', name: '语文' }, { id: '2', name: '数学' }, { id: '3', name: '英语' },
+          { id: '4', name: '物理' }, { id: '5', name: '化学' }, { id: '6', name: '生物' },
+          { id: '7', name: '道德与法治' }, { id: '8', name: '历史' }, { id: '9', name: '地理' },
+          { id: '10', name: '体育' }, { id: '11', name: '音乐' }, { id: '12', name: '美术' },
+          { id: '13', name: '信息技术' }
+        ];
+        renderQuickSubjects();
       }
+    }
+
+    function renderQuickSubjects() {
+      const container = document.getElementById('quickSubjects');
+      const allSubjects = [...subjectsList.map(s => s.name), '自习', '班会'];
+      container.innerHTML = allSubjects.map(name => {
+        const style = getSubjectStyle(name);
+        return `<button class="subject-quick-btn" data-name="${name}" onclick="selectQuickSubject('${name}', this)" style="background:${style.bg};color:${style.color};border-color:${style.bg}">${style.abbr}</button>`;
+      }).join('');
+    }
+
+    function selectQuickSubject(name, btn) {
+      selectedSubjectName = name;
+      document.querySelectorAll('.subject-quick-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
 
     async function loadDefaultSlots() {
@@ -737,7 +1466,7 @@
       if (gradeId) {
         const grade = gradesData.find(g => String(g.id) === String(gradeId));
         if (grade?.classes) {
-          [...grade.classes].sort((a,b) => a.class_num - b.class_num).forEach(c => {
+          [...grade.classes].sort((a,b) => (a.class_num||0) - (b.class_num||0)).forEach(c => {
             const opt = document.createElement('option');
             opt.value = c.id;
             opt.textContent = c.name;
@@ -749,12 +1478,18 @@
 
     async function onClassChange() {
       const classId = document.getElementById('classSelect').value;
-      if (!classId || !currentGradeId) return;
+      if (!classId || !currentGradeId) {
+        document.getElementById('currentClassBadge').textContent = '请选择班级';
+        document.getElementById('statsCards').style.display = 'none';
+        return;
+      }
       
       currentClassId = classId;
       const grade = gradesData.find(g => String(g.id) === String(currentGradeId));
       const cls = grade?.classes?.find(c => String(c.id) === String(classId));
       currentClassName = cls?.name || '';
+      document.getElementById('currentClassBadge').textContent = currentClassName;
+      document.getElementById('timetableTitle').textContent = currentClassName + ' 课程表';
       
       await loadTimetable();
     }
@@ -769,21 +1504,8 @@
         slots = data.data.slots || [];
         entries = data.data.entries || [];
         
-        if (slots.length === 0) {
-          slots = [
-            { id: 's1', name: '第一节', startTime: '08:00', endTime: '08:45', periodType: 'class', orderNum: 1 },
-            { id: 's2', name: '第二节', startTime: '08:55', endTime: '09:40', periodType: 'class', orderNum: 2 },
-            { id: 'b1', name: '课间操', startTime: '09:40', endTime: '10:10', periodType: 'break', orderNum: 3 },
-            { id: 's3', name: '第三节', startTime: '10:10', endTime: '10:55', periodType: 'class', orderNum: 4 },
-            { id: 's4', name: '第四节', startTime: '11:05', endTime: '11:50', periodType: 'class', orderNum: 5 },
-            { id: 'l1', name: '午休', startTime: '11:50', endTime: '14:00', periodType: 'lunch', orderNum: 6 },
-            { id: 's5', name: '第五节', startTime: '14:00', endTime: '14:45', periodType: 'class', orderNum: 7 },
-            { id: 's6', name: '第六节', startTime: '14:55', endTime: '15:40', periodType: 'class', orderNum: 8 },
-            { id: 's7', name: '第七节', startTime: '15:50', endTime: '16:35', periodType: 'class', orderNum: 9 }
-          ];
-        }
-        
         renderTimetable();
+        updateStats();
         
         const canEdit = API.user && (API.user.role === 'admin' || API.user.role === 'super_admin' || API.user.role === 'teacher');
         document.getElementById('editModeBtn').style.display = canEdit ? '' : 'none';
@@ -797,13 +1519,62 @@
       }
     }
 
+    function updateStats() {
+      const classEntries = entries.filter(e => {
+        const slotId = e.timeSlotId || e.time_slot_id;
+        const slot = slots.find(s => s.id === slotId);
+        return slot && (slot.periodType === 'class' || slot.period_type === 'class');
+      });
+      
+      const uniqueSubjects = new Set(classEntries.map(e => e.subjectName || e.subject_name).filter(Boolean));
+      const courseCount = classEntries.length;
+      
+      const classSlots = slots.filter(s => s.periodType === 'class' || s.period_type === 'class');
+      const totalSlots = classSlots.length * 5;
+      
+      let hours = 0;
+      if (slots.length > 0) {
+        const sorted = [...slots].sort((a,b) => (a.orderNum||0) - (b.orderNum||0));
+        const first = sorted[0];
+        const last = sorted[sorted.length - 1];
+        if (first && last) {
+          const toMin = t => {
+            const [h, m] = (t.startTime || t.start_time || '0:0').split(':').map(Number);
+            return h * 60 + m;
+          };
+          const start = toMin(first);
+          const end = (() => {
+            const [h, m] = (last.endTime || last.end_time || '0:0').split(':').map(Number);
+            return h * 60 + m;
+          })();
+          hours = Math.round((end - start) / 60 * 10) / 10;
+        }
+      }
+      
+      document.getElementById('statCourses').textContent = courseCount || '-';
+      document.getElementById('statSubjects').textContent = uniqueSubjects.size || '-';
+      document.getElementById('statHours').textContent = hours ? hours + 'h' : '-';
+      document.getElementById('statsCards').style.display = 'grid';
+    }
+
     function renderTimetable() {
       const tbody = document.getElementById('timetableBody');
       const weekdays = [1, 2, 3, 4, 5];
       const today = new Date().getDay();
+      const todayIdx = today === 0 ? -1 : today - 1;
       
-      const classSlots = slots.filter(s => s.periodType === 'class' || s.period_type === 'class');
-      const allSlots = [...slots].sort((a,b) => (a.orderNum||a.order_num) - (b.orderNum||b.order_num));
+      if (slots.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7">
+          <div class="empty-state">
+            <div class="empty-state-icon">⏰</div>
+            <div class="empty-state-text">暂无作息时间设置</div>
+            <div class="empty-state-hint">请管理员先设置作息时间段</div>
+          </div>
+        </td></tr>`;
+        return;
+      }
+      
+      const allSlots = [...slots].sort((a,b) => (a.orderNum||a.order_num||0) - (b.orderNum||b.order_num||0));
       
       let html = '';
       allSlots.forEach(slot => {
@@ -813,59 +1584,75 @@
         const periodType = slot.periodType || slot.period_type;
         const slotName = slot.name;
         
-        if (periodType === 'break' || periodType === 'lunch') {
-          const colSpan = weekdays.length;
-          const cellClass = periodType === 'lunch' ? 'lunch-cell' : 'break-cell';
-          const breakText = periodType === 'lunch' ? '🍱 午休时间' : '💪 课间休息';
+        let rowClass = '';
+        let cellContent = '';
+        
+        if (periodType === 'break' || periodType === 'lunch' || periodType === 'morning_read') {
+          if (periodType === 'lunch') {
+            rowClass = 'lunch-row';
+            cellContent = `<td colspan="${weekdays.length}"><div class="lunch-cell"><span class="break-icon">🍱</span> 午休时间 · 好好休息</div></td>`;
+          } else if (periodType === 'morning_read') {
+            rowClass = 'morning-read-row';
+            cellContent = `<td colspan="${weekdays.length}"><div class="morning-read-cell">📖 早读时间</div></td>`;
+          } else {
+            rowClass = 'break-row';
+            cellContent = `<td colspan="${weekdays.length}"><div class="break-cell"><span class="break-icon">💪</span> 课间休息 · 放松一下</div></td>`;
+          }
+          
           html += `
-            <tr>
+            <tr class="${rowClass}">
               <td>
-                <div class="time-slot">
-                  <span class="time-slot-name">${slotName}</span>
-                  <span class="time-slot-time">${startTime}-${endTime}</span>
+                <div class="time-cell">
+                  <span class="time-cell-name">${slotName}</span>
+                  <span class="time-cell-hours">${startTime}-${endTime}</span>
                 </div>
               </td>
-              <td class="${cellClass}" colspan="${colSpan}">${breakText}</td>
+              ${cellContent}
             </tr>
           `;
         } else {
           html += '<tr>';
           html += `
             <td>
-              <div class="time-slot">
-                <span class="time-slot-name">${slotName}</span>
-                <span class="time-slot-time">${startTime}-${endTime}</span>
+              <div class="time-cell">
+                <span class="time-cell-name">${slotName}</span>
+                <span class="time-cell-hours">${startTime}-${endTime}</span>
               </div>
             </td>
           `;
           
-          weekdays.forEach(wd => {
-            const isToday = wd === today;
+          weekdays.forEach((wd, wIdx) => {
+            const isToday = wIdx === todayIdx;
             const entry = entries.find(e => 
               (e.timeSlotId === slotId || e.time_slot_id === slotId) && 
               (e.weekDay === wd || e.week_day === wd)
             );
             
-            let cellContent = '';
-            let cellClass = 'subject-cell empty';
+            let content = '';
             let cellStyle = '';
+            let hasCourse = false;
             
             if (entry) {
               const subjectName = entry.subjectName || entry.subject_name || '';
               const teacherName = entry.teacherName || entry.teacher_name || '';
-              const color = getSubjectColor(subjectName);
-              cellClass = 'subject-cell';
-              cellStyle = `background:${color}15;color:${color};`;
-              cellContent = `
-                <div class="subject-name">${subjectName || '自习'}</div>
-                ${teacherName ? `<div class="subject-teacher">${teacherName}</div>` : ''}
+              const style = getSubjectStyle(subjectName);
+              hasCourse = true;
+              cellStyle = `background:${style.bg};color:${style.color};--subject-color:${style.color};`;
+              content = `
+                <div class="course-abbr">${style.abbr}</div>
+                <div class="course-name">${subjectName || '自习'}</div>
+                ${teacherName ? `<div class="course-teacher">${teacherName}</div>` : ''}
               `;
             } else {
-              cellContent = isEditMode ? '+ 添加' : '';
+              content = isEditMode ? '+ 添加' : '';
             }
             
             const clickHandler = isEditMode ? `onclick="openSubjectModal('${slotId}', ${wd})"` : '';
-            html += `<td class="${isToday ? 'today-column' : ''}"><div class="${cellClass}" style="${cellStyle}" data-slot="${slotId}" data-weekday="${wd}" ${clickHandler}>${cellContent}</div></td>`;
+            html += `<td class="${isToday ? 'today-col' : ''}">
+              <div class="course-cell ${hasCourse ? 'has-course' : 'empty'}" style="${cellStyle}" data-slot="${slotId}" data-weekday="${wd}" ${clickHandler}>
+                ${content}
+              </div>
+            </td>`;
           });
           
           html += '</tr>';
@@ -886,6 +1673,7 @@
       
       isEditMode = !isEditMode;
       document.getElementById('editModeBtn').textContent = isEditMode ? '👁️ 退出编辑' : '✏️ 编辑模式';
+      document.getElementById('editIndicator').classList.toggle('show', isEditMode);
       document.getElementById('slotBtn').style.display = isEditMode ? '' : 'none';
       document.getElementById('saveBtn').style.display = isEditMode ? '' : 'none';
       document.getElementById('slotManager').style.display = isEditMode ? '' : 'none';
@@ -895,16 +1683,24 @@
 
     function openSubjectModal(slotId, weekDay) {
       editingCell = { slotId, weekDay };
+      selectedSubjectName = '';
+      
       const existing = entries.find(e => 
         (e.timeSlotId === slotId || e.time_slot_id === slotId) && 
         (e.weekDay === weekDay || e.week_day === weekDay)
       );
       
-      document.getElementById('subjectSelect').value = existing?.subjectId || existing?.subject_id || '';
-      document.getElementById('customSubject').value = '';
+      document.querySelectorAll('.subject-quick-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('teacherInput').value = existing?.teacherName || existing?.teacher_name || '';
       document.getElementById('clearBtn').style.display = existing ? '' : 'none';
-      document.getElementById('subjectModalTitle').textContent = existing ? '编辑课程' : '添加课程';
+      document.getElementById('subjectModalTitle').textContent = existing ? '✏️ 编辑课程' : '➕ 添加课程';
+      
+      if (existing) {
+        const name = existing.subjectName || existing.subject_name || '';
+        selectedSubjectName = name;
+        const btn = document.querySelector(`.subject-quick-btn[data-name="${name}"]`);
+        if (btn) btn.classList.add('active');
+      }
       
       openModal('subjectModal');
     }
@@ -912,19 +1708,11 @@
     function saveSubject() {
       if (!editingCell) return;
       
-      const subjectSelect = document.getElementById('subjectSelect');
-      const customSubject = document.getElementById('customSubject').value.trim();
       const teacherName = document.getElementById('teacherInput').value.trim();
       
-      let subjectId = subjectSelect.value;
-      let subjectName = '';
-      
-      if (customSubject) {
-        subjectName = customSubject;
-        subjectId = '';
-      } else if (subjectId) {
-        const subject = subjectsList.find(s => String(s.id) === String(subjectId));
-        subjectName = subject?.name || '';
+      if (!selectedSubjectName) {
+        showToast('请选择一个科目', 'warning');
+        return;
       }
       
       entries = entries.filter(e => 
@@ -932,19 +1720,18 @@
           (e.weekDay === editingCell.weekDay || e.week_day === editingCell.weekDay))
       );
       
-      if (subjectId || subjectName) {
-        entries.push({
-          timeSlotId: editingCell.slotId,
-          weekDay: editingCell.weekDay,
-          subjectId: subjectId || null,
-          subjectName: subjectName,
-          teacherName: teacherName
-        });
-      }
+      entries.push({
+        timeSlotId: editingCell.slotId,
+        weekDay: editingCell.weekDay,
+        subjectId: null,
+        subjectName: selectedSubjectName,
+        teacherName: teacherName
+      });
       
       closeModal('subjectModal');
       renderTimetable();
-      showToast('已更新，记得保存', 'success');
+      updateStats();
+      showToast('已更新，记得保存课表', 'success');
     }
 
     function clearSubject() {
@@ -955,6 +1742,7 @@
       );
       closeModal('subjectModal');
       renderTimetable();
+      updateStats();
     }
 
     async function saveTimetable() {
@@ -980,7 +1768,7 @@
           entries: entriesToSave
         });
         
-        showToast('保存成功！', 'success');
+        showToast('🎉 课表保存成功！', 'success');
         await loadTimetable();
       } catch (e) {
         showToast('保存失败: ' + e.message, 'error');
@@ -1002,7 +1790,6 @@
       }
       
       try {
-        const data = await API.get(`/api/timetable/export/manifest/${currentClassId}`);
         const manifest = {
           ServerKind: 0,
           OrganizationName: "南通市崇川初级中学",
@@ -1022,19 +1809,19 @@
         document.getElementById('manifestContent').textContent = JSON.stringify(manifest, null, 2);
         openModal('manifestModal');
       } catch (e) {
-        showToast('获取清单失败', 'error');
+        showToast('获取配置失败', 'error');
       }
     }
 
     function copyManifest() {
       const text = document.getElementById('manifestContent').textContent;
       navigator.clipboard.writeText(text).then(() => {
-        showToast('已复制到剪贴板', 'success');
+        showToast('✅ 已复制到剪贴板', 'success');
       });
     }
 
     function showSlotModal(slotId = null) {
-      document.getElementById('slotModalTitle').textContent = slotId ? '编辑时间段' : '添加时间段';
+      document.getElementById('slotModalTitle').textContent = slotId ? '✏️ 编辑时间段' : '➕ 添加时间段';
       document.getElementById('slotName').value = '';
       document.getElementById('slotStart').value = '';
       document.getElementById('slotEnd').value = '';
@@ -1060,7 +1847,8 @@
         closeModal('slotModal');
         await loadDefaultSlots();
         renderSlotList();
-        showToast('添加成功', 'success');
+        renderTimetable();
+        showToast('✅ 添加成功', 'success');
       } catch (e) {
         showToast('添加失败', 'error');
       }
@@ -1068,17 +1856,16 @@
 
     function renderSlotList() {
       const list = document.getElementById('slotList');
-      const typeNames = { class: '上课', break: '课间', lunch: '午休' };
+      const typeNames = { class: '📚 上课', break: '💪 课间', lunch: '🍱 午休', morning_read: '📖 早读' };
       const sortedSlots = [...slots].sort((a,b) => (a.orderNum||a.order_num||0) - (b.orderNum||b.order_num||0));
       
       list.innerHTML = sortedSlots.map(s => `
         <div class="slot-item">
+          <span class="slot-item-drag">⠿</span>
           <div class="slot-item-time">${s.startTime || s.start_time} - ${s.endTime || s.end_time}</div>
           <div class="slot-item-name">${s.name}</div>
           <span class="slot-item-type ${s.periodType || s.period_type}">${typeNames[s.periodType || s.period_type] || '上课'}</span>
           <div class="slot-item-actions">
-            <button class="icon-btn" title="上移">⬆️</button>
-            <button class="icon-btn" title="下移">⬇️</button>
             <button class="icon-btn danger" onclick="deleteSlot('${s.id}')" title="删除">🗑️</button>
           </div>
         </div>
@@ -1093,7 +1880,8 @@
         entries = entries.filter(e => (e.timeSlotId || e.time_slot_id) !== slotId);
         renderSlotList();
         renderTimetable();
-        showToast('已删除', 'success');
+        updateStats();
+        showToast('✅ 已删除', 'success');
       } catch (e) {
         showToast('删除失败', 'error');
       }
@@ -1106,6 +1894,7 @@
     function closeModal(id) {
       document.getElementById(id).classList.remove('show');
       editingCell = null;
+      selectedSubjectName = '';
     }
 
     document.querySelectorAll('.modal-overlay').forEach(overlay => {

@@ -774,6 +774,36 @@
       "referer": "http://localhost:5000/",
       "id": "9b854347-dc3e-4a33-8f0c-fec1c3e9c1fa",
       "created_at": "2026-08-24T08:31:09.009Z"
+    },
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "30b3d0b8-7a60-4367-a3fc-a7a41b06dc34",
+      "created_at": "2026-08-24T08:47:46.489Z"
+    },
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "224a0075-9b30-4cec-acb1-db8709237c73",
+      "created_at": "2026-08-24T08:51:35.745Z"
+    },
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "931632d2-a7ee-4f58-b094-433c3a2c4690",
+      "created_at": "2026-08-24T08:52:03.250Z"
     }
   ],
   "time_slots": [
