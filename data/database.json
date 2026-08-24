@@ -694,6 +694,16 @@
       "referer": "http://localhost:5000/",
       "id": "ff7c2e9f-ae6e-4b6d-8378-ba5155ff7060",
       "created_at": "2026-08-24T03:44:24.119Z"
+    },
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "ba7522f5-8642-4da0-984b-307706b9b0a0",
+      "created_at": "2026-08-24T03:49:23.977Z"
     }
   ],
   "time_slots": [
