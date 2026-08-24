@@ -13,8 +13,8 @@
       "email": "a****@**************",
       "status": "active",
       "created_at": "2026-08-23T15:03:59.521Z",
-      "last_login": "2026-08-24T03:43:59.285Z",
-      "updated_at": "2026-08-24T03:43:59.285Z"
+      "last_login": "2026-08-24T03:56:48.031Z",
+      "updated_at": "2026-08-24T03:56:48.031Z"
     },
     {
       "id": "6402bf75-686f-4b3e-82b2-f98d04665437",
@@ -536,6 +536,36 @@
   "homework_submissions": [],
   "visit_stats": [
     {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "415581d3-4b91-4b34-8d23-1e28d8cbca8c",
+      "created_at": "2026-08-24T03:55:57.969Z"
+    },
+    {
+      "user_id": null,
+      "path": "/",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "09465cef-9b39-4a56-a38f-65b4356b6bca",
+      "created_at": "2026-08-24T03:51:37.324Z"
+    },
+    {
+      "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
+      "path": "/admin",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
+      "device_type": "desktop",
+      "referer": "http://localhost:5000/",
+      "id": "6f75d6ff-75fb-4eaf-9281-6263af5651aa",
+      "created_at": "2026-08-24T03:51:32.334Z"
+    },
+    {
       "user_id": "ccef0e9f-8bcf-403a-bb04-44657dc17969",
       "path": "/admin",
       "ip": "::1",
@@ -732,28 +762,8 @@
       "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
       "device_type": "desktop",
       "referer": "http://localhost:5000/",
-      "id": "6f75d6ff-75fb-4eaf-9281-6263af5651aa",
-      "created_at": "2026-08-24T03:51:32.334Z"
-    },
-    {
-      "user_id": null,
-      "path": "/",
-      "ip": "::1",
-      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) TRAESOLOCN/1.107.1 Chrome/142.0.7444.235 Electron/39.2.7 Safari/537.36",
-      "device_type": "desktop",
-      "referer": "http://localhost:5000/",
-      "id": "09465cef-9b39-4a56-a38f-65b4356b6bca",
-      "created_at": "2026-08-24T03:51:37.324Z"
-    },
-    {
-      "user_id": null,
-      "path": "/",
-      "ip": "::1",
-      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
-      "device_type": "desktop",
-      "referer": "http://localhost:5000/",
-      "id": "415581d3-4b91-4b34-8d23-1e28d8cbca8c",
-      "created_at": "2026-08-24T03:55:57.969Z"
+      "id": "a5f671fe-0ffb-4d1c-8e6c-ccb230a331fe",
+      "created_at": "2026-08-24T03:56:48.860Z"
     }
   ],
   "time_slots": [
@@ -958,8 +968,118 @@
       "created_at": "2026-08-24T03:54:55.421Z"
     }
   ],
-  "timetables": [],
-  "timetable_entries": [],
+  "timetables": [
+    {
+      "id": "eb4fadd3-3f0b-44de-87c0-c07cee3d9aa8",
+      "grade_id": "grade-7",
+      "class_id": "class-7-1",
+      "name": "七年级(1)班课表",
+      "week_type": "all",
+      "is_active": true,
+      "created_at": "2026-08-24T03:58:00.234Z"
+    }
+  ],
+  "timetable_entries": [
+    {
+      "id": "d4d71403-51ee-4317-a33c-526a63a02367",
+      "timetable_id": "eb4fadd3-3f0b-44de-87c0-c07cee3d9aa8",
+      "time_slot_id": "slot-morning-read",
+      "subject_id": "subject-yuwen",
+      "subject_name": "语文",
+      "teacher_name": "",
+      "week_day": 1,
+      "week_type": "all",
+      "created_at": "2026-08-24T03:58:00.234Z"
+    },
+    {
+      "id": "622bf91f-14f2-4691-914b-975906eb2e95",
+      "timetable_id": "eb4fadd3-3f0b-44de-87c0-c07cee3d9aa8",
+      "time_slot_id": "slot-1",
+      "subject_id": "subject-shuxue",
+      "subject_name": "数学",
+      "teacher_name": "",
+      "week_day": 1,
+      "week_type": "all",
+      "created_at": "2026-08-24T03:58:00.235Z"
+    },
+    {
+      "id": "8469ddf3-3571-4b5a-a87b-f580a4f5c234",
+      "timetable_id": "eb4fadd3-3f0b-44de-87c0-c07cee3d9aa8",
+      "time_slot_id": "slot-2",
+      "subject_id": "subject-yingyu",
+      "subject_name": "英语",
+      "teacher_name": "",
+      "week_day": 1,
+      "week_type": "all",
+      "created_at": "2026-08-24T03:58:00.235Z"
+    },
+    {
+      "id": "e8f5e658-c11c-4999-8eaf-c8e573a8cf1e",
+      "timetable_id": "eb4fadd3-3f0b-44de-87c0-c07cee3d9aa8",
+      "time_slot_id": "slot-3",
+      "subject_id": "subject-wuli",
+      "subject_name": "物理",
+      "teacher_name": "",
+      "week_day": 1,
+      "week_type": "all",
+      "created_at": "2026-08-24T03:58:00.236Z"
+    },
+    {
+      "id": "4d85842a-b99e-43c8-b36e-bc877fe569ab",
+      "timetable_id": "eb4fadd3-3f0b-44de-87c0-c07cee3d9aa8",
+      "time_slot_id": "slot-4",
+      "subject_id": "subject-huaxue",
+      "subject_name": "化学",
+      "teacher_name": "",
+      "week_day": 1,
+      "week_type": "all",
+      "created_at": "2026-08-24T03:58:00.236Z"
+    },
+    {
+      "id": "3d8a329c-4984-4a6f-a78e-5062fd140968",
+      "timetable_id": "eb4fadd3-3f0b-44de-87c0-c07cee3d9aa8",
+      "time_slot_id": "slot-5",
+      "subject_id": "subject-shengwu",
+      "subject_name": "生物",
+      "teacher_name": "",
+      "week_day": 1,
+      "week_type": "all",
+      "created_at": "2026-08-24T03:58:00.237Z"
+    },
+    {
+      "id": "f7fff88a-59bf-46ba-967b-534a9bc1c13a",
+      "timetable_id": "eb4fadd3-3f0b-44de-87c0-c07cee3d9aa8",
+      "time_slot_id": "slot-6",
+      "subject_id": "subject-tiyu",
+      "subject_name": "体育",
+      "teacher_name": "",
+      "week_day": 1,
+      "week_type": "all",
+      "created_at": "2026-08-24T03:58:00.237Z"
+    },
+    {
+      "id": "700661bc-49b8-4a51-9694-32611951f952",
+      "timetable_id": "eb4fadd3-3f0b-44de-87c0-c07cee3d9aa8",
+      "time_slot_id": "slot-7",
+      "subject_id": "subject-dili",
+      "subject_name": "地理",
+      "teacher_name": "",
+      "week_day": 1,
+      "week_type": "all",
+      "created_at": "2026-08-24T03:58:00.238Z"
+    },
+    {
+      "id": "8479127d-a1c5-4455-92d4-9fc34027e0e2",
+      "timetable_id": "eb4fadd3-3f0b-44de-87c0-c07cee3d9aa8",
+      "time_slot_id": "slot-8",
+      "subject_id": "subject-meishu",
+      "subject_name": "美术",
+      "teacher_name": "",
+      "week_day": 1,
+      "week_type": "all",
+      "created_at": "2026-08-24T03:58:00.238Z"
+    }
+  ],
   "system_config": [
     {
       "id": 1,
