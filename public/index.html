@@ -122,8 +122,10 @@
        公告轮播
        ============================================================ */
     .notice-carousel {
-      background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
-      border: 1px solid #FED7AA;
+      background: linear-gradient(135deg, var(--glass-bg), rgba(255,237,213,0.5));
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: var(--glass-border);
       border-radius: var(--radius-lg);
       padding: 14px 20px;
       display: flex;
@@ -133,11 +135,12 @@
       position: relative;
       overflow: hidden;
       min-height: 52px;
+      box-shadow: var(--glass-shadow);
     }
 
     [data-theme="dark"] .notice-carousel {
-      background: linear-gradient(135deg, #2D1B0E, #1F150A);
-      border-color: #5C3D1E;
+      background: linear-gradient(135deg, var(--glass-bg), rgba(45,27,14,0.5));
+      border-color: rgba(255,255,255,0.15);
     }
 
     .notice-icon-wrap {
@@ -238,12 +241,14 @@
        今日作业概览
        ============================================================ */
     .homework-overview {
-      background: var(--bg-card);
-      border: 1px solid var(--border-light);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: var(--glass-border);
       border-radius: var(--radius-xl);
       padding: 24px;
       margin-bottom: 28px;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--glass-shadow);
     }
 
     .homework-overview-header {
@@ -337,10 +342,12 @@
     }
 
     .quick-nav-card {
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-radius: var(--radius-lg);
       padding: 24px 20px;
-      border: 1px solid var(--border-light);
+      border: var(--glass-border);
       text-align: center;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
@@ -349,6 +356,7 @@
       display: block;
       position: relative;
       overflow: hidden;
+      box-shadow: var(--glass-shadow);
     }
 
     .quick-nav-card::before {
@@ -417,8 +425,12 @@
       gap: 16px;
       margin-bottom: 32px;
       padding: 24px 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius-lg);
+      border: var(--glass-border);
+      box-shadow: var(--glass-shadow);
     }
 
     .site-stat-item {
@@ -472,11 +484,13 @@
     }
 
     .grade-card {
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-radius: var(--radius-xl);
       padding: 28px 24px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
+      border: var(--glass-border);
+      box-shadow: var(--glass-shadow);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
       position: relative;
@@ -582,10 +596,13 @@
        骨架屏 - 年级卡片
        ============================================================ */
     .grade-skeleton {
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-radius: var(--radius-xl);
       padding: 28px 24px;
-      border: 1px solid var(--border-light);
+      border: var(--glass-border);
+      box-shadow: var(--glass-shadow);
     }
 
     .grade-skeleton-header {
@@ -634,8 +651,11 @@
       padding: 24px 16px;
       border-radius: var(--radius-lg);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      background: var(--bg-card);
-      border: 1px solid var(--border-light);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: var(--glass-border);
+      box-shadow: var(--glass-shadow);
     }
 
     .feature-item:hover {
@@ -682,18 +702,24 @@
     }
 
     .recent-timeline-wrap {
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-radius: var(--radius-xl);
-      border: 1px solid var(--border-light);
+      border: var(--glass-border);
       padding: 24px;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--glass-shadow);
     }
 
     /* ============================================================
        页脚
        ============================================================ */
     .site-footer {
-      border-top: 1px solid var(--border-light);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow: var(--glass-shadow);
       padding: 32px 0;
       text-align: center;
       margin-top: 16px;

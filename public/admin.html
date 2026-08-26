@@ -17,14 +17,16 @@
 
     /* ========== 侧边栏 ========== */
     .sidebar-menu {
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-radius: var(--radius-lg);
       padding: 12px;
       height: fit-content;
       position: sticky;
       top: 92px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
+      border: var(--glass-border);
+      box-shadow: var(--glass-shadow);
       transition: var(--transition);
     }
 
@@ -172,9 +174,11 @@
     }
 
     .stat-card {
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-radius: var(--radius-lg);
-      border: 1px solid var(--border-light);
+      border: var(--glass-border);
       padding: 20px;
       display: flex;
       align-items: flex-start;
@@ -182,6 +186,7 @@
       transition: var(--transition);
       position: relative;
       overflow: hidden;
+      box-shadow: var(--glass-shadow);
     }
 
     .stat-card::before {
@@ -321,12 +326,14 @@
 
     /* ========== 内容卡片 ========== */
     .content-card {
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-radius: var(--radius-lg);
-      border: 1px solid var(--border-light);
+      border: var(--glass-border);
       overflow: hidden;
       margin-bottom: 20px;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--glass-shadow);
       transition: var(--transition);
     }
 
@@ -336,7 +343,7 @@
 
     .card-header {
       padding: 18px 24px;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: var(--glass-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -366,7 +373,7 @@
     .data-table th, .data-table td {
       padding: 14px 16px;
       text-align: left;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: var(--glass-border);
       font-size: 14px;
     }
 
@@ -554,7 +561,7 @@
       gap: 10px;
       flex-wrap: wrap;
       padding: 16px 24px;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: var(--glass-border);
       background: var(--bg-hover);
     }
 
@@ -602,7 +609,7 @@
       gap: 12px;
       padding: 12px 24px;
       background: var(--primary-soft);
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: var(--glass-border);
       font-size: 14px;
       font-weight: 500;
       animation: fadeIn 0.2s ease;
@@ -661,7 +668,7 @@
       justify-content: center;
       gap: 4px;
       padding: 16px 24px;
-      border-top: 1px solid var(--border-light);
+      border-top: var(--glass-border);
     }
 
     .pagination button {
@@ -675,7 +682,7 @@
       font-weight: 600;
       color: var(--text-secondary);
       background: transparent;
-      border: 1px solid var(--border-light);
+      border: var(--glass-border);
       cursor: pointer;
       transition: var(--transition);
     }
@@ -810,11 +817,14 @@
     }
 
     .mobile-card-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border-light);
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: var(--glass-border);
       border-radius: var(--radius);
       padding: 16px;
       margin-bottom: 12px;
+      box-shadow: var(--glass-shadow);
     }
 
     .mobile-card-item .mc-header {

@@ -117,11 +117,13 @@
 
     /* === 侧边栏 === */
     .sidebar-card {
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      backdrop-filter: blur(var(--glass-blur));
       border-radius: var(--radius-xl);
       padding: 20px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
+      border: var(--glass-border);
+      box-shadow: var(--glass-shadow);
       height: fit-content;
       position: sticky;
       top: 84px;
@@ -149,7 +151,9 @@
       padding: 10px 14px;
       border-radius: var(--radius);
       border: 1px solid var(--border);
-      background: var(--bg);
+      background: var(--glass-bg);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
       font-size: 14px;
       cursor: pointer;
       color: var(--text-primary);
@@ -229,7 +233,7 @@
     .filter-btn {
       padding: 7px 14px;
       border-radius: var(--radius-full);
-      background: var(--bg-card);
+      background: var(--glass-bg-light);
       border: 1px solid var(--border);
       font-size: 13px;
       color: var(--text-secondary);
@@ -256,7 +260,7 @@
       padding: 7px 12px;
       border-radius: var(--radius-full);
       border: 1px solid var(--border);
-      background: var(--bg-card);
+      background: var(--glass-bg-light);
       font-size: 13px;
       color: var(--text-secondary);
       cursor: pointer;
@@ -304,13 +308,15 @@
 
     /* === 作业卡片 === */
     .homework-card {
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
       border-radius: var(--radius-lg);
       padding: 20px;
       margin-bottom: 12px;
-      border: 1px solid var(--border-light);
+      border: var(--glass-border);
       border-left: 4px solid var(--primary);
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--glass-shadow);
       transition: var(--transition);
       position: relative;
       opacity: 0;
@@ -410,7 +416,7 @@
       left: 0;
       right: 0;
       height: 40px;
-      background: linear-gradient(transparent, var(--bg-card));
+      background: linear-gradient(transparent, var(--glass-bg));
     }
     .expand-btn {
       background: none;
@@ -480,7 +486,7 @@
       gap: 4px;
       margin-top: 14px;
       padding-top: 12px;
-      border-top: 1px solid var(--border-light);
+      border-top: var(--glass-border);
     }
     .hw-action-btn {
       display: inline-flex;
@@ -513,15 +519,19 @@
       display: flex;
       align-items: flex-start;
       gap: 12px;
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
     }
 
     /* === 骨架屏卡片 === */
     .skeleton-hw-card {
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
       border-radius: var(--radius-lg);
       padding: 20px;
       margin-bottom: 12px;
-      border: 1px solid var(--border-light);
+      border: var(--glass-border);
     }
     .skeleton-hw-badge {
       width: 64px;
@@ -592,12 +602,14 @@
     .hw-detail-header {
       position: sticky;
       top: 0;
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      backdrop-filter: blur(var(--glass-blur));
       padding: 16px 20px;
       display: flex;
       align-items: center;
       gap: 12px;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: var(--glass-border);
       z-index: 1;
     }
     .hw-detail-close {
@@ -625,8 +637,10 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: var(--bg-card);
-      border-top: 1px solid var(--border-light);
+      background: var(--glass-bg);
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      backdrop-filter: blur(var(--glass-blur));
+      border-top: var(--glass-border);
       padding: 10px 16px;
       z-index: 100;
       box-shadow: 0 -4px 16px rgba(0,0,0,0.06);

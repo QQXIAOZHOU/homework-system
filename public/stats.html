@@ -92,8 +92,10 @@
     .time-filter {
       display: flex;
       gap: 4px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-light);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: var(--glass-border);
       border-radius: var(--radius-full);
       padding: 4px;
     }
@@ -151,6 +153,14 @@
     .stat-card .stat-icon {
       border-radius: var(--radius);
     }
+    .stat-card {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--glass-shadow);
+    }
     .stat-card-icon-primary .stat-icon {
       background: linear-gradient(135deg, #EEF0FF, #DDE2FF);
       color: var(--primary);
@@ -182,13 +192,16 @@
 
     /* ========== 内容卡片 ========== */
     .content-card {
-      background: var(--bg-card);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-radius: var(--radius-lg);
-      border: 1px solid var(--border-light);
+      border: var(--glass-border);
+      box-shadow: var(--glass-shadow);
       margin-bottom: 20px;
       transition: var(--transition);
     }
-    .content-card:hover { box-shadow: var(--shadow-sm); }
+    .content-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
     .card-header {
       padding: 16px 20px;
       border-bottom: 1px solid var(--border-light);
@@ -498,7 +511,7 @@
       font-size: 13px;
     }
     .visit-table th {
-      background: var(--bg-hover);
+      background: var(--glass-bg);
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -543,8 +556,8 @@
       font-size: 13px;
       font-weight: 600;
       color: var(--text-secondary);
-      background: var(--bg-card);
-      border: 1px solid var(--border-light);
+      background: var(--glass-bg);
+      border: var(--glass-border);
       transition: var(--transition);
     }
     .page-btn:hover { border-color: var(--primary); color: var(--primary); }
